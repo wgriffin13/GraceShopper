@@ -9,7 +9,7 @@
     "postinstall": "./node_modules/webpack/bin/webpack.js",
     "webpack": "webpack",
     "webpack:dev": "npm run webpack -- --mode=development --watch",
-    "start:dev": "npm run webpack:dev & DATABASE_URL=postgres://localhost/(db name) nodemon ./server.js --ignore client/ --ignore public/"
+    "start:dev": "npm run webpack:dev & DATABASE_URL=postgres://localhost/graceshopper nodemon ./server.js --ignore client/ --ignore public/"
   },
   "repository": {
     "type": "git",

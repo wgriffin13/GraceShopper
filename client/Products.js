@@ -1,27 +1,29 @@
-import React, { Component, Fragment } from 'react';
-import { Card } from 'react-bootstrap';
-const seed = require('../server/db/seed');
+import React, { Component, Fragment } from "react";
+import { Card, CardDeck } from "react-bootstrap";
+const seed = require("../server/db/seed");
 
 class Products extends Component {
   render() {
     const products = seed.seedProducts;
+    console.log("products.length", products.length);
     return (
       <Fragment>
-        <ul>
+        <CardDeck>
           {products.map(product => {
             return (
-              <li key={product.id}>
-                <Card style={{ width: '35rem' }}>
-                  <div>{product.title}</div>
-                  <div>{product.price}</div>
-                  <div>{product.quantity}</div>
-                  <Card.Img src={product.imageUrl} />
-                  <div>{product.description}</div>
-                </Card>
-              </li>
+              <Card key={product.id} style={{ width: "35rem" }}>
+                <Card.Img variant="top" src={product.imageUrl} />
+                <div>{product.title}</div>
+                <div>
+                  ${product.price}
+                  <span> / {product.quantity} inStock</span>
+                </div>
+
+                {/* <div>{product.description}</div> */}
+              </Card>
             );
           })}
-        </ul>
+        </CardDeck>
       </Fragment>
     );
   }

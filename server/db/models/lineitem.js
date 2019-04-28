@@ -9,8 +9,7 @@ const LineItem = conn.define('lineItem', {
     },
     orderPrice: {
         type: Sequelize.DOUBLE,
-        allowNull: false,
-        defaultValue: 0
+        allowNull: false
     },
     discount: {
         type: Sequelize.DOUBLE,

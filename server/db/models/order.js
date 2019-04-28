@@ -6,7 +6,7 @@ const Order = conn.define('order', {
         type: Sequelize.STRING,
         allowNull: false,
         validate: {
-            isIn: [['pending', 'purchased', 'shipped', 'delivered']]
+            isIn: [['pending', 'purchased', 'cancelled', 'shipped', 'delivered']]
         }
     }
 });

@@ -14,8 +14,10 @@ class Products extends Component {
       7: 'yoga',
       8: 'resistance'
     };
+
+    //temporary!!! products not coming from db, just wanted to test product layout
     const products = seed.seedProducts;
-    console.log('products.length', products.length);
+
     return (
       <Container className="d-flex">
         <Row>

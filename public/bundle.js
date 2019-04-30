@@ -440,7 +440,7 @@ class Products extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
                   //   this.findCategory(product, categories).color
                   // }`
                 },
-                className: 'd-flex-column my-2 shadow mt-3 bg-white rounded'
+                className: 'mb-3 mt-3 shadow bg-white rounded'
               },
               react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
                 react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Header,
@@ -454,18 +454,22 @@ class Products extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
               ),
               react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
                 react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Body,
-                { className: 'mt-auto text-center' },
+                { className: 'text-center' },
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Img, { variant: 'top', src: product.imageUrl }),
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                  'h5',
+                  react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Title,
                   null,
                   product.title
+                ),
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                  react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Link,
+                  { href: `/#/products/${product.id}` },
+                  'details'
                 )
               ),
               react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
                 react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Footer,
                 {
-                  variant: 'bottom',
                   className: 'text-center',
                   style: {
                     backgroundColor: `${this.findCategory(product, categories).color}`

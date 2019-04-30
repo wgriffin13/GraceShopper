@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Container, Col, Row } from 'react-bootstrap';
+import { Button, Card, Container, Col, Row } from 'react-bootstrap';
 const seed = require('../server/db/seed');
 
 class Products extends Component {
@@ -25,7 +25,7 @@ class Products extends Component {
                     //   this.findCategory(product, categories).color
                     // }`
                   }}
-                  className="d-flex-column my-2 shadow mt-3 bg-white rounded"
+                  className="mb-3 mt-3 shadow bg-white rounded"
                 >
                   <Card.Header
                     className="text-center"
@@ -37,12 +37,14 @@ class Products extends Component {
                   >
                     {this.findCategory(product, categories).name}
                   </Card.Header>
-                  <Card.Body className="mt-auto text-center">
+                  <Card.Body className="text-center">
                     <Card.Img variant="top" src={product.imageUrl} />
-                    <h5>{product.title}</h5>
+                    <Card.Title>{product.title}</Card.Title>
+                    <Card.Link href={`/#/products/${product.id}`}>
+                      details
+                    </Card.Link>
                   </Card.Body>
                   <Card.Footer
-                    variant="bottom"
                     className="text-center"
                     style={{
                       backgroundColor: `${

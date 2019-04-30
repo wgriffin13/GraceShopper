@@ -19,7 +19,7 @@ const ProductDetail = ({ products, categories, match }) => {
                 style={{
                   backgroundColor: `${
                     findCategory(displayProduct, categories).color
-                    }`,
+                  }`,
                 }}
               >
                 {findCategory(displayProduct, categories).name}
@@ -32,7 +32,7 @@ const ProductDetail = ({ products, categories, match }) => {
                 style={{
                   backgroundColor: `${
                     findCategory(displayProduct, categories).color
-                    }`,
+                  }`,
                 }}
               >
                 <Card.Subtitle>
@@ -64,8 +64,8 @@ const ProductDetail = ({ products, categories, match }) => {
           </Col>
         </Row>
       ) : (
-          'No Product Found (we can replace with a better message later'
-        )}
+        'No Product Found (we can replace with a better message later'
+      )}
     </Container>
   );
 };

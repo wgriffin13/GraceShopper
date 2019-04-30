@@ -3,6 +3,7 @@ const volleyball = require('volleyball');
 const express = require('express');
 const app = express();
 const syncAndSeed = require('./db');
+const session = require('express-session');
 const port = process.env.PORT || 3000;
 
 //Logging
@@ -10,6 +11,13 @@ app.use(volleyball);
 
 //Body Parsing for POST & PUT request
 app.use(express.json());
+
+// Session middleware
+app.use(session({
+  secret: 'This is not a very secure secret...',
+  resave: false,
+  saveUninitialized: false
+}))
 
 //Bundle file location and index.html
 app.use(express.static(path.join(__dirname, '..', 'public')));

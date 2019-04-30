@@ -3,8 +3,7 @@ const { Order, LineItem, Product } = require('../db/models');
 
 // Returns individual order where id === route id
 router.get('/:id', (req, res, next) => {
-    Order.findByPk({
-        where: req.params.id,
+    Order.findByPk(req.params.id, {
         include: [
             {model: LineItem, include: [
                 {model: Product}

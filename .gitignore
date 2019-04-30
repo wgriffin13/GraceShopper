@@ -1,3 +1,5 @@
 node_modules
 dist/
 client/archive.js
+bundle.js
+bundle.js.map

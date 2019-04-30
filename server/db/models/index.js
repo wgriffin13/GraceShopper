@@ -10,13 +10,13 @@ Product.hasMany(LineItem);
 LineItem.belongsTo(Product);
 LineItem.belongsTo(Order);
 Order.hasMany(LineItem);
-
+Order.belongsTo(User);
+User.hasMany(Order);
 
 module.exports = {
   Product,
   Category,
-  User
+  User,
   LineItem,
-  Order
-
+  Order,
 };

@@ -370,7 +370,99 @@ const seedProducts = [
   }
 ];
 
+const seedUsers = [
+  {
+    email: "jane@email.com",
+    password: "12345"
+  },
+  {
+    email: "joe@email.com",
+    password: "catsdogs"
+  },
+  {
+    email: "owner@email.com",
+    password: "54321",
+    isAdmin: true
+  }
+];
+
+const seedOrders = [
+  {
+    userId: 1,
+    status: "pending"
+  },
+  {
+    userId: 1,
+    status: "purchased"
+  },
+  {
+    userId: 2,
+    status: "cancelled"
+  },
+  {
+    userid: 2,
+    status: "shipped"
+  },
+];
+
+const seedLineItems = [
+  {
+    quantity: 3,
+    productId: 12,
+    orderPrice: 32.95,
+    netTotalCost: 32.95,
+    orderId: 1
+  },
+  {
+    quantity: 1,
+    productId: 19,
+    orderPrice: 332.94,
+    discount: -30,
+    netTotalCost: 302.94,
+    orderId: 1
+  },
+  {
+    quantity: 1,
+    productId: 24,
+    orderPrice: 38.07,
+    netTotalCost: 38.07,
+    orderId: 1
+  },
+  {
+    quantity: 2,
+    productId: 3,
+    orderPrice: 9.99,
+    netTotalCost: 9.99,
+    orderId: 2
+  },
+  {
+    quantity: 4,
+    productId: 6,
+    orderPrice: 14.99,
+    netTotalCost: 14.99,
+    orderId: 2
+  },
+  {
+    quantity: 1,
+    productId: 11,
+    orderPrice: 945,
+    discount: -50,
+    netTotalCost: 895,
+    orderId: 3
+  },
+  {
+    quantity: 1,
+    productId: 20,
+    orderPrice: 79,
+    netTotalCost: 79,
+    orderId: 4
+  },
+]
+
 module.exports = {
   seedCategories,
-  seedProducts
+  seedProducts,
+  seedUsers,
+  seedOrders,
+  seedLineItems,
 };

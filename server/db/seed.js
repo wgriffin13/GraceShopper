@@ -383,16 +383,16 @@ const seedProducts = [
 
 const seedUsers = [
   {
-    email: "jane@email.com",
-    password: "12345"
+    email: 'jane@email.com',
+    password: '12345'
   },
   {
-    email: "joe@email.com",
-    password: "catsdogs"
+    email: 'joe@email.com',
+    password: 'catsdogs'
   },
   {
-    email: "owner@email.com",
-    password: "54321",
+    email: 'owner@email.com',
+    password: '54321',
     isAdmin: true
   }
 ];
@@ -400,20 +400,20 @@ const seedUsers = [
 const seedOrders = [
   {
     userId: 1,
-    status: "pending"
+    status: 'pending'
   },
   {
     userId: 1,
-    status: "purchased"
+    status: 'purchased'
   },
   {
     userId: 2,
-    status: "cancelled"
+    status: 'cancelled'
   },
   {
     userid: 2,
-    status: "shipped"
-  },
+    status: 'shipped'
+  }
 ];
 
 const seedLineItems = [
@@ -467,17 +467,14 @@ const seedLineItems = [
     orderPrice: 79,
     netTotalCost: 79,
     orderId: 4
-  },
-]
+  }
+];
 
 module.exports = {
   seedCategories,
   seedProducts,
-<<<<<<< HEAD
-  categories
-=======
+  categories,
   seedUsers,
   seedOrders,
-  seedLineItems,
->>>>>>> d3cb2ac367718e612c267122265c8e042a8eb649
+  seedLineItems
 };

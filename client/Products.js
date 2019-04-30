@@ -3,21 +3,16 @@ import { Card, Container, Col, Row } from 'react-bootstrap';
 const seed = require('../server/db/seed');
 
 class Products extends Component {
+  findCategory = (product, categories) => {
+    return categories.find(cat => cat.id === product.categoryId);
+  };
   render() {
-    const categoryIdList = {
-      1: 'accessories',
-      2: 'boxing',
-      3: 'cardio',
-      4: 'pilates',
-      5: 'free weights',
-      6: 'smart fitness',
-      7: 'yoga',
-      8: 'resistance'
-    };
+    //temporarily pulling data from seed file
     const products = seed.seedProducts;
-    console.log('products.length', products.length);
+    const categories = seed.categories;
+
     return (
-      <Container className="d-flex">
+      <Container className="d-flex mt-3">
         <Row>
           {products.map(product => {
             return (
@@ -26,14 +21,28 @@ class Products extends Component {
                   style={{ width: '15rem', height: '25rem' }}
                   className="my-2"
                 >
-                  <Card.Header className="text-center">
-                    {categoryIdList[product.categoryId]}
+                  <Card.Header
+                    className="text-center"
+                    style={{
+                      backgroundColor: `${
+                        this.findCategory(product, categories).color
+                      }`
+                    }}
+                  >
+                    {this.findCategory(product, categories).name}
                   </Card.Header>
                   <Card.Body className="text-center">
                     <Card.Img src={product.imageUrl} />
                     <Card.Title>{product.title}</Card.Title>
                   </Card.Body>
-                  <Card.Footer className="text-center">
+                  <Card.Footer
+                    className="text-center"
+                    // style={{
+                    //   backgroundColor: `${
+                    //     this.findCategory(product, categories).color
+                    //   }`
+                    // }}
+                  >
                     <Card.Subtitle>
                       ${product.price}
                       <span> / {product.quantity} inStock</span>

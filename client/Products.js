@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { Button, Card, Container, Col, Row } from 'react-bootstrap';
-const seed = require('../server/db/seed');
+import React, { Component } from "react";
+import { Button, Card, CardGroup, Container, Col, Row } from "react-bootstrap";
+const seed = require("../server/db/seed");
 
 class Products extends Component {
   findCategory = (product, categories) => {
@@ -12,15 +12,17 @@ class Products extends Component {
     const categories = seed.categories;
 
     return (
-      <Container className="d-flex mt-3">
+      <CardGroup className="d-flex-row m-3 ">
         <Row>
           {products.map(product => {
             return (
-              <Col lg={true} xl={true} key={product.id}>
+              <Col key={product.id}>
                 <Card
+                  key={product.id}
                   style={{
-                    width: '15rem',
-                    height: '25rem'
+                    width: "15rem",
+                    height: "27rem"
+
                     // borderColor: `${
                     //   this.findCategory(product, categories).color
                     // }`
@@ -60,7 +62,7 @@ class Products extends Component {
             );
           })}
         </Row>
-      </Container>
+      </CardGroup>
     );
   }
 }

@@ -1,19 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Card, Col, Container, Image, Row } from 'react-bootstrap';
-const seed = require('../server/db/seed');
+import { connect } from 'react-redux';
 
-class ProductDetail extends Component {
-  findCategory = (product, categories) => {
-    return categories.find(cat => cat.id === product.categoryId);
+const ProductDetail = ({ products, categories, match }) => {
+  const displayProduct = products.find(prod => prod.id === match.params.id * 1);
+  const findCategory = (prod, cats) => {
+    return cats.find(cat => cat.id === prod.categoryId);
   };
-  render() {
-    //temporarily pulling data from seed file
-    const categories = seed.categories;
-    const products = seed.seedProducts;
-    const tempProduct = products[6];
-
-    return (
-      <Container className="d-flex mt-5">
+  return (
+    <Container className="d-flex mt-5">
+      {/* Make sure to be defensive when loading a single product */}
+      {displayProduct ? (
         <Row>
           <Col className="mr-3">
             <Card>
@@ -21,37 +18,39 @@ class ProductDetail extends Component {
                 className="text-center"
                 style={{
                   backgroundColor: `${
-                    this.findCategory(tempProduct, categories).color
-                  }`
+                    findCategory(displayProduct, categories).color
+                  }`,
                 }}
               >
-                {this.findCategory(tempProduct, categories).name}
+                {findCategory(displayProduct, categories).name}
               </Card.Header>
               <Card.Body className="text-center">
-                <Card.Img src={tempProduct.imageUrl} />
+                <Card.Img src={displayProduct.imageUrl} />
               </Card.Body>
               <Card.Footer
                 className="text-center"
                 style={{
                   backgroundColor: `${
-                    this.findCategory(tempProduct, categories).color
-                  }`
+                    findCategory(displayProduct, categories).color
+                  }`,
                 }}
               >
                 <Card.Subtitle>
-                  ${tempProduct.price}
-                  <span> / {tempProduct.quantity} inStock</span>
+                  ${displayProduct.price}
+                  <span> / {displayProduct.quantity} inStock</span>
                 </Card.Subtitle>
               </Card.Footer>
             </Card>
           </Col>
           <Col className="d-flex flex-column align-items-start">
             <Row className="d-flex mt-auto mb-auto">
-              <h4>{tempProduct.title}</h4>
+              <h4>{displayProduct.title}</h4>
 
-              <p className="text-justify">{tempProduct.description}</p>
+              <p className="text-justify">{displayProduct.description}</p>
+              {/*
+              We aren't seeding this data for all products so I commented out until we have this data for all products
               <Container className="d-flex justify-content-center">
-                {tempProduct.detailImages.map(img => {
+                {product.detailImages.map(img => {
                   return (
                     <Image
                       key={img}
@@ -60,13 +59,22 @@ class ProductDetail extends Component {
                     />
                   );
                 })}
-              </Container>
+              </Container> */}
             </Row>
           </Col>
         </Row>
-      </Container>
-    );
-  }
-}
+      ) : (
+        'No Product Found (we can replace with a better message later'
+      )}
+    </Container>
+  );
+};
 
-export default ProductDetail;
+const mapStateToProps = ({ categories, products }) => {
+  return {
+    products,
+    categories,
+  };
+};
+
+export default connect(mapStateToProps)(ProductDetail);

@@ -1,20 +1,26 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Card, Container, Col, Row } from 'react-bootstrap';
-const seed = require('../server/db/seed');
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-class Products extends Component {
-  findCategory = (product, categories) => {
-    return categories.find(cat => cat.id === product.categoryId);
+const Products = ({ products, categories, match }) => {
+  let displayProducts = [];
+  if (match.params.categoryId) {
+    displayProducts = products.filter(
+      prod => prod.categoryId === match.params.categoryId * 1
+    );
+  } else {
+    displayProducts = products;
+  }
+  const findCategory = (product, cats) => {
+    return cats.find(cat => cat.id === product.categoryId);
   };
-  render() {
-    //temporarily pulling data from seed file
-    const products = seed.seedProducts;
-    const categories = seed.categories;
-
-    return (
-      <Container className="d-flex mt-3">
+  return (
+    <Container className="d-flex mt-3">
+      {/* Make sure to be defensive when loading products based on the category */}
+      {displayProducts.length ? (
         <Row>
-          {products.map(product => {
+          {displayProducts.map(product => {
             return (
               <Col lg={true} xl={true} key={product.id}>
                 <Card
@@ -25,23 +31,25 @@ class Products extends Component {
                     className="text-center"
                     style={{
                       backgroundColor: `${
-                        this.findCategory(product, categories).color
-                      }`
+                        findCategory(product, categories).color
+                        }`,
                     }}
                   >
-                    {this.findCategory(product, categories).name}
+                    {findCategory(product, categories).name}
                   </Card.Header>
-                  <Card.Body className="text-center">
-                    <Card.Img src={product.imageUrl} />
-                    <Card.Title>{product.title}</Card.Title>
-                  </Card.Body>
+                  <Link to={`/products/${product.id}`}>
+                    <Card.Body className="text-center">
+                      <Card.Img src={product.imageUrl} />
+                      <Card.Title>{product.title}</Card.Title>
+                    </Card.Body>
+                  </Link>
                   <Card.Footer
                     className="text-center"
-                    // style={{
-                    //   backgroundColor: `${
-                    //     this.findCategory(product, categories).color
-                    //   }`
-                    // }}
+                    style={{
+                      backgroundColor: `${
+                        findCategory(product, categories).color
+                        }`,
+                    }}
                   >
                     <Card.Subtitle>
                       ${product.price}
@@ -53,9 +61,18 @@ class Products extends Component {
             );
           })}
         </Row>
-      </Container>
-    );
-  }
-}
+      ) : (
+          'No Products Found (We can update with a better message later'
+        )}
+    </Container>
+  );
+};
 
-export default Products;
+const mapStateToProps = ({ categories, products }) => {
+  return {
+    categories,
+    products,
+  };
+};
+
+export default connect(mapStateToProps)(Products);

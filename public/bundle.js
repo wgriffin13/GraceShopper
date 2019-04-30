@@ -433,8 +433,14 @@ class Products extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
               react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"],
               {
-                style: { width: '15rem', height: '25rem' },
-                className: 'my-2'
+                style: {
+                  width: '15rem',
+                  height: '25rem'
+                  // borderColor: `${
+                  //   this.findCategory(product, categories).color
+                  // }`
+                },
+                className: 'd-flex-column my-2 shadow mt-3 bg-white rounded'
               },
               react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
                 react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Header,
@@ -448,10 +454,10 @@ class Products extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
               ),
               react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
                 react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Body,
-                { className: 'text-center' },
-                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Img, { src: product.imageUrl }),
+                { className: 'mt-auto text-center' },
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Img, { variant: 'top', src: product.imageUrl }),
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                  react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Title,
+                  'h5',
                   null,
                   product.title
                 )
@@ -459,25 +465,20 @@ class Products extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
               react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
                 react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Footer,
                 {
-                  className: 'text-center'
-                  // style={{
-                  //   backgroundColor: `${
-                  //     this.findCategory(product, categories).color
-                  //   }`
-                  // }}
+                  variant: 'bottom',
+                  className: 'text-center',
+                  style: {
+                    backgroundColor: `${this.findCategory(product, categories).color}`
+                  }
                 },
+                '$',
+                product.price,
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                  react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Subtitle,
+                  'span',
                   null,
-                  '$',
-                  product.price,
-                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                    'span',
-                    null,
-                    ' / ',
-                    product.quantity,
-                    ' inStock'
-                  )
+                  ' / ',
+                  product.quantity,
+                  ' inStock'
                 )
               )
             )
@@ -56343,7 +56344,7 @@ const seedProducts = [{
   detailImages: ['https://images-na.ssl-images-amazon.com/images/I/611sajwcmDL._SX679_.jpg', 'https://images-na.ssl-images-amazon.com/images/I/81mf1iexHxL._SX679_.jpg'],
   description: 'TOTAL BODY CONDITIONING – Designed to create gentle resistance for a variety of toning exercises for arms, legs & core. IMPROVED FITNESS – Ideal for Pilates and improving balance & posture, strengthening core, increasing flexibility. REHABILITATION - Great for users with diminished capacity or for rehab, as well as beginners to slowly build strength. DURABLE DESIGN - Made out of steel and covered by durable rubber, the 14” ring withstands pressure and heavy use. PADDED HANDLES - Soft foam handles are padded on both the inside and outside of the ring for a comfortable, firm grip'
 }, {
-  title: 'Bowflex SelectTech Adjustable Dumbbells',
+  title: 'Bowflex SelectTech Dumbbells',
   categoryId: 5,
   price: 299.0,
   quantity: 2,

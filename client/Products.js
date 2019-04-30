@@ -18,8 +18,14 @@ class Products extends Component {
             return (
               <Col lg={true} xl={true} key={product.id}>
                 <Card
-                  style={{ width: '15rem', height: '25rem' }}
-                  className="my-2"
+                  style={{
+                    width: '15rem',
+                    height: '25rem'
+                    // borderColor: `${
+                    //   this.findCategory(product, categories).color
+                    // }`
+                  }}
+                  className="d-flex-column my-2 shadow mt-3 bg-white rounded"
                 >
                   <Card.Header
                     className="text-center"
@@ -31,22 +37,21 @@ class Products extends Component {
                   >
                     {this.findCategory(product, categories).name}
                   </Card.Header>
-                  <Card.Body className="text-center">
-                    <Card.Img src={product.imageUrl} />
-                    <Card.Title>{product.title}</Card.Title>
+                  <Card.Body className="mt-auto text-center">
+                    <Card.Img variant="top" src={product.imageUrl} />
+                    <h5>{product.title}</h5>
                   </Card.Body>
                   <Card.Footer
+                    variant="bottom"
                     className="text-center"
-                    // style={{
-                    //   backgroundColor: `${
-                    //     this.findCategory(product, categories).color
-                    //   }`
-                    // }}
+                    style={{
+                      backgroundColor: `${
+                        this.findCategory(product, categories).color
+                      }`
+                    }}
                   >
-                    <Card.Subtitle>
-                      ${product.price}
-                      <span> / {product.quantity} inStock</span>
-                    </Card.Subtitle>
+                    ${product.price}
+                    <span> / {product.quantity} inStock</span>
                   </Card.Footer>
                 </Card>
               </Col>

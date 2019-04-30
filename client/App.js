@@ -4,6 +4,7 @@ import Products from './Products';
 import Navigation from './Nav';
 import ProductDetail from './ProductDetail';
 import Home from './Home';
+import Login from './Login';
 
 class App extends Component {
   render() {
@@ -14,6 +15,7 @@ class App extends Component {
           <Route exact path="/products" component={Products} />
           <Route exact path="/products/:id" component={ProductDetail} />
           <Route exact path="/" component={Home} />
+          <Route exact path="/login" component={Login} />
         </HashRouter>
       </Fragment>
     );

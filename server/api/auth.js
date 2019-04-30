@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const User = require('../db/index');
+const { User } = require('../db/index');
 
 //log in - look for user in db, post user to session
 router.post('/', (req, res, next) => {

@@ -50013,7 +50013,7 @@ module.exports = exports['default'];
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext, BrowserRouter, HashRouter, Link, NavLink */
+/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -56117,9 +56117,84 @@ const seedProducts = [{
   description: "CONSTRUCTION – Made of solid cast iron with a machined hole and a durable, black baked enamel finish. These weights have a 2-inch center hole to fit on Olympic bars. FEATURES –Each weight features grip holes to provide a secure grip during use. The baked enamel coating ensures a durable, reliable weight that will last through grueling workouts & the raised numbers help to easily identify weight sizes. VERSATILE – Weight plates can be used to perform muscle strengthening exercises and endurance training, and to increase flexibility and balance. A single weight plate can also be used for warm-up exercises. CHOICES – These weight plates are available in 2.5, 5, 10, 25 and 45 lbs. There are grip holes for each weight size to provide a secure grip when loading and unloading the weights. TRUST– Trust experience. CAP has been a pioneer in the fitness industry for over 30 years with locations worldwide. Chances are, if you have ever worked out before you have used a CAP product."
 }];
 
+const seedUsers = [{
+  email: "jane@email.com",
+  password: "12345"
+}, {
+  email: "joe@email.com",
+  password: "catsdogs"
+}, {
+  email: "owner@email.com",
+  password: "54321",
+  isAdmin: true
+}];
+
+const seedOrders = [{
+  userId: 1,
+  status: "pending"
+}, {
+  userId: 1,
+  status: "purchased"
+}, {
+  userId: 2,
+  status: "cancelled"
+}, {
+  userid: 2,
+  status: "shipped"
+}];
+
+const seedLineItems = [{
+  quantity: 3,
+  productId: 12,
+  orderPrice: 32.95,
+  netTotalCost: 32.95,
+  orderId: 1
+}, {
+  quantity: 1,
+  productId: 19,
+  orderPrice: 332.94,
+  discount: -30,
+  netTotalCost: 302.94,
+  orderId: 1
+}, {
+  quantity: 1,
+  productId: 24,
+  orderPrice: 38.07,
+  netTotalCost: 38.07,
+  orderId: 1
+}, {
+  quantity: 2,
+  productId: 3,
+  orderPrice: 9.99,
+  netTotalCost: 9.99,
+  orderId: 2
+}, {
+  quantity: 4,
+  productId: 6,
+  orderPrice: 14.99,
+  netTotalCost: 14.99,
+  orderId: 2
+}, {
+  quantity: 1,
+  productId: 11,
+  orderPrice: 945,
+  discount: -50,
+  netTotalCost: 895,
+  orderId: 3
+}, {
+  quantity: 1,
+  productId: 20,
+  orderPrice: 79,
+  netTotalCost: 79,
+  orderId: 4
+}];
+
 module.exports = {
   seedCategories,
-  seedProducts
+  seedProducts,
+  seedUsers,
+  seedOrders,
+  seedLineItems
 };
 
 /***/ }),

@@ -1,17 +1,42 @@
 import React, { Component, Fragment } from 'react';
-import { HashRouter, Route } from 'react-router-dom';
+import { HashRouter, Route, Switch } from 'react-router-dom';
 import Products from './Products';
+import Navigation from './Nav';
+import ProductDetail from './ProductDetail';
+import { connect } from 'react-redux';
+import { fetchCategories, fetchProducts } from './store';
+import Home from './Home';
 
 class App extends Component {
+  componentDidMount() {
+    this.props.fetchInitialCategories();
+    this.props.fetchInitialProducts();
+  }
   render() {
     return (
       <Fragment>
         <HashRouter>
-          <Route exact path="/" component={Products} />
+          <Route component={Navigation} />
+          <Switch>
+            <Route exact path="/products" component={Products} />
+            <Route path="/products/category/:categoryId" component={Products} />
+            <Route exact path="/products/:id" component={ProductDetail} />
+            <Route exact path="/" component={Home} />
+          </Switch>
         </HashRouter>
       </Fragment>
     );
   }
 }
 
-export default App;
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchInitialCategories: () => dispatch(fetchCategories()),
+    fetchInitialProducts: () => dispatch(fetchProducts()),
+  };
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(App);

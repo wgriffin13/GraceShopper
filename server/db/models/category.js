@@ -8,6 +8,13 @@ const Category = conn.define('category', {
       notEmpty: true,
     },
   },
+  color: {
+    type: conn.Sequelize.STRING,
+    allowNull: false,
+    validate: {
+      notEmpty: true,
+    },
+  },
 });
 
 module.exports = Category;

@@ -1,35 +1,39 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Card, Container, Col, Row } from 'react-bootstrap';
-const seed = require('../server/db/seed');
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-class Home extends Component {
-  render() {
-    //temporarily pulling data from seed file
-    const categories = seed.categories;
-
-    return (
-      <Container className="d-flex">
-        <Row>
-          {categories.map(category => {
-            return (
-              <Col lg={true} xl={true} key={category.id}>
+const Home = ({ categories }) => {
+  return (
+    <Container className="d-flex">
+      <Row>
+        {categories.map(category => {
+          return (
+            <Col lg={true} xl={true} key={category.id}>
+              <Link to={`/products/category/${category.id}`}>
                 <Card
                   style={{
                     width: '15rem',
                     height: '15rem',
-                    backgroundColor: `${category.color}`
+                    backgroundColor: `${category.color}`,
                   }}
                   className="my-3 justify-content-center "
                 >
                   <Container className="text-center">{category.name}</Container>
                 </Card>
-              </Col>
-            );
-          })}
-        </Row>
-      </Container>
-    );
-  }
-}
+              </Link>
+            </Col>
+          );
+        })}
+      </Row>
+    </Container>
+  );
+};
 
-export default Home;
+const mapStateToProps = ({ categories }) => {
+  return {
+    categories,
+  };
+};
+
+export default connect(mapStateToProps)(Home);

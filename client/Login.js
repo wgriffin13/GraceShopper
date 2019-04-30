@@ -14,7 +14,7 @@ class Login extends Component {
     handleChange = (evt) => {
         this.setState({
             [evt.target.name]: evt.target.value
-        });
+        }, () => console.log(this.state));
     }
     handleSubmit = (evt) => {
         evt.preventDefault();
@@ -22,11 +22,14 @@ class Login extends Component {
             email: this.state.email,
             password: this.state.password
         })
+            .then(user => {
+                if (user.id) this.props.history.push('/')
+            })
             .catch(error => this.setState({
                 error,
                 email: '',
                 password: ''
-            }))
+            }, () => console.log(this.state)))
 
     }
     render() {

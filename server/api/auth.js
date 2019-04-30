@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { User } = require('../db/index');
+const { User } = require('../db//models');
 
 //log in - look for user in db, post user to session
 router.post('/', (req, res, next) => {
@@ -15,9 +15,11 @@ router.post('/', (req, res, next) => {
                 error.status = 401;
                 throw error;
             }
+            console.log('we found them!' + user);
             req.session.user = user;
             res.send(user)
         })
+        .catch(next)
 })
 
 //upon successful log-in, return get the session (or throw a log-in error)

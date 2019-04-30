@@ -25,7 +25,11 @@ export const loginAttempt = (user) => {
     return dispatch => {
         return axios.post('/api/auth', user)
             .then(res => res.data)
-            .then(userData => dispatch(setUserActionCreator(userData)))
+            .then(userData => {
+                console.log(userData);
+                dispatch(setUserActionCreator(userData));
+                return userData;
+            })
     }
 }
 

@@ -267,7 +267,7 @@ const seedProducts = [
       'TOTAL BODY CONDITIONING – Designed to create gentle resistance for a variety of toning exercises for arms, legs & core. IMPROVED FITNESS – Ideal for Pilates and improving balance & posture, strengthening core, increasing flexibility. REHABILITATION - Great for users with diminished capacity or for rehab, as well as beginners to slowly build strength. DURABLE DESIGN - Made out of steel and covered by durable rubber, the 14” ring withstands pressure and heavy use. PADDED HANDLES - Soft foam handles are padded on both the inside and outside of the ring for a comfortable, firm grip',
   },
   {
-    title: 'Bowflex SelectTech Adjustable Dumbbells',
+    title: 'Bowflex SelectTech Dumbbells',
     categoryId: 5,
     price: 299.0,
     quantity: 2,

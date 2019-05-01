@@ -1,12 +1,14 @@
 import React from 'react';
-import { Card, Col, Container, Image, Row } from 'react-bootstrap';
+import { Card, Col, Container, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import ProductImages from './ProductImages';
 
 const ProductDetail = ({ products, categories, match }) => {
   const displayProduct = products.find(prod => prod.id === match.params.id * 1);
   const findCategory = (prod, cats) => {
     return cats.find(cat => cat.id === prod.categoryId);
   };
+
   return (
     <Container className="d-flex mt-5">
       {/* Make sure to be defensive when loading a single product */}
@@ -19,7 +21,7 @@ const ProductDetail = ({ products, categories, match }) => {
                 style={{
                   backgroundColor: `${
                     findCategory(displayProduct, categories).color
-                  }`,
+                  }`
                 }}
               >
                 {findCategory(displayProduct, categories).name}
@@ -32,7 +34,7 @@ const ProductDetail = ({ products, categories, match }) => {
                 style={{
                   backgroundColor: `${
                     findCategory(displayProduct, categories).color
-                  }`,
+                  }`
                 }}
               >
                 <Card.Subtitle>
@@ -47,24 +49,12 @@ const ProductDetail = ({ products, categories, match }) => {
               <h4>{displayProduct.title}</h4>
 
               <p className="text-justify">{displayProduct.description}</p>
-              {/*
-              We aren't seeding this data for all products so I commented out until we have this data for all products
-              <Container className="d-flex justify-content-center">
-                {product.detailImages.map(img => {
-                  return (
-                    <Image
-                      key={img}
-                      src={img}
-                      style={{ width: '5rem', height: '5rem' }}
-                    />
-                  );
-                })}
-              </Container> */}
+              <ProductImages prodIdx={displayProduct.id} />
             </Row>
           </Col>
         </Row>
       ) : (
-        'No Product Found (we can replace with a better message later'
+        'No Product Found'
       )}
     </Container>
   );
@@ -73,7 +63,7 @@ const ProductDetail = ({ products, categories, match }) => {
 const mapStateToProps = ({ categories, products }) => {
   return {
     products,
-    categories,
+    categories
   };
 };
 

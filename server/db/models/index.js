@@ -1,6 +1,6 @@
 const Product = require('./product');
 const Category = require('./category');
-const User = require('./User')
+const User = require('./user')
 const Order = require('./order');
 const LineItem = require('./lineitem');
 

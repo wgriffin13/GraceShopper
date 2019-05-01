@@ -1,7 +1,7 @@
-import React from 'react';
-import { Card, Container, Col, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+import React from "react";
+import { Card, Container, Col, Row } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
 const Products = ({ products, categories, match }) => {
   let displayProducts = [];
@@ -22,17 +22,25 @@ const Products = ({ products, categories, match }) => {
         <Row>
           {displayProducts.map(product => {
             return (
-              <Col lg={true} xl={true} key={product.id}>
+              <Col key={product.id}>
                 <Card
-                  style={{ width: '15rem', height: '25rem' }}
-                  className="my-2"
+                  key={product.id}
+                  style={{
+                    width: "15rem",
+                    height: "27rem"
+
+                    // borderColor: `${
+                    //   this.findCategory(product, categories).color
+                    // }`
+                  }}
+                  className="mb-3 mt-3 shadow bg-white rounded"
                 >
                   <Card.Header
                     className="text-center"
                     style={{
                       backgroundColor: `${
                         findCategory(product, categories).color
-                      }`,
+                      }`
                     }}
                   >
                     {findCategory(product, categories).name}
@@ -48,13 +56,11 @@ const Products = ({ products, categories, match }) => {
                     style={{
                       backgroundColor: `${
                         findCategory(product, categories).color
-                      }`,
+                      }`
                     }}
                   >
-                    <Card.Subtitle>
-                      ${product.price}
-                      <span> / {product.quantity} inStock</span>
-                    </Card.Subtitle>
+                    ${product.price}
+                    <span> / {product.quantity} inStock</span>
                   </Card.Footer>
                 </Card>
               </Col>
@@ -62,7 +68,7 @@ const Products = ({ products, categories, match }) => {
           })}
         </Row>
       ) : (
-        'No Products Found (We can update with a better message later'
+        "No Products Found (We can update with a better message later"
       )}
     </Container>
   );
@@ -71,7 +77,7 @@ const Products = ({ products, categories, match }) => {
 const mapStateToProps = ({ categories, products }) => {
   return {
     categories,
-    products,
+    products
   };
 };
 

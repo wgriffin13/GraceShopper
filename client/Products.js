@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, Container, Col, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
 const Products = ({ products, categories, match }) => {
@@ -45,10 +45,17 @@ const Products = ({ products, categories, match }) => {
                     {findCategory(product, categories).name}
                   </Card.Header>
                   <Card.Body className="text-center">
-                    <Link to={`/products/${product.id}`}>
+                    {/* <Link
+                      to={`/products/${product.id}`}
+                      style={{ textDecoration: "none", color: "white" }}
+                    > */}
+                    <Card.Link
+                      style={{ textDecoration: "none" }}
+                      href={`/#/products/${product.id}`}
+                    >
                       <Card.Img src={product.imageUrl} />
                       <Card.Title>{product.title}</Card.Title>
-                    </Link>
+                    </Card.Link>
                   </Card.Body>
                   <Card.Footer
                     className="text-center"
@@ -67,7 +74,7 @@ const Products = ({ products, categories, match }) => {
           })}
         </Row>
       ) : (
-        "No Products Found (We can update with a better message later"
+        "No Products Found"
       )}
     </Container>
   );

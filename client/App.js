@@ -7,7 +7,7 @@ import ProductImages from './ProductImages';
 import { connect } from 'react-redux';
 import { fetchCategories, fetchProducts, fetchProductImages } from './store';
 import Home from './Home';
-import Admin from './Admin/Admin';
+import Admin from './Admin/AdminPage';
 import Login from './Login';
 
 class App extends Component {

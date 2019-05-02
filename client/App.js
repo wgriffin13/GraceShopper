@@ -4,14 +4,16 @@ import Products from './Products';
 import Navigation from './Nav';
 import ProductDetail from './ProductDetail';
 import { connect } from 'react-redux';
-import { fetchCategories, fetchProducts } from './store';
+import { fetchCategories, fetchProducts, sessionLogin } from './store';
 import Home from './Home';
 import Login from './Login';
+import Cart from './Cart';
 
 class App extends Component {
   componentDidMount() {
     this.props.fetchInitialCategories();
     this.props.fetchInitialProducts();
+    this.props.sessionLogin();
   }
   render() {
     return (
@@ -24,6 +26,7 @@ class App extends Component {
             <Route exact path="/products/:id" component={ProductDetail} />
             <Route exact path="/" component={Home} />
             <Route exact path="/login" component={Login} />
+            <Route exact path="/cart" component={Cart} />
           </Switch>
         </HashRouter>
       </Fragment>
@@ -35,6 +38,8 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchInitialCategories: () => dispatch(fetchCategories()),
     fetchInitialProducts: () => dispatch(fetchProducts()),
+    sessionLogin: () => dispatch(sessionLogin())
+    
   };
 };
 

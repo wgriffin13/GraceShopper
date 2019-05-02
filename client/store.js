@@ -33,6 +33,21 @@ export const loginAttempt = (user) => {
     }
 }
 
+export const sessionLogin = () => {
+    return dispatch => {
+      return axios.get('/api/auth')
+        .then(res => res.data)
+        .then(userData => dispatch(setUserActionCreator(userData)))
+    }
+  }
+  
+  export const logout = () => {
+    return dispatch => {
+      return axios.delete('/api/auth')
+        .then(() => dispatch(setUserActionCreator({})))
+    }
+  }
+
 const GET_CATEGORIES = 'GET_CATEGORIES';
 const GET_PRODUCTS = 'GET_PRODUCTS';
 

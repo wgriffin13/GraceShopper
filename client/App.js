@@ -5,7 +5,12 @@ import Navigation from './Nav';
 import ProductDetail from './ProductDetail';
 import ProductImages from './ProductImages';
 import { connect } from 'react-redux';
-import { fetchCategories, fetchProducts, fetchProductImages } from './store';
+import {
+  fetchCategories,
+  fetchProducts,
+  fetchProductImages,
+  fetchUsers
+} from './store';
 import Home from './Home';
 import Admin from './Admin/AdminPage';
 import Login from './Login';
@@ -15,6 +20,7 @@ class App extends Component {
     this.props.fetchInitialCategories();
     this.props.fetchInitialProducts();
     this.props.fetchInitialProductImages();
+    this.props.fetchInitialUsers();
   }
   render() {
     return (
@@ -44,7 +50,8 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchInitialCategories: () => dispatch(fetchCategories()),
     fetchInitialProducts: () => dispatch(fetchProducts()),
-    fetchInitialProductImages: () => dispatch(fetchProductImages())
+    fetchInitialProductImages: () => dispatch(fetchProductImages()),
+    fetchInitialUsers: () => dispatch(fetchUsers())
   };
 };
 

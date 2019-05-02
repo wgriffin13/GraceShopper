@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Badge, Card, Col, Row, Table } from 'react-bootstrap';
-
-//temp
-// import usersData from './UsersData';
+import {
+  Accordion,
+  Badge,
+  Button,
+  Card,
+  Col,
+  Row,
+  Table
+} from 'react-bootstrap';
 
 function UserRow(props) {
   const user = props.user;
@@ -36,8 +41,6 @@ function UserRow(props) {
 
 class UsersPanel extends Component {
   render() {
-    // const userList = usersData.filter(user => user.id < 10);
-
     const users = this.props.users;
 
     return (
@@ -46,30 +49,35 @@ class UsersPanel extends Component {
           <Col>
             <Card>
               <Card.Header>
-                <i className="fa fa-align-justify" /> Users{' '}
-                <small className="text-muted">registered</small>
+                <Accordion.Toggle as={Button} variant="link" eventKey="1">
+                  <h6>Users</h6>
+                </Accordion.Toggle>
               </Card.Header>
-              <Card.Body>
-                <Table
-                  hover
-                  responsive
-                  className="table-outline mb-0 d-none d-sm-table"
-                >
-                  <thead>
-                    <tr>
-                      <th scope="col">id</th>
-                      <th scope="col">email</th>
-                      <th scope="col">password</th>
-                      <th scope="col">administrator</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {users.length
-                      ? users.map(user => <UserRow key={user.id} user={user} />)
-                      : ''}
-                  </tbody>
-                </Table>
-              </Card.Body>
+              <Accordion.Collapse eventKey="1">
+                <Card.Body>
+                  <Table
+                    hover
+                    responsive
+                    className="table-outline mb-0 d-none d-sm-table"
+                  >
+                    <thead>
+                      <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Password</th>
+                        <th scope="col">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {users.length
+                        ? users.map(user => (
+                            <UserRow key={user.id} user={user} />
+                          ))
+                        : null}
+                    </tbody>
+                  </Table>
+                </Card.Body>
+              </Accordion.Collapse>
             </Card>
           </Col>
         </Row>

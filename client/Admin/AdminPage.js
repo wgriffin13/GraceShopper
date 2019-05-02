@@ -1,16 +1,17 @@
 import React, { Component, Fragment } from 'react';
-import { Card, Container, Col, Row } from 'react-bootstrap';
+import { Accordion, Card, Container, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import UsersPanel from './UsersPanel';
-import InventoryPanel from './Inventory';
+import InventoryPanel from './InventoryPanel';
+import OrdersPanel from './OrdersPanel';
 
 class Admin extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      users: this.seedState()
+      accordion: [],
+      orders: []
     };
-    console.log('props in AdminPage', props);
   }
 
   componentDidMount() {
@@ -20,50 +21,67 @@ class Admin extends Component {
   //temporarily hard seeding
   seedState = () => {
     return {
-      users: [
+      accordion: [true, true, true],
+
+      orders: [
         {
           id: 1,
-          email: 'jane@email.com',
-          password: '12345',
-          isAdmin: false
+          userId: 1,
+          status: 'pending'
         },
         {
           id: 2,
-          email: 'joe@email.com',
-          password: 'catsdogs',
-          isAdmin: false
+          userId: 1,
+          status: 'purchased'
         },
         {
           id: 3,
-          email: 'owner@email.com',
-          password: '54321',
-          isAdmin: true
+          userId: 2,
+          status: 'cancelled'
+        },
+        {
+          id: 4,
+          userId: 2,
+          status: 'shipped'
         }
       ]
     };
   };
 
+  toggleAccordion = tab => {
+    const prevState = this.state.accordion;
+    const state = prevState.map((x, index) => (tab === index ? !x : false));
+
+    this.setState({
+      accordion: state
+    });
+  };
+
   render() {
-    const users = this.state.users;
-    const products = this.props.products;
+    const { orders } = this.state;
+    const { products, users } = this.props;
 
     return (
       <Fragment>
         <Container className="d-flex">
-          <Row>
-            <Card>
-              <UsersPanel users={users} />
-              <InventoryPanel products={products} />
-            </Card>
-          </Row>
+          <Col>
+            <Accordion>
+              <Card>
+                <OrdersPanel orders={orders} />
+                <UsersPanel users={users} />
+                <InventoryPanel products={products} />
+              </Card>
+            </Accordion>
+          </Col>
         </Container>
       </Fragment>
     );
   }
 }
-const mapStateToProps = ({ products }) => {
+const mapStateToProps = ({ products, users }) => {
   return {
-    products
+    products,
+    users
   };
 };
 

@@ -100,7 +100,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _UsersPanel__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./UsersPanel */ "./client/Admin/UsersPanel.js");
-/* harmony import */ var _Inventory__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Inventory */ "./client/Admin/Inventory.js");
+/* harmony import */ var _InventoryPanel__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./InventoryPanel */ "./client/Admin/InventoryPanel.js");
+/* harmony import */ var _OrdersPanel__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./OrdersPanel */ "./client/Admin/OrdersPanel.js");
+
 
 
 
@@ -113,29 +115,41 @@ class Admin extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
 
     this.seedState = () => {
       return {
-        users: [{
+        accordion: [true, true, true],
+
+        orders: [{
           id: 1,
-          email: 'jane@email.com',
-          password: '12345',
-          isAdmin: false
+          userId: 1,
+          status: 'pending'
         }, {
           id: 2,
-          email: 'joe@email.com',
-          password: 'catsdogs',
-          isAdmin: false
+          userId: 1,
+          status: 'purchased'
         }, {
           id: 3,
-          email: 'owner@email.com',
-          password: '54321',
-          isAdmin: true
+          userId: 2,
+          status: 'cancelled'
+        }, {
+          id: 4,
+          userId: 2,
+          status: 'shipped'
         }]
       };
     };
 
-    this.state = {
-      users: this.seedState()
+    this.toggleAccordion = tab => {
+      const prevState = this.state.accordion;
+      const state = prevState.map((x, index) => tab === index ? !x : false);
+
+      this.setState({
+        accordion: state
+      });
     };
-    console.log('props in AdminPage', props);
+
+    this.state = {
+      accordion: [],
+      orders: []
+    };
   }
 
   componentDidMount() {
@@ -146,8 +160,8 @@ class Admin extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
 
 
   render() {
-    const users = this.state.users;
-    const products = this.props.products;
+    const { orders } = this.state;
+    const { products, users } = this.props;
 
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
       react__WEBPACK_IMPORTED_MODULE_0__["Fragment"],
@@ -156,22 +170,28 @@ class Admin extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
         react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"],
         { className: 'd-flex' },
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-          react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Row"],
+          react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Col"],
           null,
           react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-            react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"],
+            react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Accordion"],
             null,
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UsersPanel__WEBPACK_IMPORTED_MODULE_3__["default"], { users: users }),
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Inventory__WEBPACK_IMPORTED_MODULE_4__["default"], { products: products })
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+              react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"],
+              null,
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_OrdersPanel__WEBPACK_IMPORTED_MODULE_5__["default"], { orders: orders }),
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UsersPanel__WEBPACK_IMPORTED_MODULE_3__["default"], { users: users }),
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_InventoryPanel__WEBPACK_IMPORTED_MODULE_4__["default"], { products: products })
+            )
           )
         )
       )
     );
   }
 }
-const mapStateToProps = ({ products }) => {
+const mapStateToProps = ({ products, users }) => {
   return {
-    products
+    products,
+    users
   };
 };
 
@@ -179,10 +199,10 @@ const mapStateToProps = ({ products }) => {
 
 /***/ }),
 
-/***/ "./client/Admin/Inventory.js":
-/*!***********************************!*\
-  !*** ./client/Admin/Inventory.js ***!
-  \***********************************/
+/***/ "./client/Admin/InventoryPanel.js":
+/*!****************************************!*\
+  !*** ./client/Admin/InventoryPanel.js ***!
+  \****************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -196,7 +216,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const InventoryPanel = props => {
   const products = props.products;
-  console.log('products', products);
+
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
     react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Row"],
     null,
@@ -209,106 +229,127 @@ const InventoryPanel = props => {
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
           react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Header,
           null,
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement('i', { className: 'fa fa-align-justify' }),
-          ' Product Inventory'
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+            react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Accordion"].Toggle,
+            { as: react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], variant: 'link', eventKey: '2' },
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+              'h6',
+              null,
+              ' Product Inventory'
+            )
+          )
         ),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-          react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Body,
-          null,
+          react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Accordion"].Collapse,
+          { eventKey: '2' },
           react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-            react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Table"],
-            { hover: true, bordered: true, striped: true, responsive: true, size: 'sm' },
+            react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Body,
+            null,
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-              'thead',
-              null,
+              react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Table"],
+              { hover: true, bordered: true, striped: true, responsive: true, size: 'sm' },
               react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                'tr',
+                'thead',
                 null,
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                  'th',
+                  'tr',
                   null,
-                  'Title'
-                ),
-                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                  'th',
-                  null,
-                  'Date Added'
-                ),
-                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                  'th',
-                  null,
-                  'Category'
-                ),
-                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                  'th',
-                  null,
-                  'Quantity'
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'th',
+                    null,
+                    'Id'
+                  ),
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'th',
+                    null,
+                    'Product'
+                  ),
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'th',
+                    null,
+                    'Price'
+                  ),
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'th',
+                    null,
+                    'Category'
+                  ),
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'th',
+                    null,
+                    'Quantity'
+                  )
                 )
+              ),
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                'tbody',
+                null,
+                products.length ? products.map(product => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                  'tr',
+                  { key: product.id },
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'td',
+                    null,
+                    product.id
+                  ),
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'td',
+                    null,
+                    product.title
+                  ),
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'td',
+                    null,
+                    product.price
+                  ),
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'td',
+                    null,
+                    product.categoryId
+                  ),
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'td',
+                    null,
+                    product.quantity
+                  ),
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'td',
+                    null,
+                    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                      react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Badge"],
+                      { variant: 'success' },
+                      'InStock'
+                    )
+                  )
+                )) : null
               )
             ),
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-              'tbody',
+              react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"],
               null,
-              products.length ? products.map(product => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                'tr',
-                { key: product.id },
-                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                  'td',
-                  null,
-                  product.title
-                ),
-                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                  'td',
-                  null,
-                  product.createdAt
-                ),
-                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                  'td',
-                  null,
-                  product.categoryId
-                ),
-                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                  'td',
-                  null,
-                  product.quantity
-                ),
-                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                  'td',
-                  null,
-                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                    react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Badge"],
-                    { variant: 'success' },
-                    'InStock'
-                  )
-                )
-              )) : 'no data'
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Prev, null),
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Item,
+                null,
+                '1'
+              ),
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Item,
+                null,
+                '2'
+              ),
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Item,
+                null,
+                '3'
+              ),
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Item,
+                null,
+                '4'
+              ),
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Next, null)
             )
-          ),
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-            react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"],
-            null,
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Prev, null),
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-              react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Item,
-              null,
-              '1'
-            ),
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-              react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Item,
-              null,
-              '2'
-            ),
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-              react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Item,
-              null,
-              '3'
-            ),
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-              react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Item,
-              null,
-              '4'
-            ),
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Next, null)
           )
         )
       )
@@ -317,6 +358,139 @@ const InventoryPanel = props => {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (InventoryPanel);
+
+/***/ }),
+
+/***/ "./client/Admin/OrdersPanel.js":
+/*!*************************************!*\
+  !*** ./client/Admin/OrdersPanel.js ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
+
+
+
+const OrdersPanel = props => {
+  const orders = props.orders;
+
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+    react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Row"],
+    null,
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+      react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Col"],
+      null,
+      react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+        react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"],
+        null,
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+          react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Header,
+          null,
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+            react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Accordion"].Toggle,
+            { as: react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], variant: 'link', eventKey: '0' },
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+              'h6',
+              null,
+              'Orders'
+            )
+          )
+        ),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+          react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Accordion"].Collapse,
+          { eventKey: '0' },
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+            react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Body,
+            null,
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+              react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Table"],
+              { hover: true, bordered: true, striped: true, responsive: true, size: 'sm' },
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                'thead',
+                null,
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                  'tr',
+                  null,
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'th',
+                    null,
+                    'OrderId'
+                  ),
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'th',
+                    null,
+                    'UserId'
+                  ),
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'th',
+                    null,
+                    'Status'
+                  )
+                )
+              ),
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                'tbody',
+                null,
+                orders.length ? orders.map(order => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                  'tr',
+                  { key: order.id },
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'td',
+                    null,
+                    order.id
+                  ),
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'td',
+                    null,
+                    order.userId
+                  ),
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'td',
+                    null,
+                    order.status
+                  )
+                )) : null
+              )
+            ),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+              react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"],
+              null,
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Prev, null),
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Item,
+                null,
+                '1'
+              ),
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Item,
+                null,
+                '2'
+              ),
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Item,
+                null,
+                '3'
+              ),
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Item,
+                null,
+                '4'
+              ),
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Next, null)
+            )
+          )
+        )
+      )
+    )
+  );
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (OrdersPanel);
 
 /***/ }),
 
@@ -336,9 +510,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-//temp
-// import usersData from './UsersData';
 
 function UserRow(props) {
   const user = props.user;
@@ -392,8 +563,6 @@ function UserRow(props) {
 
 class UsersPanel extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
   render() {
-    // const userList = usersData.filter(user => user.id < 10);
-
     const users = this.props.users;
 
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
@@ -411,57 +580,62 @@ class UsersPanel extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
               react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Card"].Header,
               null,
-              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement('i', { className: 'fa fa-align-justify' }),
-              ' Users',
-              ' ',
               react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                'small',
-                { className: 'text-muted' },
-                'registered'
+                react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Accordion"].Toggle,
+                { as: react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Button"], variant: 'link', eventKey: '1' },
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                  'h6',
+                  null,
+                  'Users'
+                )
               )
             ),
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-              react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Card"].Body,
-              null,
+              react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Accordion"].Collapse,
+              { eventKey: '1' },
               react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Table"],
-                {
-                  hover: true,
-                  responsive: true,
-                  className: 'table-outline mb-0 d-none d-sm-table'
-                },
+                react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Card"].Body,
+                null,
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                  'thead',
-                  null,
+                  react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Table"],
+                  {
+                    hover: true,
+                    responsive: true,
+                    className: 'table-outline mb-0 d-none d-sm-table'
+                  },
                   react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                    'tr',
+                    'thead',
                     null,
                     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                      'th',
-                      { scope: 'col' },
-                      'id'
-                    ),
-                    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                      'th',
-                      { scope: 'col' },
-                      'email'
-                    ),
-                    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                      'th',
-                      { scope: 'col' },
-                      'password'
-                    ),
-                    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                      'th',
-                      { scope: 'col' },
-                      'administrator'
+                      'tr',
+                      null,
+                      react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                        'th',
+                        { scope: 'col' },
+                        'Id'
+                      ),
+                      react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                        'th',
+                        { scope: 'col' },
+                        'Email'
+                      ),
+                      react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                        'th',
+                        { scope: 'col' },
+                        'Password'
+                      ),
+                      react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                        'th',
+                        { scope: 'col' },
+                        'Status'
+                      )
                     )
+                  ),
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'tbody',
+                    null,
+                    users.length ? users.map(user => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserRow, { key: user.id, user: user })) : null
                   )
-                ),
-                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                  'tbody',
-                  null,
-                  users.length ? users.map(user => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserRow, { key: user.id, user: user })) : ''
                 )
               )
             )
@@ -514,6 +688,7 @@ class App extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
     this.props.fetchInitialCategories();
     this.props.fetchInitialProducts();
     this.props.fetchInitialProductImages();
+    this.props.fetchInitialUsers();
   }
   render() {
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
@@ -547,7 +722,8 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchInitialCategories: () => dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_7__["fetchCategories"])()),
     fetchInitialProducts: () => dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_7__["fetchProducts"])()),
-    fetchInitialProductImages: () => dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_7__["fetchProductImages"])())
+    fetchInitialProductImages: () => dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_7__["fetchProductImages"])()),
+    fetchInitialUsers: () => dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_7__["fetchUsers"])())
   };
 };
 
@@ -1187,7 +1363,7 @@ react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_
 /*!*************************!*\
   !*** ./client/store.js ***!
   \*************************/
-/*! exports provided: store, fetchCategories, fetchProducts, fetchProductImages, loginAttempt */
+/*! exports provided: store, fetchCategories, fetchProducts, fetchProductImages, loginAttempt, fetchUsers */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1197,6 +1373,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchProducts", function() { return fetchProducts; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchProductImages", function() { return fetchProductImages; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loginAttempt", function() { return loginAttempt; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchUsers", function() { return fetchUsers; });
 /* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
 /* harmony import */ var redux_logger__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! redux-logger */ "./node_modules/redux-logger/dist/redux-logger.js");
 /* harmony import */ var redux_logger__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(redux_logger__WEBPACK_IMPORTED_MODULE_1__);
@@ -1211,18 +1388,22 @@ __webpack_require__.r(__webpack_exports__);
 //CONSTANTS
 
 const SET_USER = 'SET_USER';
+const GET_USERS = 'GET_USERS';
 const GET_CATEGORIES = 'GET_CATEGORIES';
 const GET_PRODUCTS = 'GET_PRODUCTS';
 const GET_PRODUCT_IMAGES = 'GET_PRODUCTS_IMAGES';
 
 //ACTION CREATORS
 
-const setUserActionCreator = user => {
-  return {
-    type: SET_USER,
-    user
-  };
-};
+const setUserActionCreator = user => ({
+  type: SET_USER,
+  user
+});
+
+const getUsers = users => ({
+  type: GET_USERS,
+  users
+});
 
 const getCategories = categories => ({
   type: GET_CATEGORIES,
@@ -1255,6 +1436,12 @@ const fetchProducts = () => {
 const fetchProductImages = () => {
   return dispatch => {
     return axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/api/products/productImages').then(response => response.data).then(images => dispatch(getProductImages(images)));
+  };
+};
+
+const fetchUsers = () => {
+  return dispatch => {
+    return axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/api/users').then(response => response.data).then(users => dispatch(getUsers(users)));
   };
 };
 
@@ -1305,12 +1492,21 @@ const user = (state = {}, action) => {
       return state;
   }
 };
+const users = (state = {}, action) => {
+  switch (action.type) {
+    case GET_USERS:
+      return action.users;
+    default:
+      return state;
+  }
+};
 
 const reducer = Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"])({
   categories,
   products,
   productImages,
-  user
+  user,
+  users
 });
 
 const store = Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(reducer, Object(redux__WEBPACK_IMPORTED_MODULE_0__["applyMiddleware"])(redux_thunk__WEBPACK_IMPORTED_MODULE_2__["default"], redux_logger__WEBPACK_IMPORTED_MODULE_1___default.a));

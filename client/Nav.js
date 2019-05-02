@@ -1,9 +1,12 @@
-import React, { Component, Fragment } from 'react';
-import { Navbar, Nav, Form, FormControl, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import React, { Component, Fragment } from "react";
+import { Navbar, Nav, Form, FormControl, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { logout } from "./store";
 
 class Navigation extends Component {
   render() {
+    console.log("are we logged in", this.props.isLoggedIn);
     return (
       <Fragment>
         <Navbar bg="light">
@@ -20,9 +23,19 @@ class Navigation extends Component {
             <Nav.Link as={Link} to="/admin" className="mr-auto">
               admin
             </Nav.Link>
-            <Nav.Link as={Link} to="/login" className="mr-auto">
-              login
-            </Nav.Link>
+            {this.props.isLoggedIn ? (
+              <button
+                className="mr-auto"
+                type="button"
+                onClick={this.props.logout}
+              >
+                logout
+              </button>
+            ) : (
+              <Nav.Link as={Link} to="/login" className="mr-auto">
+                login
+              </Nav.Link>
+            )}
             <Nav.Link as={Link} to="/cart">
               cart
             </Nav.Link>
@@ -44,4 +57,19 @@ class Navigation extends Component {
   }
 }
 
-export default Navigation;
+const mapStateToProps = ({ user }) => {
+  return {
+    isLoggedIn: !!user.id
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    logout: () => dispatch(logout())
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Navigation);

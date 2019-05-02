@@ -1,23 +1,27 @@
-import { createStore, applyMiddleware, combineReducers } from 'redux';
-import loggerMiddleware from 'redux-logger';
-import thunkMiddleware from 'redux-thunk';
-import axios from 'axios';
+import { createStore, applyMiddleware, combineReducers } from "redux";
+import loggerMiddleware from "redux-logger";
+import thunkMiddleware from "redux-thunk";
+import axios from "axios";
 
 //CONSTANTS
 
-const SET_USER = 'SET_USER';
-const GET_CATEGORIES = 'GET_CATEGORIES';
-const GET_PRODUCTS = 'GET_PRODUCTS';
-const GET_PRODUCT_IMAGES = 'GET_PRODUCTS_IMAGES';
+const SET_USER = "SET_USER";
+const GET_USERS = "GET_USERS";
+const GET_CATEGORIES = "GET_CATEGORIES";
+const GET_PRODUCTS = "GET_PRODUCTS";
+const GET_PRODUCT_IMAGES = "GET_PRODUCTS_IMAGES";
 
 //ACTION CREATORS
 
-const setUserActionCreator = user => {
-  return {
-    type: SET_USER,
-    user
-  };
-};
+const setUserActionCreator = user => ({
+  type: SET_USER,
+  user
+});
+
+const getUsers = users => ({
+  type: GET_USERS,
+  users
+});
 
 const getCategories = categories => ({
   type: GET_CATEGORIES,
@@ -39,7 +43,7 @@ const getProductImages = productImages => ({
 const fetchCategories = () => {
   return dispatch => {
     return axios
-      .get('/api/categories')
+      .get("/api/categories")
       .then(response => response.data)
       .then(categories => dispatch(getCategories(categories)));
   };
@@ -48,7 +52,7 @@ const fetchCategories = () => {
 const fetchProducts = () => {
   return dispatch => {
     return axios
-      .get('/api/products')
+      .get("/api/products")
       .then(response => response.data)
       .then(products => dispatch(getProducts(products)));
   };
@@ -56,22 +60,47 @@ const fetchProducts = () => {
 const fetchProductImages = () => {
   return dispatch => {
     return axios
-      .get('/api/products/productImages')
+      .get("/api/products/productImages")
       .then(response => response.data)
       .then(images => dispatch(getProductImages(images)));
+  };
+};
+
+const fetchUsers = () => {
+  return dispatch => {
+    return axios
+      .get("/api/users")
+      .then(response => response.data)
+      .then(users => dispatch(getUsers(users)));
   };
 };
 
 const loginAttempt = user => {
   return dispatch => {
     return axios
-      .post('/api/auth', user)
+      .post("/api/auth", user)
       .then(res => res.data)
       .then(userData => {
-        console.log(userData);
         dispatch(setUserActionCreator(userData));
         return userData;
       });
+  };
+};
+
+const sessionLogin = () => {
+  return dispatch => {
+    return axios
+      .get("/api/auth")
+      .then(res => res.data)
+      .then(userData => dispatch(setUserActionCreator(userData)));
+  };
+};
+
+const logout = () => {
+  return dispatch => {
+    return axios
+      .delete("/api/auth")
+      .then(() => dispatch(setUserActionCreator({})));
   };
 };
 
@@ -112,12 +141,21 @@ const user = (state = {}, action) => {
       return state;
   }
 };
+const users = (state = {}, action) => {
+  switch (action.type) {
+    case GET_USERS:
+      return action.users;
+    default:
+      return state;
+  }
+};
 
 const reducer = combineReducers({
   categories,
   products,
   productImages,
-  user
+  user,
+  users
 });
 
 const store = createStore(
@@ -130,5 +168,8 @@ export {
   fetchCategories,
   fetchProducts,
   fetchProductImages,
-  loginAttempt
+  loginAttempt,
+  fetchUsers,
+  sessionLogin,
+  logout
 };

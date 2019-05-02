@@ -2,9 +2,7 @@ const path = require('path');
 const volleyball = require('volleyball');
 const express = require('express');
 const app = express();
-const syncAndSeed = require('./db');
 const session = require('express-session');
-const port = process.env.PORT || 1337;
 
 //Logging
 app.use(volleyball);
@@ -48,8 +46,4 @@ app.use((error, req, res, next) => {
   res.status(error.status || 500).send({ errors });
 });
 
-syncAndSeed().then(() => {
-  app.listen(port, () => {
-    console.log(`app listening on port ${port}`);
-  });
-});
+module.exports = app;

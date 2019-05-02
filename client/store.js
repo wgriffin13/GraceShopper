@@ -3,6 +3,8 @@ import loggerMiddleware from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
 import axios from 'axios';
 
+//CONSTANTS
+
 const SET_USER = 'SET_USER';
 const GET_CATEGORIES = 'GET_CATEGORIES';
 const GET_PRODUCTS = 'GET_PRODUCTS';

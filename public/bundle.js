@@ -105,6 +105,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./store */ "./client/store.js");
 /* harmony import */ var _Home__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Home */ "./client/Home.js");
 /* harmony import */ var _Login__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Login */ "./client/Login.js");
+/* harmony import */ var _Cart__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Cart */ "./client/Cart.js");
+
 
 
 
@@ -135,7 +137,8 @@ class App extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
           react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], { path: '/products/category/:categoryId', component: _Products__WEBPACK_IMPORTED_MODULE_2__["default"] }),
           react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], { exact: true, path: '/products/:id', component: _ProductDetail__WEBPACK_IMPORTED_MODULE_4__["default"] }),
           react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], { exact: true, path: '/', component: _Home__WEBPACK_IMPORTED_MODULE_7__["default"] }),
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], { exact: true, path: '/login', component: _Login__WEBPACK_IMPORTED_MODULE_8__["default"] })
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], { exact: true, path: '/login', component: _Login__WEBPACK_IMPORTED_MODULE_8__["default"] }),
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], { exact: true, path: '/cart', component: _Cart__WEBPACK_IMPORTED_MODULE_9__["default"] })
         )
       )
     );
@@ -150,6 +153,59 @@ const mapDispatchToProps = dispatch => {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_5__["connect"])(null, mapDispatchToProps)(App));
+
+/***/ }),
+
+/***/ "./client/Cart.js":
+/*!************************!*\
+  !*** ./client/Cart.js ***!
+  \************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+
+
+
+class Cart extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
+
+    constructor() {
+        super();
+        this.state = {
+            pendingOrder: {}
+        };
+    }
+
+    findPendingOrder() {
+        this.setState({ pendingOrder: this.props.orders.find(order => order.status === 'pending') });
+    }
+    render() {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+            'div',
+            null,
+            this.props.orders.status === 'pending' ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                'div',
+                null,
+                'Order found - ',
+                this.state.pendingOrder.id,
+                ' '
+            ) : 'No items in your cart'
+        );
+    }
+}
+
+const mapStateToProps = state => {
+    return {
+        orders: state.orders,
+        user: state.user
+    };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps)(Cart));
 
 /***/ }),
 
@@ -252,7 +308,10 @@ class Login extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
                 email: this.state.email,
                 password: this.state.password
             }).then(user => {
-                if (user.id) this.props.history.push('/');
+                if (user.id) {
+                    this.props.requestFetchUserOrders(user.id);
+                    this.props.history.push('/');
+                }
             }).catch(error => this.setState({
                 error,
                 email: '',
@@ -322,7 +381,8 @@ class Login extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
 
 const mapDispatchToProps = dispatch => {
     return {
-        login: user => dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_2__["loginAttempt"])(user))
+        login: user => dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_2__["loginAttempt"])(user)),
+        requestFetchUserOrders: userId => dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_2__["fetchUserOrders"])(userId))
     };
 };
 
@@ -665,7 +725,7 @@ react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_
 /*!*************************!*\
   !*** ./client/store.js ***!
   \*************************/
-/*! exports provided: loginAttempt, store, fetchCategories, fetchProducts */
+/*! exports provided: loginAttempt, store, fetchCategories, fetchProducts, fetchOrders, fetchUserOrders */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -674,6 +734,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "store", function() { return store; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchCategories", function() { return fetchCategories; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchProducts", function() { return fetchProducts; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchOrders", function() { return fetchOrders; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchUserOrders", function() { return fetchUserOrders; });
 /* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
 /* harmony import */ var redux_logger__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! redux-logger */ "./node_modules/redux-logger/dist/redux-logger.js");
 /* harmony import */ var redux_logger__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(redux_logger__WEBPACK_IMPORTED_MODULE_1__);
@@ -756,10 +818,43 @@ const products = (state = [], action) => {
     }
 };
 
+const GET_ORDERS = 'GET_ORDERS';
+
+const getOrders = orders => ({
+    type: GET_ORDERS,
+    orders
+});
+
+const fetchOrders = () => {
+    return dispatch => {
+        return axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/api/orders').then(response => response.data).then(data => {
+            dispatch(getOrders(data));
+        });
+    };
+};
+
+const fetchUserOrders = userId => {
+    return dispatch => {
+        return axios__WEBPACK_IMPORTED_MODULE_3___default.a.get(`/api/orders/user/${userId}`).then(response => response.data).then(data => {
+            dispatch(getOrders(data));
+        });
+    };
+};
+
+const orders = (state = [], action) => {
+    switch (action.type) {
+        case GET_ORDERS:
+            return action.orders;
+        default:
+            return state;
+    }
+};
+
 const reducer = Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"])({
     categories,
     products,
-    user
+    user,
+    orders
 });
 
 const store = Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(reducer, Object(redux__WEBPACK_IMPORTED_MODULE_0__["applyMiddleware"])(redux_thunk__WEBPACK_IMPORTED_MODULE_2__["default"], redux_logger__WEBPACK_IMPORTED_MODULE_1___default.a));
@@ -53700,7 +53795,7 @@ function warning(message) {
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext */
+/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext, BrowserRouter, HashRouter, Link, NavLink */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

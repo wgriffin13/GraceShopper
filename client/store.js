@@ -82,12 +82,51 @@ const products = (state = [], action) => {
     }
 };
 
+const GET_ORDERS = 'GET_ORDERS';
+
+const getOrders = (orders) => (
+    {
+        type: GET_ORDERS,
+        orders
+    }
+);
+
+const fetchOrders = () => {
+    return (dispatch) => {
+        return axios.get('/api/orders')
+            .then(response => response.data)
+            .then(data => {
+                dispatch(getOrders(data))
+            });
+    };
+};
+
+const fetchUserOrders = (userId) => {
+    return (dispatch) => {
+        return axios.get(`/api/orders/user/${userId}`)
+            .then(response => response.data)
+            .then(data => {
+                dispatch(getOrders(data))
+            });
+    };
+};
+
+const orders = (state = [], action) => {
+    switch (action.type) {
+        case GET_ORDERS:
+            return action.orders;
+        default:
+            return state;
+    }
+}
+
 const reducer = combineReducers({
     categories,
     products,
-    user
+    user,
+    orders,
 });
 
 const store = createStore(reducer, applyMiddleware(thunkMiddleware, loggerMiddleware));
 
-export { store, fetchCategories, fetchProducts };
+export { store, fetchCategories, fetchProducts, fetchOrders, fetchUserOrders };

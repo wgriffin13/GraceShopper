@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { fetchCategories, fetchProducts } from './store';
 import Home from './Home';
 import Login from './Login';
+import Cart from './Cart';
 
 class App extends Component {
   componentDidMount() {
@@ -24,6 +25,7 @@ class App extends Component {
             <Route exact path="/products/:id" component={ProductDetail} />
             <Route exact path="/" component={Home} />
             <Route exact path="/login" component={Login} />
+            <Route exact path="/cart" component={Cart} />
           </Switch>
         </HashRouter>
       </Fragment>

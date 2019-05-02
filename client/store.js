@@ -4,38 +4,18 @@ import thunkMiddleware from 'redux-thunk';
 import axios from 'axios';
 
 const SET_USER = 'SET_USER';
-
-const setUserActionCreator = (user) => {
-    return {
-        type: SET_USER,
-        user
-    }
-}
-
-const user = (state = {}, action) => {
-    switch (action.type) {
-        case SET_USER:
-            return action.user;
-        default:
-            return state;
-    }
-}
-
-export const loginAttempt = (user) => {
-    return dispatch => {
-        return axios.post('/api/auth', user)
-            .then(res => res.data)
-            .then(userData => {
-                console.log(userData);
-                dispatch(setUserActionCreator(userData));
-                return userData;
-            })
-    }
-}
-
 const GET_CATEGORIES = 'GET_CATEGORIES';
 const GET_PRODUCTS = 'GET_PRODUCTS';
 const GET_PRODUCT_IMAGES = 'GET_PRODUCTS_IMAGES';
+
+//ACTION CREATORS
+
+const setUserActionCreator = user => {
+  return {
+    type: SET_USER,
+    user
+  };
+};
 
 const getCategories = categories => ({
   type: GET_CATEGORIES,
@@ -52,22 +32,24 @@ const getProductImages = productImages => ({
   productImages
 });
 
+//THUNKS
+
 const fetchCategories = () => {
-    return dispatch => {
-        return axios
-            .get('/api/categories')
-            .then(response => response.data)
-            .then(categories => dispatch(getCategories(categories)));
-    };
+  return dispatch => {
+    return axios
+      .get('/api/categories')
+      .then(response => response.data)
+      .then(categories => dispatch(getCategories(categories)));
+  };
 };
 
 const fetchProducts = () => {
-    return dispatch => {
-        return axios
-            .get('/api/products')
-            .then(response => response.data)
-            .then(products => dispatch(getProducts(products)));
-    };
+  return dispatch => {
+    return axios
+      .get('/api/products')
+      .then(response => response.data)
+      .then(products => dispatch(getProducts(products)));
+  };
 };
 const fetchProductImages = () => {
   return dispatch => {
@@ -78,22 +60,37 @@ const fetchProductImages = () => {
   };
 };
 
+const loginAttempt = user => {
+  return dispatch => {
+    return axios
+      .post('/api/auth', user)
+      .then(res => res.data)
+      .then(userData => {
+        console.log(userData);
+        dispatch(setUserActionCreator(userData));
+        return userData;
+      });
+  };
+};
+
+//REDUCERS
+
 const categories = (state = [], action) => {
-    switch (action.type) {
-        case GET_CATEGORIES:
-            return action.categories;
-        default:
-            return state;
-    }
+  switch (action.type) {
+    case GET_CATEGORIES:
+      return action.categories;
+    default:
+      return state;
+  }
 };
 
 const products = (state = [], action) => {
-    switch (action.type) {
-        case GET_PRODUCTS:
-            return action.products;
-        default:
-            return state;
-    }
+  switch (action.type) {
+    case GET_PRODUCTS:
+      return action.products;
+    default:
+      return state;
+  }
 };
 
 const productImages = (state = [], action) => {
@@ -105,18 +102,31 @@ const productImages = (state = [], action) => {
   }
 };
 
+const user = (state = {}, action) => {
+  switch (action.type) {
+    case SET_USER:
+      return action.user;
+    default:
+      return state;
+  }
+};
+
 const reducer = combineReducers({
-<<<<<<< HEAD
   categories,
   products,
-  productImages
-=======
-    categories,
-    products,
-    user
->>>>>>> upstream/dev
+  productImages,
+  user
 });
 
-const store = createStore(reducer, applyMiddleware(thunkMiddleware, loggerMiddleware));
+const store = createStore(
+  reducer,
+  applyMiddleware(thunkMiddleware, loggerMiddleware)
+);
 
-export { store, fetchCategories, fetchProducts, fetchProductImages };
+export {
+  store,
+  fetchCategories,
+  fetchProducts,
+  fetchProductImages,
+  loginAttempt
+};

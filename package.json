@@ -5,6 +5,7 @@
   "main": "./server/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
     "start:server": "DATABASE_URL=postgres://localhost/graceshopper nodemon ./server/index.js",
     "postinstall": "./node_modules/webpack/bin/webpack.js",
     "webpack": "webpack",
@@ -47,6 +48,7 @@
     "react-redux": "^7.0.2",
     "react-router-dom": "^5.0.0",
     "redux": "^4.0.1",
+    "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "sequelize": "^5.7.5",
     "volleyball": "^1.5.1",

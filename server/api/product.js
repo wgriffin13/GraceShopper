@@ -17,18 +17,6 @@ router.get('/productImages', (req, res, next) => {
     .catch(next);
 });
 
-// //GET /api/products/productId/productimagesId
-// router.get('/:id/:productImagesId', (req, res, next) => {
-//   ProductImage.findAll({
-//     where: {
-//       productId: req.params.productImagesId
-//     },
-//     include: [{ model: Product }]
-//   })
-//     .then(image => res.send(image))
-//     .catch(next);
-// });
-
 //POST /api/products
 router.post('/', (req, res, next) => {
   Product.create(req.body)

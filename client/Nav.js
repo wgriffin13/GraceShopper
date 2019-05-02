@@ -17,6 +17,9 @@ class Navigation extends Component {
             </Nav.Link>
           </Nav>
           <Nav className="justify-content-end">
+            <Nav.Link as={Link} to="/admin" className="mr-auto">
+              admin
+            </Nav.Link>
             <Nav.Link as={Link} to="/login" className="mr-auto">
               login
             </Nav.Link>

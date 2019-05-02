@@ -1,7 +1,6 @@
-import React from "react";
-import { Card, Container, Col, Row } from "react-bootstrap";
-// import { Link } from "react-router-dom";
-import { connect } from "react-redux";
+import React from 'react';
+import { Card, Container, Col, Row } from 'react-bootstrap';
+import { connect } from 'react-redux';
 
 const Products = ({ products, categories, match }) => {
   let displayProducts = [];
@@ -28,8 +27,8 @@ const Products = ({ products, categories, match }) => {
                 <Card
                   key={product.id}
                   style={{
-                    width: "15rem",
-                    height: "27rem",
+                    width: '15rem',
+                    height: '27rem',
                     borderColor: `${findCategory(product, categories).color}`
                   }}
                   className="mb-3 mt-3 shadow bg-white rounded"
@@ -45,12 +44,8 @@ const Products = ({ products, categories, match }) => {
                     {findCategory(product, categories).name}
                   </Card.Header>
                   <Card.Body className="text-center">
-                    {/* <Link
-                      to={`/products/${product.id}`}
-                      style={{ textDecoration: "none", color: "white" }}
-                    > */}
                     <Card.Link
-                      style={{ textDecoration: "none" }}
+                      style={{ textDecoration: 'none' }}
                       href={`/#/products/${product.id}`}
                     >
                       <Card.Img src={product.imageUrl} />
@@ -74,7 +69,7 @@ const Products = ({ products, categories, match }) => {
           })}
         </Row>
       ) : (
-        "No Products Found"
+        'No Products Found'
       )}
     </Container>
   );

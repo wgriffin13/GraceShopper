@@ -105,6 +105,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./store */ "./client/store.js");
 /* harmony import */ var _Home__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Home */ "./client/Home.js");
 /* harmony import */ var _Login__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Login */ "./client/Login.js");
+/* harmony import */ var _Cart__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Cart */ "./client/Cart.js");
+
 
 
 
@@ -119,6 +121,7 @@ class App extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
   componentDidMount() {
     this.props.fetchInitialCategories();
     this.props.fetchInitialProducts();
+    this.props.sessionLogin();
   }
   render() {
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
@@ -135,7 +138,8 @@ class App extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
           react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], { path: '/products/category/:categoryId', component: _Products__WEBPACK_IMPORTED_MODULE_2__["default"] }),
           react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], { exact: true, path: '/products/:id', component: _ProductDetail__WEBPACK_IMPORTED_MODULE_4__["default"] }),
           react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], { exact: true, path: '/', component: _Home__WEBPACK_IMPORTED_MODULE_7__["default"] }),
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], { exact: true, path: '/login', component: _Login__WEBPACK_IMPORTED_MODULE_8__["default"] })
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], { exact: true, path: '/login', component: _Login__WEBPACK_IMPORTED_MODULE_8__["default"] }),
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], { exact: true, path: '/cart', component: _Cart__WEBPACK_IMPORTED_MODULE_9__["default"] })
         )
       )
     );
@@ -145,11 +149,38 @@ class App extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
 const mapDispatchToProps = dispatch => {
   return {
     fetchInitialCategories: () => dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_6__["fetchCategories"])()),
-    fetchInitialProducts: () => dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_6__["fetchProducts"])())
+    fetchInitialProducts: () => dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_6__["fetchProducts"])()),
+    sessionLogin: () => dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_6__["sessionLogin"])())
+
   };
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_5__["connect"])(null, mapDispatchToProps)(App));
+
+/***/ }),
+
+/***/ "./client/Cart.js":
+/*!************************!*\
+  !*** ./client/Cart.js ***!
+  \************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+const Cart = () => {
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+        'h1',
+        null,
+        'This will be the cart display!'
+    );
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Cart);
 
 /***/ }),
 
@@ -343,12 +374,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./store */ "./client/store.js");
+
+
 
 
 
 
 class Navigation extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
   render() {
+    console.log("are we logged in", this.props.isLoggedIn);
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
       react__WEBPACK_IMPORTED_MODULE_0__["Fragment"],
       null,
@@ -377,7 +413,11 @@ class Navigation extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
           react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Nav"],
           { className: 'justify-content-end' },
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+          this.props.isLoggedIn ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+            'button',
+            { className: 'mr-auto', type: 'button', onClick: this.props.logout },
+            'logout'
+          ) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
             react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Nav"].Link,
             { as: react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], to: '/login', className: 'mr-auto' },
             'login'
@@ -408,7 +448,19 @@ class Navigation extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
   }
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (Navigation);
+const mapStateToProps = ({ user }) => {
+  return {
+    isLoggedIn: !!user.id
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    logout: () => dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_4__["logout"])())
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_3__["connect"])(mapStateToProps, mapDispatchToProps)(Navigation));
 
 /***/ }),
 
@@ -665,12 +717,14 @@ react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_
 /*!*************************!*\
   !*** ./client/store.js ***!
   \*************************/
-/*! exports provided: loginAttempt, store, fetchCategories, fetchProducts */
+/*! exports provided: loginAttempt, sessionLogin, logout, store, fetchCategories, fetchProducts */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loginAttempt", function() { return loginAttempt; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sessionLogin", function() { return sessionLogin; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "logout", function() { return logout; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "store", function() { return store; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchCategories", function() { return fetchCategories; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchProducts", function() { return fetchProducts; });
@@ -710,6 +764,18 @@ const loginAttempt = user => {
             dispatch(setUserActionCreator(userData));
             return userData;
         });
+    };
+};
+
+const sessionLogin = () => {
+    return dispatch => {
+        return axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/api/auth').then(res => res.data).then(userData => dispatch(setUserActionCreator(userData)));
+    };
+};
+
+const logout = () => {
+    return dispatch => {
+        return axios__WEBPACK_IMPORTED_MODULE_3___default.a.delete('/api/auth').then(() => dispatch(setUserActionCreator({})));
     };
 };
 
@@ -53700,7 +53766,7 @@ function warning(message) {
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext */
+/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext, BrowserRouter, HashRouter, Link, NavLink */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

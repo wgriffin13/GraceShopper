@@ -7,11 +7,8 @@ import ProductImages from './ProductImages';
 import { connect } from 'react-redux';
 import { fetchCategories, fetchProducts, fetchProductImages } from './store';
 import Home from './Home';
-<<<<<<< HEAD
 import Admin from './Admin/Admin';
-=======
 import Login from './Login';
->>>>>>> upstream/dev
 
 class App extends Component {
   componentDidMount() {
@@ -34,11 +31,8 @@ class App extends Component {
               component={ProductImages}
             />
             <Route exact path="/" component={Home} />
-<<<<<<< HEAD
             <Route exact path="/admin" component={Admin} />
-=======
             <Route exact path="/login" component={Login} />
->>>>>>> upstream/dev
           </Switch>
         </HashRouter>
       </Fragment>

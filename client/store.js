@@ -38,7 +38,6 @@ const GET_PRODUCTS = 'GET_PRODUCTS';
 const GET_PRODUCT_IMAGES = 'GET_PRODUCTS_IMAGES';
 
 const getCategories = categories => ({
-<<<<<<< HEAD
   type: GET_CATEGORIES,
   categories
 });
@@ -51,15 +50,6 @@ const getProducts = products => ({
 const getProductImages = productImages => ({
   type: GET_PRODUCT_IMAGES,
   productImages
-=======
-    type: GET_CATEGORIES,
-    categories,
-});
-
-const getProducts = products => ({
-    type: GET_PRODUCTS,
-    products,
->>>>>>> upstream/dev
 });
 
 const fetchCategories = () => {

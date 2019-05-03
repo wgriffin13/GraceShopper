@@ -86,6 +86,570 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./client/Admin/AdminPage.js":
+/*!***********************************!*\
+  !*** ./client/Admin/AdminPage.js ***!
+  \***********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _UsersPanel__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./UsersPanel */ "./client/Admin/UsersPanel.js");
+/* harmony import */ var _InventoryPanel__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./InventoryPanel */ "./client/Admin/InventoryPanel.js");
+/* harmony import */ var _OrdersPanel__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./OrdersPanel */ "./client/Admin/OrdersPanel.js");
+
+
+
+
+
+
+
+class Admin extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
+  constructor(props) {
+    super(props);
+
+    this.seedState = () => {
+      return {
+        accordion: [true, true, true],
+
+        orders: [{
+          id: 1,
+          userId: 1,
+          status: 'pending'
+        }, {
+          id: 2,
+          userId: 1,
+          status: 'purchased'
+        }, {
+          id: 3,
+          userId: 2,
+          status: 'cancelled'
+        }, {
+          id: 4,
+          userId: 2,
+          status: 'shipped'
+        }]
+      };
+    };
+
+    this.toggleAccordion = tab => {
+      const prevState = this.state.accordion;
+      const state = prevState.map((x, index) => tab === index ? !x : false);
+
+      this.setState({
+        accordion: state
+      });
+    };
+
+    this.state = {
+      accordion: [],
+      orders: []
+    };
+  }
+
+  componentDidMount() {
+    this.setState(this.seedState());
+  }
+
+  //temporarily hard seeding
+
+
+  render() {
+    const { orders } = this.state;
+    const { products, users } = this.props;
+
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+      react__WEBPACK_IMPORTED_MODULE_0__["Fragment"],
+      null,
+      react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+        react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"],
+        { className: 'd-flex' },
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+          react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Col"],
+          null,
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+            react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Accordion"],
+            null,
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+              react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"],
+              null,
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_OrdersPanel__WEBPACK_IMPORTED_MODULE_5__["default"], { orders: orders }),
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UsersPanel__WEBPACK_IMPORTED_MODULE_3__["default"], { users: users }),
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_InventoryPanel__WEBPACK_IMPORTED_MODULE_4__["default"], { products: products })
+            )
+          )
+        )
+      )
+    );
+  }
+}
+const mapStateToProps = ({ products, users }) => {
+  return {
+    products,
+    users
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps)(Admin));
+
+/***/ }),
+
+/***/ "./client/Admin/InventoryPanel.js":
+/*!****************************************!*\
+  !*** ./client/Admin/InventoryPanel.js ***!
+  \****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
+
+
+
+const InventoryPanel = props => {
+  const products = props.products;
+
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+    react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Row"],
+    null,
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+      react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Col"],
+      null,
+      react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+        react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"],
+        null,
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+          react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Header,
+          null,
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+            react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Accordion"].Toggle,
+            { as: react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], variant: 'link', eventKey: '2' },
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+              'h6',
+              null,
+              ' Product Inventory'
+            )
+          )
+        ),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+          react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Accordion"].Collapse,
+          { eventKey: '2' },
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+            react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Body,
+            null,
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+              react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Table"],
+              { hover: true, bordered: true, striped: true, responsive: true, size: 'sm' },
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                'thead',
+                null,
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                  'tr',
+                  null,
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'th',
+                    null,
+                    'Id'
+                  ),
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'th',
+                    null,
+                    'Product'
+                  ),
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'th',
+                    null,
+                    'Price'
+                  ),
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'th',
+                    null,
+                    'Category'
+                  ),
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'th',
+                    null,
+                    'Quantity'
+                  )
+                )
+              ),
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                'tbody',
+                null,
+                products.length ? products.map(product => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                  'tr',
+                  { key: product.id },
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'td',
+                    null,
+                    product.id
+                  ),
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'td',
+                    null,
+                    product.title
+                  ),
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'td',
+                    null,
+                    product.price
+                  ),
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'td',
+                    null,
+                    product.categoryId
+                  ),
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'td',
+                    null,
+                    product.quantity
+                  ),
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'td',
+                    null,
+                    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                      react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Badge"],
+                      { variant: 'success' },
+                      'InStock'
+                    )
+                  )
+                )) : null
+              )
+            ),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+              react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"],
+              null,
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Prev, null),
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Item,
+                null,
+                '1'
+              ),
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Item,
+                null,
+                '2'
+              ),
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Item,
+                null,
+                '3'
+              ),
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Item,
+                null,
+                '4'
+              ),
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Next, null)
+            )
+          )
+        )
+      )
+    )
+  );
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (InventoryPanel);
+
+/***/ }),
+
+/***/ "./client/Admin/OrdersPanel.js":
+/*!*************************************!*\
+  !*** ./client/Admin/OrdersPanel.js ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
+
+
+
+const OrdersPanel = props => {
+  const orders = props.orders;
+
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+    react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Row"],
+    null,
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+      react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Col"],
+      null,
+      react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+        react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"],
+        null,
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+          react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Header,
+          null,
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+            react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Accordion"].Toggle,
+            { as: react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], variant: 'link', eventKey: '0' },
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+              'h6',
+              null,
+              'Orders'
+            )
+          )
+        ),
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+          react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Accordion"].Collapse,
+          { eventKey: '0' },
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+            react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Body,
+            null,
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+              react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Table"],
+              { hover: true, bordered: true, striped: true, responsive: true, size: 'sm' },
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                'thead',
+                null,
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                  'tr',
+                  null,
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'th',
+                    null,
+                    'OrderId'
+                  ),
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'th',
+                    null,
+                    'UserId'
+                  ),
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'th',
+                    null,
+                    'Status'
+                  )
+                )
+              ),
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                'tbody',
+                null,
+                orders.length ? orders.map(order => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                  'tr',
+                  { key: order.id },
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'td',
+                    null,
+                    order.id
+                  ),
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'td',
+                    null,
+                    order.userId
+                  ),
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'td',
+                    null,
+                    order.status
+                  )
+                )) : null
+              )
+            ),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+              react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"],
+              null,
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Prev, null),
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Item,
+                null,
+                '1'
+              ),
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Item,
+                null,
+                '2'
+              ),
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Item,
+                null,
+                '3'
+              ),
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Item,
+                null,
+                '4'
+              ),
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Pagination"].Next, null)
+            )
+          )
+        )
+      )
+    )
+  );
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (OrdersPanel);
+
+/***/ }),
+
+/***/ "./client/Admin/UsersPanel.js":
+/*!************************************!*\
+  !*** ./client/Admin/UsersPanel.js ***!
+  \************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
+
+
+
+
+function UserRow(props) {
+  const user = props.user;
+  const userLink = `/users/${user.id}`;
+
+  const getBadge = isAdmin => {
+    return isAdmin ? 'success' : 'primary';
+  };
+
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+    'tr',
+    { key: user.id.toString() },
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+      'th',
+      { scope: 'row' },
+      react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+        react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"],
+        { to: userLink },
+        user.id
+      )
+    ),
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+      'td',
+      null,
+      react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+        react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"],
+        { to: userLink },
+        user.email
+      )
+    ),
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+      'td',
+      null,
+      user.password
+    ),
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+      'td',
+      null,
+      react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+        react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"],
+        { to: userLink },
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+          react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Badge"],
+          { color: getBadge(user.isAdmin) },
+          user.isAdmin ? 'Administrator' : 'User'
+        )
+      )
+    )
+  );
+}
+
+class UsersPanel extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
+  render() {
+    const users = this.props.users;
+
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+      'div',
+      null,
+      react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+        react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Row"],
+        null,
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+          react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Col"],
+          null,
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+            react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Card"],
+            null,
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+              react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Card"].Header,
+              null,
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Accordion"].Toggle,
+                { as: react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Button"], variant: 'link', eventKey: '1' },
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                  'h6',
+                  null,
+                  'Users'
+                )
+              )
+            ),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+              react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Accordion"].Collapse,
+              { eventKey: '1' },
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Card"].Body,
+                null,
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                  react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Table"],
+                  {
+                    hover: true,
+                    responsive: true,
+                    className: 'table-outline mb-0 d-none d-sm-table'
+                  },
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'thead',
+                    null,
+                    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                      'tr',
+                      null,
+                      react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                        'th',
+                        { scope: 'col' },
+                        'Id'
+                      ),
+                      react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                        'th',
+                        { scope: 'col' },
+                        'Email'
+                      ),
+                      react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                        'th',
+                        { scope: 'col' },
+                        'Password'
+                      ),
+                      react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                        'th',
+                        { scope: 'col' },
+                        'Status'
+                      )
+                    )
+                  ),
+                  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                    'tbody',
+                    null,
+                    users.length ? users.map(user => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserRow, { key: user.id, user: user })) : null
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    );
+  }
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (UsersPanel);
+
+/***/ }),
+
 /***/ "./client/App.js":
 /*!***********************!*\
   !*** ./client/App.js ***!
@@ -101,11 +665,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Products__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Products */ "./client/Products.js");
 /* harmony import */ var _Nav__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Nav */ "./client/Nav.js");
 /* harmony import */ var _ProductDetail__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ProductDetail */ "./client/ProductDetail.js");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./store */ "./client/store.js");
-/* harmony import */ var _Home__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Home */ "./client/Home.js");
-/* harmony import */ var _Login__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Login */ "./client/Login.js");
-/* harmony import */ var _Cart__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Cart */ "./client/Cart.js");
+/* harmony import */ var _ProductImages__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ProductImages */ "./client/ProductImages.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./store */ "./client/store.js");
+/* harmony import */ var _Home__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Home */ "./client/Home.js");
+/* harmony import */ var _Admin_AdminPage__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Admin/AdminPage */ "./client/Admin/AdminPage.js");
+/* harmony import */ var _Login__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Login */ "./client/Login.js");
+/* harmony import */ var _Cart__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./Cart */ "./client/Cart.js");
+
+
 
 
 
@@ -121,6 +689,9 @@ class App extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
   componentDidMount() {
     this.props.fetchInitialCategories();
     this.props.fetchInitialProducts();
+    this.props.fetchInitialProductImages();
+    this.props.fetchInitialUsers();
+    this.props.sessionLogin();
   }
   render() {
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
@@ -133,12 +704,18 @@ class App extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
           react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Switch"],
           null,
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], { exact: true, path: '/products', component: _Products__WEBPACK_IMPORTED_MODULE_2__["default"] }),
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], { path: '/products/category/:categoryId', component: _Products__WEBPACK_IMPORTED_MODULE_2__["default"] }),
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], { exact: true, path: '/products/:id', component: _ProductDetail__WEBPACK_IMPORTED_MODULE_4__["default"] }),
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], { exact: true, path: '/', component: _Home__WEBPACK_IMPORTED_MODULE_7__["default"] }),
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], { exact: true, path: '/login', component: _Login__WEBPACK_IMPORTED_MODULE_8__["default"] }),
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], { exact: true, path: '/cart', component: _Cart__WEBPACK_IMPORTED_MODULE_9__["default"] })
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], { exact: true, path: "/products", component: _Products__WEBPACK_IMPORTED_MODULE_2__["default"] }),
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], { path: "/products/category/:categoryId", component: _Products__WEBPACK_IMPORTED_MODULE_2__["default"] }),
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], { exact: true, path: "/products/:id", component: _ProductDetail__WEBPACK_IMPORTED_MODULE_4__["default"] }),
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], {
+            exact: true,
+            path: "/products/productImages",
+            component: _ProductImages__WEBPACK_IMPORTED_MODULE_5__["default"]
+          }),
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], { exact: true, path: "/", component: _Home__WEBPACK_IMPORTED_MODULE_8__["default"] }),
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], { exact: true, path: "/admin", component: _Admin_AdminPage__WEBPACK_IMPORTED_MODULE_9__["default"] }),
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], { exact: true, path: "/login", component: _Login__WEBPACK_IMPORTED_MODULE_10__["default"] }),
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], { exact: true, path: "/cart", component: _Cart__WEBPACK_IMPORTED_MODULE_11__["default"] })
         )
       )
     );
@@ -147,12 +724,15 @@ class App extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchInitialCategories: () => dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_6__["fetchCategories"])()),
-    fetchInitialProducts: () => dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_6__["fetchProducts"])())
+    fetchInitialCategories: () => dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_7__["fetchCategories"])()),
+    fetchInitialProducts: () => dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_7__["fetchProducts"])()),
+    fetchInitialProductImages: () => dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_7__["fetchProductImages"])()),
+    fetchInitialUsers: () => dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_7__["fetchUsers"])()),
+    sessionLogin: () => dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_7__["sessionLogin"])())
   };
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_5__["connect"])(null, mapDispatchToProps)(App));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_6__["connect"])(null, mapDispatchToProps)(App));
 
 /***/ }),
 
@@ -221,9 +801,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 
 
 
@@ -231,7 +809,7 @@ __webpack_require__.r(__webpack_exports__);
 const Home = ({ categories }) => {
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
     react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"],
-    { className: 'd-flex' },
+    { className: "d-flex" },
     react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
       react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Row"],
       null,
@@ -240,21 +818,27 @@ const Home = ({ categories }) => {
           react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Col"],
           { lg: true, xl: true, key: category.id },
           react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-            react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"],
-            { to: `/products/category/${category.id}` },
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-              react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"],
-              {
-                style: {
-                  width: '15rem',
-                  height: '15rem',
-                  backgroundColor: `${category.color}`
-                },
-                className: 'my-3 justify-content-center '
+            react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"],
+            {
+              style: {
+                width: "15rem",
+                height: "15rem",
+                backgroundColor: `${category.color}`
               },
+              className: "my-3 justify-content-center "
+            },
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+              react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Link,
+              { href: `/#/products/category/${category.id}` },
               react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"],
-                { className: 'text-center' },
+                react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Text,
+                {
+                  className: "white-text-with-blue-shadow text-center",
+                  style: {
+                    fontSize: "22px",
+                    color: "white"
+                  }
+                },
                 category.name
               )
             )
@@ -271,7 +855,7 @@ const mapStateToProps = ({ categories }) => {
   };
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_3__["connect"])(mapStateToProps)(Home));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps)(Home));
 
 /***/ }),
 
@@ -403,64 +987,82 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./store */ "./client/store.js");
+
+
 
 
 
 
 class Navigation extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
   render() {
+    console.log("are we logged in", this.props.isLoggedIn);
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
       react__WEBPACK_IMPORTED_MODULE_0__["Fragment"],
       null,
       react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
         react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Navbar"],
-        { bg: 'light' },
+        { bg: "light" },
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
           react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Navbar"].Brand,
           null,
-          'Grace Shopper'
+          "Grace Shopper"
         ),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
           react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Nav"],
-          { className: 'mr-auto' },
+          { className: "mr-auto" },
           react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
             react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Nav"].Link,
-            { as: react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], to: '/' },
-            'Home'
+            { as: react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], to: "/" },
+            "Home"
           ),
           react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
             react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Nav"].Link,
-            { as: react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], to: '/products' },
-            'Products'
+            { as: react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], to: "/products" },
+            "Products"
           )
         ),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
           react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Nav"],
-          { className: 'justify-content-end' },
+          { className: "justify-content-end" },
           react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
             react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Nav"].Link,
-            { as: react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], to: '/login', className: 'mr-auto' },
-            'login'
+            { as: react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], to: "/admin", className: "mr-auto" },
+            "admin"
+          ),
+          this.props.isLoggedIn ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+            "button",
+            {
+              className: "mr-auto",
+              type: "button",
+              onClick: this.props.logout
+            },
+            "logout"
+          ) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+            react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Nav"].Link,
+            { as: react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], to: "/login", className: "mr-auto" },
+            "login"
           ),
           react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
             react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Nav"].Link,
-            { as: react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], to: '/cart' },
-            'cart'
+            { as: react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], to: "/cart" },
+            "cart"
           )
         ),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
           react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"],
           { inline: true },
           react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["FormControl"], {
-            type: 'text',
-            size: 'sm',
-            placeholder: 'search',
-            className: 'mx-sm-2'
+            type: "text",
+            size: "sm",
+            placeholder: "search",
+            className: "mx-sm-2"
           }),
           react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
             react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Button"],
-            { variant: 'outline-secondary', size: 'sm' },
-            'search'
+            { variant: "outline-secondary", size: "sm" },
+            "search"
           )
         )
       )
@@ -468,7 +1070,19 @@ class Navigation extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
   }
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (Navigation);
+const mapStateToProps = ({ user }) => {
+  return {
+    isLoggedIn: !!user.id
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    logout: () => dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_4__["logout"])())
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_3__["connect"])(mapStateToProps, mapDispatchToProps)(Navigation));
 
 /***/ }),
 
@@ -485,87 +1099,122 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _ProductImages__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ProductImages */ "./client/ProductImages.js");
 
 
 
 
-const ProductDetail = ({ products, categories, match }) => {
-  const displayProduct = products.find(prod => prod.id === match.params.id * 1);
-  const findCategory = (prod, cats) => {
-    return cats.find(cat => cat.id === prod.categoryId);
-  };
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-    react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"],
-    { className: 'd-flex mt-5' },
-    displayProduct ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-      react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Row"],
-      null,
-      react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-        react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Col"],
-        { className: 'mr-3' },
+
+class ProductDetail extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
+  constructor(props) {
+    super(props);
+
+    this.displayProduct = () => {
+      return this.props.products.find(prod => prod.id === this.props.match.params.id * 1);
+    };
+
+    this.findCategory = (prod, cats) => {
+      return cats.find(cat => cat.id === prod.categoryId);
+    };
+
+    this.handleClick = event => {
+      event.preventDefault();
+      console.log(event.target.src);
+      this.setState({ displayImage: event.target.src });
+    };
+
+    this.state = {
+      displayImage: ''
+    };
+    console.log('props in ProductDetail', props);
+  }
+
+  componentDidMount() {
+    this.setState({ displayImage: this.displayProduct().imageUrl });
+  }
+
+  render() {
+    const { categories } = this.props;
+
+    const displayProduct = this.displayProduct();
+
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+      react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"],
+      { className: 'd-flex mt-5' },
+      this.displayProduct() ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+        react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Row"],
+        null,
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-          react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"],
-          null,
+          react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Col"],
+          { className: 'mr-3' },
           react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-            react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Header,
-            {
-              className: 'text-center',
-              style: {
-                backgroundColor: `${findCategory(displayProduct, categories).color}`
-              }
-            },
-            findCategory(displayProduct, categories).name
-          ),
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-            react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Body,
-            { className: 'text-center' },
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Img, { src: displayProduct.imageUrl })
-          ),
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-            react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Footer,
-            {
-              className: 'text-center',
-              style: {
-                backgroundColor: `${findCategory(displayProduct, categories).color}`
-              }
-            },
+            react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"],
+            null,
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-              react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Subtitle,
-              null,
-              '$',
-              displayProduct.price,
+              react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Header,
+              {
+                className: 'text-center',
+                style: {
+                  backgroundColor: `${this.findCategory(displayProduct, categories).color}`
+                }
+              },
+              this.findCategory(displayProduct, categories).name
+            ),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+              react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Body,
+              { className: 'text-center' },
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Img, { src: this.state.displayImage })
+            ),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+              react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Footer,
+              {
+                className: 'text-center',
+                style: {
+                  backgroundColor: `${this.findCategory(displayProduct, categories).color}`
+                }
+              },
               react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                'span',
+                react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Subtitle,
                 null,
-                ' / ',
-                displayProduct.quantity,
-                ' inStock'
+                '$',
+                displayProduct.price,
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+                  'span',
+                  null,
+                  ' / ',
+                  displayProduct.quantity,
+                  ' inStock'
+                )
               )
             )
           )
-        )
-      ),
-      react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-        react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Col"],
-        { className: 'd-flex flex-column align-items-start' },
+        ),
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-          react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Row"],
-          { className: 'd-flex mt-auto mb-auto' },
+          react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Col"],
+          { className: 'd-flex flex-column align-items-start' },
           react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-            'h4',
-            null,
-            displayProduct.title
+            react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Row"],
+            { className: 'd-flex mt-auto mb-auto' },
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+              'h4',
+              null,
+              displayProduct.title
+            ),
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+              'p',
+              { className: 'text-justify' },
+              displayProduct.description
+            )
           ),
-          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-            'p',
-            { className: 'text-justify' },
-            displayProduct.description
-          )
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ProductImages__WEBPACK_IMPORTED_MODULE_3__["default"], {
+            prodIdx: displayProduct.id,
+            handleClick: this.handleClick
+          })
         )
-      )
-    ) : 'No Product Found (we can replace with a better message later'
-  );
-};
+      ) : 'No Product Found'
+    );
+  }
+}
 
 const mapStateToProps = ({ categories, products }) => {
   return {
@@ -575,6 +1224,70 @@ const mapStateToProps = ({ categories, products }) => {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps)(ProductDetail));
+
+/***/ }),
+
+/***/ "./client/ProductImages.js":
+/*!*********************************!*\
+  !*** ./client/ProductImages.js ***!
+  \*********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+
+
+
+
+const ProductImages = ({ productImages, prodIdx, handleClick }) => {
+  const foundImages = productImages.filter(img => img.productId === prodIdx);
+
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+    react__WEBPACK_IMPORTED_MODULE_0__["Fragment"],
+    null,
+    foundImages.length ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+      react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"],
+      null,
+      react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+        react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Row"],
+        { className: 'd-flex justify-content-center' },
+        foundImages.map(img => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+          react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["ButtonGroup"],
+          { key: img.id },
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
+            react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Button"],
+            {
+              className: 'mr-2 mb-2',
+              variant: 'outline-info',
+              type: 'button',
+              onClick: handleClick,
+              href: img.imageUrl
+            },
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Image"], {
+              style: { height: '80px' },
+              src: img.imageUrl,
+              rounded: true,
+              className: 'align-items-center'
+            })
+          )
+        ))
+      )
+    ) : 'No additional product images available'
+  );
+};
+
+const mapStateToProps = ({ productImages }) => {
+  return {
+    productImages
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps)(ProductImages));
 
 /***/ }),
 
@@ -590,15 +1303,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 
 
 
 
 const Products = ({ products, categories, match }) => {
   let displayProducts = [];
+
   if (match.params.categoryId) {
     displayProducts = products.filter(prod => prod.categoryId === match.params.categoryId * 1);
   } else {
@@ -607,9 +1319,10 @@ const Products = ({ products, categories, match }) => {
   const findCategory = (product, cats) => {
     return cats.find(cat => cat.id === product.categoryId);
   };
+
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
     react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"],
-    { className: "d-flex mt-3" },
+    { className: 'd-flex mt-3' },
     displayProducts.length ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
       react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Row"],
       null,
@@ -622,19 +1335,16 @@ const Products = ({ products, categories, match }) => {
             {
               key: product.id,
               style: {
-                width: "15rem",
-                height: "27rem"
-
-                // borderColor: `${
-                //   this.findCategory(product, categories).color
-                // }`
+                width: '15rem',
+                height: '27rem',
+                borderColor: `${findCategory(product, categories).color}`
               },
-              className: "mb-3 mt-3 shadow bg-white rounded"
+              className: 'mb-3 mt-3 shadow bg-white rounded'
             },
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
               react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Header,
               {
-                className: "text-center",
+                className: 'text-center',
                 style: {
                   backgroundColor: `${findCategory(product, categories).color}`
                 }
@@ -642,11 +1352,14 @@ const Products = ({ products, categories, match }) => {
               findCategory(product, categories).name
             ),
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-              react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"],
-              { to: `/products/${product.id}` },
+              react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Body,
+              { className: 'text-center' },
               react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Body,
-                { className: "text-center" },
+                react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Link,
+                {
+                  style: { textDecoration: 'none' },
+                  href: `/#/products/${product.id}`
+                },
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Img, { src: product.imageUrl }),
                 react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
                   react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Title,
@@ -658,25 +1371,25 @@ const Products = ({ products, categories, match }) => {
             react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
               react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Footer,
               {
-                className: "text-center",
+                className: 'text-center',
                 style: {
                   backgroundColor: `${findCategory(product, categories).color}`
                 }
               },
-              "$",
+              '$',
               product.price,
               react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(
-                "span",
+                'span',
                 null,
-                " / ",
+                ' / ',
                 product.quantity,
-                " inStock"
+                ' inStock'
               )
             )
           )
         );
       })
-    ) : "No Products Found (We can update with a better message later"
+    ) : 'No Products Found'
   );
 };
 
@@ -687,7 +1400,7 @@ const mapStateToProps = ({ categories, products }) => {
   };
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_3__["connect"])(mapStateToProps)(Products));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps)(Products));
 
 /***/ }),
 
@@ -725,15 +1438,19 @@ react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_
 /*!*************************!*\
   !*** ./client/store.js ***!
   \*************************/
-/*! exports provided: loginAttempt, store, fetchCategories, fetchProducts, fetchOrders, fetchUserOrders */
+/*! exports provided: store, fetchCategories, fetchProducts, fetchProductImages, loginAttempt, fetchUsers, sessionLogin, logout, fetchOrders, fetchUserOrders */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loginAttempt", function() { return loginAttempt; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "store", function() { return store; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchCategories", function() { return fetchCategories; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchProducts", function() { return fetchProducts; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchProductImages", function() { return fetchProductImages; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loginAttempt", function() { return loginAttempt; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchUsers", function() { return fetchUsers; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sessionLogin", function() { return sessionLogin; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "logout", function() { return logout; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchOrders", function() { return fetchOrders; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchUserOrders", function() { return fetchUserOrders; });
 /* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
@@ -747,114 +1464,177 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const SET_USER = 'SET_USER';
+//CONSTANTS
 
-const setUserActionCreator = user => {
-    return {
-        type: SET_USER,
-        user
-    };
-};
+const SET_USER = "SET_USER";
+const GET_USERS = "GET_USERS";
+const GET_CATEGORIES = "GET_CATEGORIES";
+const GET_PRODUCTS = "GET_PRODUCTS";
+const GET_PRODUCT_IMAGES = "GET_PRODUCTS_IMAGES";
 
-const user = (state = {}, action) => {
-    switch (action.type) {
-        case SET_USER:
-            return action.user;
-        default:
-            return state;
-    }
-};
+//ACTION CREATORS
 
-const loginAttempt = user => {
-    return dispatch => {
-        return axios__WEBPACK_IMPORTED_MODULE_3___default.a.post('/api/auth', user).then(res => res.data).then(userData => {
-            console.log(userData);
-            dispatch(setUserActionCreator(userData));
-            return userData;
-        });
-    };
-};
+const setUserActionCreator = user => ({
+  type: SET_USER,
+  user
+});
 
-const GET_CATEGORIES = 'GET_CATEGORIES';
-const GET_PRODUCTS = 'GET_PRODUCTS';
+const getUsers = users => ({
+  type: GET_USERS,
+  users
+});
 
 const getCategories = categories => ({
-    type: GET_CATEGORIES,
-    categories
+  type: GET_CATEGORIES,
+  categories
 });
 
 const getProducts = products => ({
-    type: GET_PRODUCTS,
-    products
+  type: GET_PRODUCTS,
+  products
 });
 
+const getProductImages = productImages => ({
+  type: GET_PRODUCT_IMAGES,
+  productImages
+});
+
+//THUNKS
+
 const fetchCategories = () => {
-    return dispatch => {
-        return axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/api/categories').then(response => response.data).then(categories => dispatch(getCategories(categories)));
-    };
+  return dispatch => {
+    return axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/api/categories").then(response => response.data).then(categories => dispatch(getCategories(categories)));
+  };
 };
 
 const fetchProducts = () => {
-    return dispatch => {
-        return axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/api/products').then(response => response.data).then(products => dispatch(getProducts(products)));
-    };
+  return dispatch => {
+    return axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/api/products").then(response => response.data).then(products => dispatch(getProducts(products)));
+  };
+};
+const fetchProductImages = () => {
+  return dispatch => {
+    return axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/api/products/productImages").then(response => response.data).then(images => dispatch(getProductImages(images)));
+  };
 };
 
+const fetchUsers = () => {
+  return dispatch => {
+    return axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/api/users").then(response => response.data).then(users => dispatch(getUsers(users)));
+  };
+};
+
+const loginAttempt = user => {
+  return dispatch => {
+    return axios__WEBPACK_IMPORTED_MODULE_3___default.a.post("/api/auth", user).then(res => res.data).then(userData => {
+      dispatch(setUserActionCreator(userData));
+      return userData;
+    });
+  };
+};
+
+const sessionLogin = () => {
+  return dispatch => {
+    return axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/api/auth").then(res => res.data).then(userData => dispatch(setUserActionCreator(userData)));
+  };
+};
+
+const logout = () => {
+  return dispatch => {
+    return axios__WEBPACK_IMPORTED_MODULE_3___default.a.delete("/api/auth").then(() => dispatch(setUserActionCreator({})));
+  };
+};
+
+//REDUCERS
+
 const categories = (state = [], action) => {
-    switch (action.type) {
-        case GET_CATEGORIES:
-            return action.categories;
-        default:
-            return state;
-    }
+  switch (action.type) {
+    case GET_CATEGORIES:
+      return action.categories;
+    default:
+      return state;
+  }
 };
 
 const products = (state = [], action) => {
-    switch (action.type) {
-        case GET_PRODUCTS:
-            return action.products;
-        default:
-            return state;
-    }
+  switch (action.type) {
+    case GET_PRODUCTS:
+      return action.products;
+    default:
+      return state;
+  }
+};
+
+const productImages = (state = [], action) => {
+  switch (action.type) {
+    case GET_PRODUCT_IMAGES:
+      return action.productImages;
+    default:
+      return state;
+  }
+};
+
+const user = (state = {}, action) => {
+  switch (action.type) {
+    case SET_USER:
+      return action.user;
+    default:
+      return state;
+  }
+};
+const users = (state = {}, action) => {
+  switch (action.type) {
+    case GET_USERS:
+      return action.users;
+    default:
+      return state;
+  }
 };
 
 const GET_ORDERS = 'GET_ORDERS';
 
 const getOrders = orders => ({
-    type: GET_ORDERS,
-    orders
+  type: GET_ORDERS,
+  orders
 });
 
 const fetchOrders = () => {
-    return dispatch => {
-        return axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/api/orders').then(response => response.data).then(data => {
-            dispatch(getOrders(data));
-        });
-    };
+  return dispatch => {
+    return axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/api/orders').then(response => response.data).then(data => {
+      dispatch(getOrders(data));
+    });
+  };
 };
 
 const fetchUserOrders = userId => {
-    return dispatch => {
-        return axios__WEBPACK_IMPORTED_MODULE_3___default.a.get(`/api/orders/user/${userId}`).then(response => response.data).then(data => {
-            dispatch(getOrders(data));
-        });
-    };
+  return dispatch => {
+    return axios__WEBPACK_IMPORTED_MODULE_3___default.a.get(`/api/orders/user/${userId}`).then(response => response.data).then(data => {
+      dispatch(getOrders(data));
+      // Call the functionality to merge sessionCart and pending cart
+    });
+  };
 };
 
+// const mergeCarts = (sessionCart, pendingOrder) => {
+
+// }
+
 const orders = (state = [], action) => {
-    switch (action.type) {
-        case GET_ORDERS:
-            return action.orders;
-        default:
-            return state;
-    }
+  switch (action.type) {
+    case GET_ORDERS:
+      return action.orders;
+    default:
+      return state;
+  }
 };
 
 const reducer = Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"])({
-    categories,
-    products,
-    user,
-    orders
+  categories,
+  products,
+  productImages,
+  user,
+  users,
+  orders
 });
 
 const store = Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(reducer, Object(redux__WEBPACK_IMPORTED_MODULE_0__["applyMiddleware"])(redux_thunk__WEBPACK_IMPORTED_MODULE_2__["default"], redux_logger__WEBPACK_IMPORTED_MODULE_1___default.a));

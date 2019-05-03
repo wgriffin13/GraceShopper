@@ -424,7 +424,7 @@ const seedOrders = [
     status: "cancelled"
   },
   {
-    userid: 2,
+    userId: 2,
     status: "shipped"
   }
 ];

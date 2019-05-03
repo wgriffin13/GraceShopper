@@ -175,9 +175,14 @@ const fetchUserOrders = (userId) => {
             .then(response => response.data)
             .then(data => {
                 dispatch(getOrders(data))
+                // Call the functionality to merge sessionCart and pending cart
             });
     };
 };
+
+// const mergeCarts = (sessionCart, pendingOrder) => {
+
+// }
 
 const orders = (state = [], action) => {
     switch (action.type) {

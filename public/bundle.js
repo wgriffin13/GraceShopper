@@ -1492,6 +1492,7 @@ const getCategories = categories => ({
 const getProducts = products => ({
   type: GET_PRODUCTS,
   products
+<<<<<<< HEAD
 });
 
 const getProductImages = productImages => ({
@@ -1499,6 +1500,15 @@ const getProductImages = productImages => ({
   productImages
 });
 
+=======
+});
+
+const getProductImages = productImages => ({
+  type: GET_PRODUCT_IMAGES,
+  productImages
+});
+
+>>>>>>> 27b3754bd2a76581bfbbf7423f316a5008f98c89
 //THUNKS
 
 const fetchCategories = () => {
@@ -1516,6 +1526,7 @@ const fetchProductImages = () => {
   return dispatch => {
     return axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/api/products/productImages").then(response => response.data).then(images => dispatch(getProductImages(images)));
   };
+<<<<<<< HEAD
 };
 
 const fetchUsers = () => {
@@ -1524,6 +1535,16 @@ const fetchUsers = () => {
   };
 };
 
+=======
+};
+
+const fetchUsers = () => {
+  return dispatch => {
+    return axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/api/users").then(response => response.data).then(users => dispatch(getUsers(users)));
+  };
+};
+
+>>>>>>> 27b3754bd2a76581bfbbf7423f316a5008f98c89
 const loginAttempt = user => {
   return dispatch => {
     return axios__WEBPACK_IMPORTED_MODULE_3___default.a.post("/api/auth", user).then(res => res.data).then(userData => {
@@ -1610,7 +1631,10 @@ const fetchUserOrders = userId => {
   return dispatch => {
     return axios__WEBPACK_IMPORTED_MODULE_3___default.a.get(`/api/orders/user/${userId}`).then(response => response.data).then(data => {
       dispatch(getOrders(data));
+<<<<<<< HEAD
       // Call the functionality to merge sessionCart and pending cart
+=======
+>>>>>>> 27b3754bd2a76581bfbbf7423f316a5008f98c89
     });
   };
 };
@@ -54575,7 +54599,7 @@ function warning(message) {
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext, BrowserRouter, HashRouter, Link, NavLink */
+/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

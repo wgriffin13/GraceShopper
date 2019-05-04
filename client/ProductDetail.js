@@ -73,6 +73,7 @@ class ProductDetail extends Component {
         }
       });
     }
+    this.props.requestCreateSessionCart(tempSessionCart);
     console.log(tempSessionCart);
   }
 

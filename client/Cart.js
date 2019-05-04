@@ -29,6 +29,16 @@ class Cart extends Component {
         }
       }
 
+    calculateOrderTotal = () => {
+        return (
+            this.state.cart.lineitems.reduce((acc, item) => {
+                acc += item.quantity * item.netTotalCost;
+                console.log(acc)
+                return acc
+            }, 0).toFixed(2)
+        )
+    }
+
     render () {
         return (
             <div className="container">
@@ -49,17 +59,28 @@ class Cart extends Component {
                                 return (
                                     <tr key={item.productId}>
                                         <td>
-                                            <div className="col-2">{item.product.imageUrl}</div>
-                                            <div className="col-10">{item.product.tite}</div>
+                                            <div className="row">
+                                                <div className="col-6 col-lg-3"><img src={item.product.imageUrl} className="img-thumbnail" /></div>
+                                                <div className="col-5 col-lg-7">{item.product.title}</div>
+                                            </div>
                                         </td>
-                                        <td>{item.orderPrice}</td>
-                                        <td>{item.discount}</td>
-                                        <td>{item.quantity}</td>
-                                        <td>{item.netTotalCost}</td>
+                                        <td className="text-right">{item.orderPrice}</td>
+                                        <td className="text-right">{item.discount}</td>
+                                        <td className="text-right">{item.quantity}</td>
+                                        <td className="text-right">{item.netTotalCost * item.quantity}</td>
                                     </tr>
                                 )
                             })}
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <th scope="col">Total</th>
+                                <th />
+                                <th />
+                                <th />
+                                <th scope="col">{this.calculateOrderTotal()}</th>
+                            </tr>
+                        </tfoot>
                     </table> :
                     <div className="mt-2">Oh no, there are no items in your cart!</div>}
             </div>

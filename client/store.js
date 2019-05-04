@@ -1,3 +1,4 @@
+/* eslint-disable default-case */
 import { createStore, applyMiddleware, combineReducers } from "redux";
 import loggerMiddleware from "redux-logger";
 import thunkMiddleware from "redux-thunk";
@@ -10,6 +11,7 @@ const GET_USERS = "GET_USERS";
 const GET_CATEGORIES = "GET_CATEGORIES";
 const GET_PRODUCTS = "GET_PRODUCTS";
 const GET_PRODUCT_IMAGES = "GET_PRODUCTS_IMAGES";
+const SET_SESSION_CART = "SET_SESSION_CART";
 
 //ACTION CREATORS
 
@@ -38,6 +40,11 @@ const getProductImages = productImages => ({
   productImages
 });
 
+const setSessionCart = sessionCart => ({
+  type: SET_SESSION_CART,
+  sessionCart
+});
+
 //THUNKS
 
 const fetchCategories = () => {
@@ -57,6 +64,7 @@ const fetchProducts = () => {
       .then(products => dispatch(getProducts(products)));
   };
 };
+
 const fetchProductImages = () => {
   return dispatch => {
     return axios
@@ -104,6 +112,14 @@ const logout = () => {
   };
 };
 
+const createSessionCart = sessionCart => {
+  return dispatch => {
+    return axios
+      .post("/api/cart", sessionCart)
+      .then(() => dispatch(setSessionCart(sessionCart)))
+  };
+};
+
 //REDUCERS
 
 const categories = (state = [], action) => {
@@ -141,10 +157,20 @@ const user = (state = {}, action) => {
       return state;
   }
 };
+
 const users = (state = {}, action) => {
   switch (action.type) {
     case GET_USERS:
       return action.users;
+    default:
+      return state;
+  }
+};
+
+const sessionCart = (state = {}, action) => {
+  switch (action.type) {
+    case SET_SESSION_CART:
+      return action.sessionCart;
     default:
       return state;
   }
@@ -199,7 +225,8 @@ const reducer = combineReducers({
   productImages,
   user,
   users,
-  orders
+  orders,
+  sessionCart,
 });
 
 const store = createStore(
@@ -216,6 +243,7 @@ export {
   fetchUsers,
   sessionLogin,
   logout,
-  fetchOrders, 
-  fetchUserOrders
+  fetchOrders,
+  fetchUserOrders,
+  createSessionCart,
 };

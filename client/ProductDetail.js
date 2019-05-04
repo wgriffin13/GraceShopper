@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Card, Col, Container, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import ProductImages from './ProductImages';
+import { createSessionCart } from './store';
 
 class ProductDetail extends Component {
   constructor(props) {
@@ -30,6 +31,35 @@ class ProductDetail extends Component {
     event.preventDefault();
     console.log(event.target.src);
     this.setState({ displayImage: event.target.src });
+  };
+
+  initSessionCart = (productId, qty) => {
+    return {
+      sessionCartId: 1,
+      status: "pending",
+      lineitems: [
+        {
+          quantity: qty,
+          product: {
+            id: productId
+          }
+        }
+      ]
+    };
+  };
+
+  addToCart = (productId, quantity) => {
+    // Checks if user logged in
+    if (this.props.user) {
+      console.log('User loggined in: ' + this.props.user);
+    } else if (this.props.sessionCart) {
+      // Add item to session cart
+      console.log('Session cart exists: ' + this.props.sessionCart);
+    } else {
+      // Create a session cart
+      const sessionCart = this.initSessionCart(productId, quantity);
+      this.props.requestCreateSessionCart(sessionCart);
+    }
   };
 
   render() {
@@ -82,6 +112,7 @@ class ProductDetail extends Component {
                 prodIdx={displayProduct.id}
                 handleClick={this.handleClick}
               />
+              <button type="button" onClick={this.addToCart(displayProduct.id, 1)}>Add to Cart</button>
             </Col>
           </Row>
         ) : (
@@ -92,11 +123,19 @@ class ProductDetail extends Component {
   }
 }
 
-const mapStateToProps = ({ categories, products }) => {
+const mapStateToProps = ({ categories, products, user, sessionCart }) => {
   return {
     products,
-    categories
+    categories,
+    user,
+    sessionCart,
   };
 };
 
-export default connect(mapStateToProps)(ProductDetail);
+const mapDispatchToProps = (dispatch) => {
+  return {
+      requestCreateSessionCart: (sessionCart) => dispatch(createSessionCart(sessionCart)),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductDetail);

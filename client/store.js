@@ -246,4 +246,5 @@ export {
   fetchOrders,
   fetchUserOrders,
   createSessionCart,
+  setSessionCart,
 };

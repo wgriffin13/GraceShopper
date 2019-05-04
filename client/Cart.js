@@ -36,32 +36,29 @@ class Cart extends Component {
                 {(this.state.cart.status) ?
                     <table className="table mt-2">
                         <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">First</th>
-                            <th scope="col">Last</th>
-                            <th scope="col">Handle</th>
-                        </tr>
+                            <tr>
+                                <th scope="col">Product</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Discount</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Subtotal</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Larry</td>
-                            <td>the Bird</td>
-                            <td>@twitter</td>
-                        </tr>
+                            {this.state.cart.lineitems.map(item => {
+                                return (
+                                    <tr key={item.productId}>
+                                        <td>
+                                            <div className="col-2">{item.product.imageUrl}</div>
+                                            <div className="col-10">{item.product.tite}</div>
+                                        </td>
+                                        <td>{item.orderPrice}</td>
+                                        <td>{item.discount}</td>
+                                        <td>{item.quantity}</td>
+                                        <td>{item.netTotalCost}</td>
+                                    </tr>
+                                )
+                            })}
                         </tbody>
                     </table> :
                     <div className="mt-2">Oh no, there are no items in your cart!</div>}

@@ -17,6 +17,7 @@ import Home from './Home';
 import Admin from './Admin/AdminPage';
 import Login from './Login';
 import Cart from './Cart';
+import CheckOut from './CheckOut';
 
 class App extends Component {
   componentDidMount() {
@@ -45,6 +46,7 @@ class App extends Component {
             <Route exact path="/admin" component={Admin} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/cart" component={Cart} />
+            <Route exact path="/checkout" component={CheckOut} />
           </Switch>
         </HashRouter>
       </Fragment>

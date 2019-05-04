@@ -116,7 +116,16 @@ const createSessionCart = sessionCart => {
   return dispatch => {
     return axios
       .post("/api/cart", sessionCart)
-      .then(() => dispatch(setSessionCart(sessionCart)))
+      .then(() => dispatch(setSessionCart(sessionCart)));
+  };
+};
+
+const getSessionCart = () => {
+  return dispatch => {
+    return axios
+      .get("/api/cart")
+      .then(res => res.data)
+      .then(data => dispatch(setSessionCart(data)));
   };
 };
 
@@ -247,4 +256,5 @@ export {
   fetchUserOrders,
   createSessionCart,
   setSessionCart,
+  getSessionCart,
 };

@@ -13,13 +13,16 @@ class ProductDetail extends Component {
   }
 
   componentDidMount() {
-    this.setState({ displayImage: this.displayProduct().imageUrl });
+    this.setState({
+      displayImage: this.displayProduct().imageUrl
+    });
   }
 
   displayProduct = () => {
-    return this.props.products.find(
+    const displayProd = this.props.products.find(
       prod => prod.id === this.props.match.params.id * 1
     );
+    return displayProd;
   };
 
   findCategory = (prod, cats) => {
@@ -28,7 +31,7 @@ class ProductDetail extends Component {
 
   handleClick = event => {
     event.preventDefault();
-    console.log(event.target.src);
+    // console.log(event.target.src);
     this.setState({ displayImage: event.target.src });
   };
 
@@ -37,10 +40,12 @@ class ProductDetail extends Component {
 
     const displayProduct = this.displayProduct();
 
+    console.log('displayProduct', displayProduct);
+
     return (
       <Container className="d-flex mt-5">
         {/* Make sure to be defensive when loading a single product */}
-        {this.displayProduct() ? (
+        {displayProduct ? (
           <Row>
             <Col className="mr-3">
               <Card>

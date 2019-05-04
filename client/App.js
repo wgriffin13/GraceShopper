@@ -11,7 +11,8 @@ import {
   fetchProductImages,
   fetchUsers,
   sessionLogin,
-  fetchOrders
+  fetchOrders,
+  fetchUserOrders
 } from './store';
 import Home from './Home';
 import Admin from './Admin/AdminPage';
@@ -27,6 +28,7 @@ class App extends Component {
     this.props.fetchInitialUsers();
     this.props.sessionLogin();
     this.props.fetchOrders();
+    this.props.fetchUserOrders();
   }
   render() {
     return (
@@ -46,7 +48,7 @@ class App extends Component {
             <Route exact path="/admin" component={Admin} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/cart" component={Cart} />
-            <Route exact path="/checkout" component={CheckOut} />
+            <Route exact path="/orders/user/:userId" component={CheckOut} />
           </Switch>
         </HashRouter>
       </Fragment>
@@ -61,7 +63,8 @@ const mapDispatchToProps = dispatch => {
     fetchInitialProductImages: () => dispatch(fetchProductImages()),
     fetchInitialUsers: () => dispatch(fetchUsers()),
     sessionLogin: () => dispatch(sessionLogin()),
-    fetchOrders: () => dispatch(fetchOrders())
+    fetchOrders: () => dispatch(fetchOrders()),
+    fetchUserOrders: () => dispatch(fetchUserOrders())
   };
 };
 

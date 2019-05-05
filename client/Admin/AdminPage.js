@@ -9,44 +9,13 @@ class Admin extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      accordion: [],
-      orders: []
+      accordion: []
     };
   }
 
   componentDidMount() {
-    this.setState(this.seedState());
+    this.setState({ accordion: [true, true, true] });
   }
-
-  //temporarily hard seeding
-  seedState = () => {
-    return {
-      accordion: [true, true, true],
-
-      orders: [
-        {
-          id: 1,
-          userId: 1,
-          status: 'pending'
-        },
-        {
-          id: 2,
-          userId: 1,
-          status: 'purchased'
-        },
-        {
-          id: 3,
-          userId: 2,
-          status: 'cancelled'
-        },
-        {
-          id: 4,
-          userId: 2,
-          status: 'shipped'
-        }
-      ]
-    };
-  };
 
   toggleAccordion = tab => {
     const prevState = this.state.accordion;
@@ -58,8 +27,7 @@ class Admin extends Component {
   };
 
   render() {
-    const { orders } = this.state;
-    const { products, users } = this.props;
+    const { products, users, orders } = this.props;
 
     return (
       <Fragment>
@@ -78,10 +46,11 @@ class Admin extends Component {
     );
   }
 }
-const mapStateToProps = ({ products, users }) => {
+const mapStateToProps = ({ products, users, orders }) => {
   return {
     products,
-    users
+    users,
+    orders
   };
 };
 

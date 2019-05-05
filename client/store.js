@@ -10,6 +10,9 @@ const GET_USERS = "GET_USERS";
 const GET_CATEGORIES = "GET_CATEGORIES";
 const GET_PRODUCTS = "GET_PRODUCTS";
 const GET_PRODUCT_IMAGES = "GET_PRODUCTS_IMAGES";
+const CREATE_CART = "CREATE_CART";
+const GET_ORDERS = 'GET_ORDERS';
+const ADD_LINEITEM = "ADD_LINEITEM";
 
 //ACTION CREATORS
 
@@ -37,6 +40,23 @@ const getProductImages = productImages => ({
   type: GET_PRODUCT_IMAGES,
   productImages
 });
+
+const getOrders = (orders) => (
+  {
+      type: GET_ORDERS,
+      orders
+  }
+);
+
+const createCartActionCreator = order => ({
+  type: CREATE_CART,
+  order
+})
+
+const addLineItemAC = item => ({
+  type: ADD_LINEITEM,
+  item
+})
 
 //THUNKS
 
@@ -150,14 +170,24 @@ const users = (state = {}, action) => {
   }
 };
 
-const GET_ORDERS = 'GET_ORDERS';
+const orders = (state = [], action) => {
+  switch (action.type) {
+      case GET_ORDERS:
+          return action.orders;
+      case CREATE_CART:
+          return [...state, action.order];
+      case ADD_LINEITEM:
+          return state.map(order => {
+            if (order.status === 'pending') {
+              order.lineitems.push(action.item)
+            }
+            return order;
+          })
+      default:
+          return state;
+  }
+}
 
-const getOrders = (orders) => (
-    {
-        type: GET_ORDERS,
-        orders
-    }
-);
 
 const fetchOrders = () => {
     return (dispatch) => {
@@ -180,18 +210,29 @@ const fetchUserOrders = (userId) => {
     };
 };
 
+//create a cart for logged-in user by calling the post route
+const createPendingOrder = (order) => {
+  return (dispatch) => {
+    return axios.post(`/api/orders/user/${order.userId}`, order)
+      .then(response => response.data)
+      .then(data => dispatch(createCartActionCreator(data)))
+  }
+}
+
+//create a line-item when a  product is added to the cart
+const addToCart = (item) => {
+  return (dispatch) => {
+    return axios.post(`/api/orders/${item.orderId}`, item)
+      .then(response => response.data)
+      .then(data => dispatch(addLineItemAC(data)))
+  }
+}
+
 // const mergeCarts = (sessionCart, pendingOrder) => {
 
 // }
 
-const orders = (state = [], action) => {
-    switch (action.type) {
-        case GET_ORDERS:
-            return action.orders;
-        default:
-            return state;
-    }
-}
+
 
 const reducer = combineReducers({
   categories,
@@ -216,6 +257,8 @@ export {
   fetchUsers,
   sessionLogin,
   logout,
-  fetchOrders, 
-  fetchUserOrders
+  fetchOrders,
+  fetchUserOrders,
+  createPendingOrder,
+  addToCart
 };

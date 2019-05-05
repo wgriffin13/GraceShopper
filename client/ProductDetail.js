@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Card, Col, Container, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import ProductImages from './ProductImages';
+import { createPendingOrder, addToCart } from './store';
 
 class ProductDetail extends Component {
   constructor(props) {
@@ -31,6 +32,36 @@ class ProductDetail extends Component {
     console.log(event.target.src);
     this.setState({ displayImage: event.target.src });
   };
+
+  addToCart = (item) => {
+    this.props.addToCart(item)
+      .then(this.props.history.push('/cart'))
+  }
+
+  handleAddToCart = () => {
+    const {user, order } = this.props;
+    console.log(user);
+    console.log(order);
+    if (user && order) {
+      this.addToCart({
+        orderId: order.id,
+        productId: this.props.match.params.id,
+        quantity: 1
+      })
+    } else if (user && !order) {
+      this.props.createPendingOrder({
+        userId: user.id,
+        status: 'pending'
+      })
+        .then( newOrder => {
+          this.addToCart({
+            orderId: newOrder.id,
+            productId: this.props.match.params.id,
+            quantity: 1
+          })
+        })
+    }
+  }
 
   render() {
     const { categories } = this.props;
@@ -77,6 +108,7 @@ class ProductDetail extends Component {
                 <h4>{displayProduct.title}</h4>
 
                 <p className="text-justify">{displayProduct.description}</p>
+                <button type="button" className="btn btn-primary" onClick={this.handleAddToCart}>Add To Cart</button>
               </Row>
               <ProductImages
                 prodIdx={displayProduct.id}
@@ -92,11 +124,20 @@ class ProductDetail extends Component {
   }
 }
 
-const mapStateToProps = ({ categories, products }) => {
+const mapStateToProps = ({ user, categories, products, orders }) => {
   return {
+    user,
     products,
-    categories
+    categories,
+    order: orders.find(order => order.status === 'pending')
   };
 };
 
-export default connect(mapStateToProps)(ProductDetail);
+const mapDispatchToProps = dispatch => {
+  return {
+    createPendingOrder: (userId) => dispatch(createPendingOrder(userId)),
+    addToCart: (item) => dispatch(addToCart(item))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductDetail);

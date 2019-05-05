@@ -6,7 +6,6 @@ import { logout } from "./store";
 
 class Navigation extends Component {
   render() {
-    console.log("are we logged in", this.props.isLoggedIn);
     return (
       <Fragment>
         <Navbar bg="light">

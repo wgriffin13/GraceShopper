@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Card, Col, Container, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import ProductImages from './ProductImages';
-import { createSessionCart, setSessionCart } from './store';
+import { createPendingOrder, addToCart, createSessionCart, setSessionCart  } from './store';
 
 class ProductDetail extends Component {
   constructor(props) {
@@ -54,6 +54,32 @@ class ProductDetail extends Component {
     return cats.find(cat => cat.id === prod.categoryId);
   };
 
+  addToCartOrder = (order) => {
+    this.props.addToCart({
+      orderId: order.id,
+      productId: this.props.match.params.id * 1,
+      quantity: 1,
+      orderPrice: this.displayProduct().price,
+      netTotalCost: this.displayProduct().price
+    })
+      .then(() => this.props.history.push('/cart'))
+  }
+
+  handleAddToCartLoggedIn = () => {
+    const {order, user } = this.props;
+    if (order) {
+      this.addToCartOrder(order)
+    } else {
+      this.props.createPendingOrder({
+        userId: user.id,
+        status: 'pending'
+      })
+        .then( newOrder => {
+          this.addToCartOrder(newOrder)
+        })
+    }
+  }
+
   initSessionCart = (product, qty) => {
     return {
       sessionCartId: 1,
@@ -103,7 +129,7 @@ class ProductDetail extends Component {
   addToCart = (product, quantity) => {
     // Checks if user logged in
     if (this.props.user.email) {
-      console.log('User loggined in: ' + this.props.user);
+      this.handleAddToCartLoggedIn();
     } else if (this.props.sessionCart.sessionCartId) {
       // Session cart exists -> updates quantity or adds line item
       console.log('Session cart exists: ' + this.props.sessionCart);
@@ -183,22 +209,26 @@ class ProductDetail extends Component {
   }
 }
 
-const mapStateToProps = ({ categories, products, user, sessionCart }) => {
+
+const mapStateToProps = ({ categories, products, user, sessionCart, orders }) => {
   return {
+    user,
     products,
     categories,
-    user,
-    sessionCart
+    sessionCart,
+    order: orders.find(order => order.status === 'pending')
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    requestCreateSessionCart: sessionCart =>
-      dispatch(createSessionCart(sessionCart)),
-    requestUpdateCart: sessionCart => dispatch(setSessionCart(sessionCart))
+    createPendingOrder: (order) => dispatch(createPendingOrder(order)),
+    addToCart: (item) => dispatch(addToCart(item)),
+    requestCreateSessionCart: (sessionCart) => dispatch(createSessionCart(sessionCart)),
+    requestUpdateCart: (sessionCart) => dispatch(setSessionCart(sessionCart))
   };
 };
+
 
 export default connect(
   mapStateToProps,

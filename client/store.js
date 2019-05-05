@@ -1,3 +1,4 @@
+/* eslint-disable default-case */
 import { createStore, applyMiddleware, combineReducers } from "redux";
 import loggerMiddleware from "redux-logger";
 import thunkMiddleware from "redux-thunk";
@@ -13,6 +14,7 @@ const GET_PRODUCT_IMAGES = "GET_PRODUCTS_IMAGES";
 const CREATE_CART = "CREATE_CART";
 const GET_ORDERS = 'GET_ORDERS';
 const ADD_LINEITEM = "ADD_LINEITEM";
+const SET_SESSION_CART = "SET_SESSION_CART";
 
 //ACTION CREATORS
 
@@ -57,6 +59,10 @@ const addLineItemAC = item => ({
   type: ADD_LINEITEM,
   item
 })
+const setSessionCart = sessionCart => ({
+  type: SET_SESSION_CART,
+  sessionCart
+});
 
 //THUNKS
 
@@ -77,6 +83,7 @@ const fetchProducts = () => {
       .then(products => dispatch(getProducts(products)));
   };
 };
+
 const fetchProductImages = () => {
   return dispatch => {
     return axios
@@ -124,6 +131,23 @@ const logout = () => {
   };
 };
 
+const createSessionCart = sessionCart => {
+  return dispatch => {
+    return axios
+      .post("/api/cart", sessionCart)
+      .then(() => dispatch(setSessionCart(sessionCart)));
+  };
+};
+
+const getSessionCart = () => {
+  return dispatch => {
+    return axios
+      .get("/api/cart")
+      .then(res => res.data)
+      .then(data => dispatch(setSessionCart(data)));
+  };
+};
+
 //REDUCERS
 
 const categories = (state = [], action) => {
@@ -161,6 +185,7 @@ const user = (state = {}, action) => {
       return state;
   }
 };
+
 const users = (state = {}, action) => {
   switch (action.type) {
     case GET_USERS:
@@ -187,6 +212,16 @@ const orders = (state = [], action) => {
           return state;
   }
 }
+const sessionCart = (state = {}, action) => {
+  switch (action.type) {
+    case SET_SESSION_CART:
+      return action.sessionCart;
+    default:
+      return state;
+  }
+};
+
+const GET_ORDERS = 'GET_ORDERS';
 
 
 const fetchOrders = () => {
@@ -240,7 +275,8 @@ const reducer = combineReducers({
   productImages,
   user,
   users,
-  orders
+  orders,
+  sessionCart,
 });
 
 const store = createStore(
@@ -260,5 +296,8 @@ export {
   fetchOrders,
   fetchUserOrders,
   createPendingOrder,
-  addToCart
+  addToCart,
+  createSessionCart,
+  setSessionCart,
+  getSessionCart,
 };

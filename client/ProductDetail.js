@@ -3,6 +3,7 @@ import { Card, Col, Container, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import ProductImages from './ProductImages';
 import { createPendingOrder, addToCart } from './store';
+import { createSessionCart, setSessionCart } from './store';
 
 class ProductDetail extends Component {
   constructor(props) {
@@ -63,6 +64,75 @@ class ProductDetail extends Component {
     }
   }
 
+  initSessionCart = (product, qty) => {
+    return {
+      sessionCartId: 1,
+      status: "pending",
+      lineitems: [
+        {
+          quantity: qty,
+          orderPrice: product.price,
+          discount: 0,
+          netTotalCost: product.price,
+          productId: product.id,
+          product: {
+            id: product.id,
+            title: product.title,
+            imageUrl: product.imageUrl
+          }
+        }
+      ]
+    };
+  };
+
+  updateSessionCart = (product, qty) => {
+    const tempSessionCart = this.props.sessionCart;
+    const lineItemIdx = tempSessionCart.lineitems.findIndex(item => item.product.id === product.id);
+    if (lineItemIdx > -1) {
+      tempSessionCart.lineitems[lineItemIdx].quantity += qty;
+    } else {
+      tempSessionCart.lineitems.push({
+        quantity: qty,
+        orderPrice: product.price,
+        discount: 0,
+        netTotalCost: product.price,
+        productId: product.id,
+        product: {
+          id: product.id,
+          title: product.title,
+          imageUrl: product.imageUrl
+        }
+      });
+    }
+    this.props.requestCreateSessionCart(tempSessionCart);
+    console.log(tempSessionCart);
+  }
+
+  addToCart = (product, quantity) => {
+    
+    // Checks if user logged in
+    console.log(product)
+    if (this.props.user.email) {
+
+      console.log('User loggined in: ' + this.props.user);
+
+    } else if (this.props.sessionCart.sessionCartId) {
+
+      // Session cart exists -> updates quantity or adds line item
+      console.log('Session cart exists: ' + this.props.sessionCart);
+      this.updateSessionCart(product, quantity);
+
+    } else {
+
+      // Create a session cart
+      const sessionCart = this.initSessionCart(product, quantity);
+      this.props.requestCreateSessionCart(sessionCart);
+
+    }
+    // Sends user to cart
+    this.props.history.push('/cart')
+  };
+
   render() {
     const { categories } = this.props;
 
@@ -114,6 +184,8 @@ class ProductDetail extends Component {
                 prodIdx={displayProduct.id}
                 handleClick={this.handleClick}
               />
+              {/*TEMPORARY BUTTON TO TEST SESSION CART FUNCTIONALITY*/}
+              <button type="button" onClick={() => this.addToCart(displayProduct, 1)}>Add to Cart</button>
             </Col>
           </Row>
         ) : (
@@ -124,11 +196,13 @@ class ProductDetail extends Component {
   }
 }
 
-const mapStateToProps = ({ user, categories, products, orders }) => {
+
+const mapStateToProps = ({ categories, products, user, sessionCart }) => {
   return {
     user,
     products,
     categories,
+    sessionCart,
     order: orders.find(order => order.status === 'pending')
   };
 };
@@ -136,8 +210,11 @@ const mapStateToProps = ({ user, categories, products, orders }) => {
 const mapDispatchToProps = dispatch => {
   return {
     createPendingOrder: (userId) => dispatch(createPendingOrder(userId)),
-    addToCart: (item) => dispatch(addToCart(item))
-  }
-}
+    addToCart: (item) => dispatch(addToCart(item)),
+    requestCreateSessionCart: (sessionCart) => dispatch(createSessionCart(sessionCart)),
+    requestUpdateCart: (sessionCart) => dispatch(setSessionCart(sessionCart))
+  };
+};
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductDetail);

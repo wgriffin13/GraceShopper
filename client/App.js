@@ -10,7 +10,8 @@ import {
   fetchProducts,
   fetchProductImages,
   fetchUsers,
-  sessionLogin
+  sessionLogin,
+  getSessionCart,
 } from "./store";
 import Home from "./Home";
 import Admin from "./Admin/AdminPage";
@@ -24,6 +25,7 @@ class App extends Component {
     this.props.fetchInitialProductImages();
     this.props.fetchInitialUsers();
     this.props.sessionLogin();
+    this.props.getSessionCart();
   }
   render() {
     return (
@@ -56,7 +58,8 @@ const mapDispatchToProps = dispatch => {
     fetchInitialProducts: () => dispatch(fetchProducts()),
     fetchInitialProductImages: () => dispatch(fetchProductImages()),
     fetchInitialUsers: () => dispatch(fetchUsers()),
-    sessionLogin: () => dispatch(sessionLogin())
+    sessionLogin: () => dispatch(sessionLogin()),
+    getSessionCart: () => dispatch(getSessionCart()),
   };
 };
 

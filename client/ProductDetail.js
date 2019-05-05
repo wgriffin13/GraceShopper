@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { Card, Col, Container, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import ProductImages from './ProductImages';
-import { createPendingOrder, addToCart } from './store';
-import { createSessionCart, setSessionCart } from './store';
+import { createPendingOrder, addToCart, createSessionCart, setSessionCart  } from './store';
 
 class ProductDetail extends Component {
   constructor(props) {
@@ -34,32 +33,28 @@ class ProductDetail extends Component {
     this.setState({ displayImage: event.target.src });
   };
 
-  addToCart = (item) => {
-    this.props.addToCart(item)
-      .then(this.props.history.push('/cart'))
+  addToCartOrder = (order) => {
+    this.props.addToCart({
+      orderId: order.id,
+      productId: this.props.match.params.id * 1,
+      quantity: 1,
+      orderPrice: this.displayProduct().price,
+      netTotalCost: this.displayProduct().price
+    })
+      .then(() => this.props.history.push('/cart'))
   }
 
   handleAddToCart = () => {
     const {user, order } = this.props;
-    console.log(user);
-    console.log(order);
     if (user && order) {
-      this.addToCart({
-        orderId: order.id,
-        productId: this.props.match.params.id,
-        quantity: 1
-      })
+      this.addToCartOrder(order)
     } else if (user && !order) {
       this.props.createPendingOrder({
         userId: user.id,
         status: 'pending'
       })
         .then( newOrder => {
-          this.addToCart({
-            orderId: newOrder.id,
-            productId: this.props.match.params.id,
-            quantity: 1
-          })
+          this.addToCartOrder(newOrder)
         })
     }
   }
@@ -197,7 +192,7 @@ class ProductDetail extends Component {
 }
 
 
-const mapStateToProps = ({ categories, products, user, sessionCart }) => {
+const mapStateToProps = ({ categories, products, user, sessionCart, orders }) => {
   return {
     user,
     products,
@@ -209,7 +204,7 @@ const mapStateToProps = ({ categories, products, user, sessionCart }) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    createPendingOrder: (userId) => dispatch(createPendingOrder(userId)),
+    createPendingOrder: (order) => dispatch(createPendingOrder(order)),
     addToCart: (item) => dispatch(addToCart(item)),
     requestCreateSessionCart: (sessionCart) => dispatch(createSessionCart(sessionCart)),
     requestUpdateCart: (sessionCart) => dispatch(setSessionCart(sessionCart))

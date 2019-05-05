@@ -204,7 +204,11 @@ const orders = (state = [], action) => {
       case ADD_LINEITEM:
           return state.map(order => {
             if (order.status === 'pending') {
+              if (!order.lineitems){
+                order.lineitems = [action.item]
+              } else {
               order.lineitems.push(action.item)
+              }
             }
             return order;
           })
@@ -221,7 +225,6 @@ const sessionCart = (state = {}, action) => {
   }
 };
 
-const GET_ORDERS = 'GET_ORDERS';
 
 
 const fetchOrders = () => {
@@ -250,7 +253,11 @@ const createPendingOrder = (order) => {
   return (dispatch) => {
     return axios.post(`/api/orders/user/${order.userId}`, order)
       .then(response => response.data)
-      .then(data => dispatch(createCartActionCreator(data)))
+      .then(data => {
+        console.log("Pending Order Created!")
+        dispatch(createCartActionCreator(data));
+        return data;
+      })
   }
 }
 
@@ -259,7 +266,9 @@ const addToCart = (item) => {
   return (dispatch) => {
     return axios.post(`/api/orders/${item.orderId}`, item)
       .then(response => response.data)
-      .then(data => dispatch(addLineItemAC(data)))
+      .then(data => {
+        dispatch(addLineItemAC(data));
+      })
   }
 }
 

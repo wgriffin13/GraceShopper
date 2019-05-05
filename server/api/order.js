@@ -4,22 +4,8 @@ const { Order, LineItem, Product, User } = require('../db/models');
 // Post route needs to check if pending order exists (throw error if order exists)
 
 router.post('/user/:id', (req, res, next) => {
-    Order.findAll({where: {
-        userId: req.params.id,
-        status: 'pending'
-    }})
-        .then( (order) => {
-            console.log(order);
-            if (!order) {
-                Order.create(req.body)
-                .then(newOrder => res.send(newOrder))
-            } else {
-                const error = new Error();
-                error.status = 400;
-                error.message = 'There is already a pending order';
-                throw Error;
-            }
-        })
+    Order.create(req.body)
+        .then(newOrder => res.send(newOrder))
         .catch(next)
 })
 
@@ -82,6 +68,7 @@ router.get('/', (req, res, next) => {
 
 //creates a new line item
 router.post('/:id', (req, res, next) => {
+    console.log(req.body)
     LineItem.create(req.body)
         .then(lineItem => res.send(lineItem))
         .catch(next)

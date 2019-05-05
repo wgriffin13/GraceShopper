@@ -10,36 +10,54 @@ class ProductDetail extends Component {
     this.state = {
       displayImage: ''
     };
-    console.log('props in ProductDetail', props);
   }
 
   componentDidMount() {
-    this.setState({
-      displayImage: this.displayProduct().imageUrl
-    });
+    if (this.props.match.params.id !== localStorage.getItem('matchParams')) {
+      this.setState({
+        displayImage: this.displayProduct().imageUrl
+      });
+    } else {
+      this.hydrateStateWithLocalStorage();
+    }
   }
 
+  hydrateStateWithLocalStorage = () => {
+    if (localStorage.hasOwnProperty('displayImage')) {
+      let value = localStorage.getItem('displayImage');
+      try {
+        value = JSON.parse(value);
+        this.setState({ displayImage: value });
+      } catch (e) {
+        this.setState({ displayImage: value });
+      }
+    }
+  };
+
+  handleClick = event => {
+    event.preventDefault();
+    this.setState({ displayImage: event.target.src });
+    localStorage.setItem('displayImage', JSON.stringify(event.target.src));
+    localStorage.setItem('matchParams', this.props.match.params.id);
+  };
+
   displayProduct = () => {
-    const displayProd = this.props.products.find(
-      prod => prod.id === this.props.match.params.id * 1
-    );
-    return displayProd;
+    if (this.props.products.length) {
+      const displayProd = this.props.products.find(
+        prod => prod.id === this.props.match.params.id * 1
+      );
+      return displayProd;
+    }
   };
 
   findCategory = (prod, cats) => {
     return cats.find(cat => cat.id === prod.categoryId);
   };
 
-  handleClick = event => {
-    event.preventDefault();
-    // console.log(event.target.src);
-    this.setState({ displayImage: event.target.src });
-  };
-
   initSessionCart = (product, qty) => {
     return {
       sessionCartId: 1,
-      status: "pending",
+      status: 'pending',
       lineitems: [
         {
           quantity: qty,
@@ -59,7 +77,9 @@ class ProductDetail extends Component {
 
   updateSessionCart = (product, qty) => {
     const tempSessionCart = this.props.sessionCart;
-    const lineItemIdx = tempSessionCart.lineitems.findIndex(item => item.product.id === product.id);
+    const lineItemIdx = tempSessionCart.lineitems.findIndex(
+      item => item.product.id === product.id
+    );
     if (lineItemIdx > -1) {
       tempSessionCart.lineitems[lineItemIdx].quantity += qty;
     } else {
@@ -77,45 +97,37 @@ class ProductDetail extends Component {
       });
     }
     this.props.requestCreateSessionCart(tempSessionCart);
-    console.log(tempSessionCart);
-  }
+    // console.log(tempSessionCart);
+  };
 
   addToCart = (product, quantity) => {
-    
     // Checks if user logged in
-    console.log(product)
     if (this.props.user.email) {
-
       console.log('User loggined in: ' + this.props.user);
-
     } else if (this.props.sessionCart.sessionCartId) {
-
       // Session cart exists -> updates quantity or adds line item
       console.log('Session cart exists: ' + this.props.sessionCart);
       this.updateSessionCart(product, quantity);
-
     } else {
-
       // Create a session cart
       const sessionCart = this.initSessionCart(product, quantity);
       this.props.requestCreateSessionCart(sessionCart);
-
     }
     // Sends user to cart
-    this.props.history.push('/cart')
+    this.props.history.push('/cart');
   };
 
   render() {
     const { categories } = this.props;
 
-    const displayProduct = this.displayProduct();
-
-    console.log('displayProduct', displayProduct);
+    const product = this.props.products.find(
+      prd => prd.id === this.props.match.params.id * 1
+    );
 
     return (
       <Container className="d-flex mt-5">
         {/* Make sure to be defensive when loading a single product */}
-        {displayProduct ? (
+        {product ? (
           <Row>
             <Col className="mr-3">
               <Card>
@@ -123,11 +135,11 @@ class ProductDetail extends Component {
                   className="text-center"
                   style={{
                     backgroundColor: `${
-                      this.findCategory(displayProduct, categories).color
+                      this.findCategory(product, categories).color
                     }`
                   }}
                 >
-                  {this.findCategory(displayProduct, categories).name}
+                  {this.findCategory(product, categories).name}
                 </Card.Header>
                 <Card.Body className="text-center">
                   <Card.Img src={this.state.displayImage} />
@@ -136,29 +148,31 @@ class ProductDetail extends Component {
                   className="text-center"
                   style={{
                     backgroundColor: `${
-                      this.findCategory(displayProduct, categories).color
+                      this.findCategory(product, categories).color
                     }`
                   }}
                 >
                   <Card.Subtitle>
-                    ${displayProduct.price}
-                    <span> / {displayProduct.quantity} inStock</span>
+                    ${product.price}
+                    <span> / {product.quantity} inStock</span>
                   </Card.Subtitle>
                 </Card.Footer>
               </Card>
             </Col>
             <Col className="d-flex flex-column align-items-start">
               <Row className="d-flex mt-auto mb-auto">
-                <h4>{displayProduct.title}</h4>
+                <h4>{product.title}</h4>
 
-                <p className="text-justify">{displayProduct.description}</p>
+                <p className="text-justify">{product.description}</p>
               </Row>
               <ProductImages
-                prodIdx={displayProduct.id}
+                prodIdx={product.id}
                 handleClick={this.handleClick}
               />
               {/*TEMPORARY BUTTON TO TEST SESSION CART FUNCTIONALITY*/}
-              <button type="button" onClick={() => this.addToCart(displayProduct, 1)}>Add to Cart</button>
+              <button type="button" onClick={() => this.addToCart(product, 1)}>
+                Add to Cart
+              </button>
             </Col>
           </Row>
         ) : (
@@ -174,15 +188,19 @@ const mapStateToProps = ({ categories, products, user, sessionCart }) => {
     products,
     categories,
     user,
-    sessionCart,
+    sessionCart
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-      requestCreateSessionCart: (sessionCart) => dispatch(createSessionCart(sessionCart)),
-      requestUpdateCart: (sessionCart) => dispatch(setSessionCart(sessionCart))
-  }
-}
+    requestCreateSessionCart: sessionCart =>
+      dispatch(createSessionCart(sessionCart)),
+    requestUpdateCart: sessionCart => dispatch(setSessionCart(sessionCart))
+  };
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductDetail);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ProductDetail);

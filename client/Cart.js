@@ -1,16 +1,7 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-// import CheckOut from './CheckOut';
-
 class Cart extends Component {
-  //   constructor() {
-  //     super();
-  //     this.state = {
-  //       pendingOrder: {}
-  //     };
-  //   }
-
   constructor() {
     super();
     this.state = {
@@ -38,7 +29,7 @@ class Cart extends Component {
   }
 
   calculateOrderTotal = () => {
-    return this.state.cart.lineitems
+    return this.state.pendingOrder.lineitems
       .reduce((acc, item) => {
         acc += item.quantity * item.netTotalCost;
         console.log(acc);
@@ -113,13 +104,5 @@ const mapStateToProps = ({ user, sessionCart }) => {
     sessionCart
   };
 };
-
-// const mapStateToProps = state => {
-//   //   console.log('state in cart MSTP', state);
-//   return {
-//     orders: state.orders,
-//     user: state.user
-//   };
-// };
 
 export default connect(mapStateToProps)(Cart);

@@ -17,6 +17,7 @@ import Home from './Home';
 import Admin from './Admin/AdminPage';
 import Login from './Login';
 import Cart from './Cart';
+import CheckOut from './CheckOut';
 
 class App extends Component {
   componentDidMount() {

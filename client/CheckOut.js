@@ -1,7 +1,6 @@
-import React, { Component, Fragment, Container } from 'react';
+import React, { Component, Container } from 'react';
 import { connect } from 'react-redux';
 import {
-  Badge,
   Button,
   Card,
   CardBody,
@@ -11,10 +10,8 @@ import {
   FormGroup,
   Input,
   Label,
-  Table,
   Row
 } from 'reactstrap';
-import { fetchUserOrders } from './store';
 
 class CheckOut extends Component {
   constructor(props) {
@@ -26,39 +23,6 @@ class CheckOut extends Component {
       customPayment: [true, false]
     };
   }
-
-  componentDidMount() {
-    this.fetchUserOrders(this.props.user.id);
-  }
-
-  // supplyUserState = user => {
-  //   return {
-  //     user: {
-  //       name: user ? user.name : '',
-  //       createdAt: user ? user.createdAt : '',
-  //       email: user ? user.email : ''
-  //     }
-  //   };
-  // };
-
-  // supplyOrderState = order => {
-  //   return {
-  //     order: {
-  //       id: order ? order.id : null,
-  //       status: order ? order.status : '',
-  //       userId: order ? order.userId : '',
-  //       createdAt: order ? order.createdAt : ''
-  //     }
-  //   };
-  // };
-
-  // findOrder = orders => {
-  //   return orders.find(order => order.status === 'pending');
-  // };
-
-  // findUser = () => {
-  //   this.props.users.find(usr => usr.id === this.state.order.userId);
-  // };
 
   toggleShipping = () => {
     this.setState({ collapseShipping: !this.state.collapseShipping });
@@ -295,12 +259,6 @@ class CheckOut extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchUserOrders: id => dispatch(fetchUserOrders(id))
-  };
-};
-
 const mapStateToProps = state => {
   console.log('state in Checkout', state);
   return {
@@ -309,7 +267,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CheckOut);
+export default connect(mapStateToProps)(CheckOut);

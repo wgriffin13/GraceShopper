@@ -29,13 +29,13 @@ class Cart extends Component {
   }
 
   calculateOrderTotal = () => {
-    return this.state.pendingOrder.lineitems
+    return this.state.cart.lineitems
       .reduce((acc, item) => {
         acc += item.quantity * item.netTotalCost;
         console.log(acc);
         return acc;
       }, 0)
-      .toFixed(2);
+      .toFixed(2).toLocaleString('en');
   };
 
   render() {

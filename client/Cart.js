@@ -35,7 +35,7 @@ class Cart extends Component {
         console.log(acc);
         return acc;
       }, 0)
-      .toFixed(2).toLocaleString('en');
+      .toLocaleString();
   };
 
   render() {
@@ -70,11 +70,11 @@ class Cart extends Component {
                         </div>
                       </div>
                     </td>
-                    <td className="text-right">{item.orderPrice}</td>
-                    <td className="text-right">{item.discount}</td>
-                    <td className="text-right">{item.quantity}</td>
+                    <td className="text-right">{item.orderPrice.toLocaleString()}</td>
+                    <td className="text-right">{item.discount.toLocaleString()}</td>
+                    <td className="text-right">{item.quantity.toLocaleString()}</td>
                     <td className="text-right">
-                      {item.netTotalCost * item.quantity}
+                      {(item.netTotalCost * item.quantity).toLocaleString()}
                     </td>
                   </tr>
                 );
@@ -86,7 +86,7 @@ class Cart extends Component {
                 <th />
                 <th />
                 <th />
-                <th scope="col">{this.calculateOrderTotal()}</th>
+                <th scope="col">${this.calculateOrderTotal()}</th>
               </tr>
             </tfoot>
           </table>

@@ -1,8 +1,8 @@
 /* eslint-disable default-case */
-import { createStore, applyMiddleware, combineReducers } from "redux";
-import loggerMiddleware from "redux-logger";
-import thunkMiddleware from "redux-thunk";
-import axios from "axios";
+import { createStore, applyMiddleware, combineReducers } from 'redux';
+import loggerMiddleware from 'redux-logger';
+import thunkMiddleware from 'redux-thunk';
+import axios from 'axios';
 
 //CONSTANTS
 
@@ -17,6 +17,11 @@ const ADD_LINEITEM = "ADD_LINEITEM";
 const SET_SESSION_CART = "SET_SESSION_CART";
 
 //ACTION CREATORS
+
+const getOrders = orders => ({
+  type: GET_ORDERS,
+  orders
+});
 
 const setUserActionCreator = user => ({
   type: SET_USER,
@@ -43,12 +48,6 @@ const getProductImages = productImages => ({
   productImages
 });
 
-const getOrders = (orders) => (
-  {
-      type: GET_ORDERS,
-      orders
-  }
-);
 
 const createCartActionCreator = order => ({
   type: CREATE_CART,
@@ -69,7 +68,7 @@ const setSessionCart = sessionCart => ({
 const fetchCategories = () => {
   return dispatch => {
     return axios
-      .get("/api/categories")
+      .get('/api/categories')
       .then(response => response.data)
       .then(categories => dispatch(getCategories(categories)));
   };
@@ -78,7 +77,7 @@ const fetchCategories = () => {
 const fetchProducts = () => {
   return dispatch => {
     return axios
-      .get("/api/products")
+      .get('/api/products')
       .then(response => response.data)
       .then(products => dispatch(getProducts(products)));
   };
@@ -87,7 +86,7 @@ const fetchProducts = () => {
 const fetchProductImages = () => {
   return dispatch => {
     return axios
-      .get("/api/products/productImages")
+      .get('/api/products/productImages')
       .then(response => response.data)
       .then(images => dispatch(getProductImages(images)));
   };
@@ -96,7 +95,7 @@ const fetchProductImages = () => {
 const fetchUsers = () => {
   return dispatch => {
     return axios
-      .get("/api/users")
+      .get('/api/users')
       .then(response => response.data)
       .then(users => dispatch(getUsers(users)));
   };
@@ -105,7 +104,7 @@ const fetchUsers = () => {
 const loginAttempt = user => {
   return dispatch => {
     return axios
-      .post("/api/auth", user)
+      .post('/api/auth', user)
       .then(res => res.data)
       .then(userData => {
         dispatch(setUserActionCreator(userData));
@@ -117,7 +116,7 @@ const loginAttempt = user => {
 const sessionLogin = () => {
   return dispatch => {
     return axios
-      .get("/api/auth")
+      .get('/api/auth')
       .then(res => res.data)
       .then(userData => dispatch(setUserActionCreator(userData)));
   };
@@ -126,15 +125,38 @@ const sessionLogin = () => {
 const logout = () => {
   return dispatch => {
     return axios
-      .delete("/api/auth")
+      .delete('/api/auth')
       .then(() => dispatch(setUserActionCreator({})));
+  };
+};
+
+const fetchOrders = () => {
+  return dispatch => {
+    return axios
+      .get('/api/orders')
+      .then(response => response.data)
+      .then(data => {
+        dispatch(getOrders(data));
+      });
+  };
+};
+
+const fetchUserOrders = userId => {
+  return dispatch => {
+    return axios
+      .get(`/api/orders/user/${userId}`)
+      .then(response => response.data)
+      .then(data => {
+        dispatch(getOrders(data));
+        // Call the functionality to merge sessionCart and pending cart
+      });
   };
 };
 
 const createSessionCart = sessionCart => {
   return dispatch => {
     return axios
-      .post("/api/cart", sessionCart)
+      .post('/api/cart', sessionCart)
       .then(() => dispatch(setSessionCart(sessionCart)));
   };
 };
@@ -142,7 +164,7 @@ const createSessionCart = sessionCart => {
 const getSessionCart = () => {
   return dispatch => {
     return axios
-      .get("/api/cart")
+      .get('/api/cart')
       .then(res => res.data)
       .then(data => dispatch(setSessionCart(data)));
   };
@@ -226,28 +248,6 @@ const sessionCart = (state = {}, action) => {
 };
 
 
-
-const fetchOrders = () => {
-    return (dispatch) => {
-        return axios.get('/api/orders')
-            .then(response => response.data)
-            .then(data => {
-                dispatch(getOrders(data))
-            });
-    };
-};
-
-const fetchUserOrders = (userId) => {
-    return (dispatch) => {
-        return axios.get(`/api/orders/user/${userId}`)
-            .then(response => response.data)
-            .then(data => {
-                dispatch(getOrders(data))
-                // Call the functionality to merge sessionCart and pending cart
-            });
-    };
-};
-
 //create a cart for logged-in user by calling the post route
 const createPendingOrder = (order) => {
   return (dispatch) => {
@@ -285,7 +285,7 @@ const reducer = combineReducers({
   user,
   users,
   orders,
-  sessionCart,
+  sessionCart
 });
 
 const store = createStore(
@@ -308,5 +308,5 @@ export {
   addToCart,
   createSessionCart,
   setSessionCart,
-  getSessionCart,
+  getSessionCart
 };

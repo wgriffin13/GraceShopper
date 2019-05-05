@@ -1,73 +1,125 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import {
-  Badge,
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Collapse,
-  FormGroup,
-  Input,
-  Label,
-  Table,
-  Row
-} from 'reactstrap';
+
 // import CheckOut from './CheckOut';
 
 class Cart extends Component {
+  //   constructor() {
+  //     super();
+  //     this.state = {
+  //       pendingOrder: {}
+  //     };
+  //   }
+
   constructor() {
     super();
     this.state = {
-      pendingOrder: {}
+      cart: {}
     };
   }
 
-  findPendingOrder() {
-    this.setState({
-      pendingOrder: this.props.orders.find(order => order.status === 'pending')
-    });
+  componentDidMount() {
+    if (this.props.user.id) {
+      console.log(this.props.id);
+    } else if (this.props.sessionCart.sessionCartId) {
+      this.setState({ cart: this.props.sessionCart });
+    }
   }
 
-  // checkOutOrder = id => {
-  //   let path = `/orders/${id}`;
-  //   this.props.history.push(path);
-  // };
+  componentDidUpdate(prevProps) {
+    if (this.props !== prevProps) {
+      if (this.props.user.id) {
+        console.log(this.props.id);
+      } else if (this.props.sessionCart.sessionCartId) {
+        this.setState({ cart: this.props.sessionCart });
+      }
+      console.log(this.props.sessionCart);
+    }
+  }
+
+  calculateOrderTotal = () => {
+    return this.state.cart.lineitems
+      .reduce((acc, item) => {
+        acc += item.quantity * item.netTotalCost;
+        console.log(acc);
+        return acc;
+      }, 0)
+      .toFixed(2);
+  };
 
   render() {
-    console.log('props in cart render', this.props);
-    const order = this.props.orders.find(_order => _order.status === 'pending');
-    console.log('order in cart render', order);
-    // const user = this.props.user;
     return (
-      <div>
-        {order ? (
-          <Fragment>
-            <div>found Order Id: {order.id} </div>
-            <hr />
-
-            <Button
-              color="success"
-              //   onClick={this.checkOutOrder(this.state.pendingOrder.id)}
-            >
-              Confirm Order
-            </Button>
-          </Fragment>
+      <div className="container">
+        <h2 className="mt-2">Shopping Cart</h2>
+        {this.state.cart.status ? (
+          <table className="table mt-2">
+            <thead>
+              <tr>
+                <th scope="col">Product</th>
+                <th scope="col">Price</th>
+                <th scope="col">Discount</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.state.cart.lineitems.map(item => {
+                return (
+                  <tr key={item.productId}>
+                    <td>
+                      <div className="row">
+                        <div className="col-6 col-lg-3">
+                          <img
+                            src={item.product.imageUrl}
+                            className="img-thumbnail"
+                          />
+                        </div>
+                        <div className="col-5 col-lg-7">
+                          {item.product.title}
+                        </div>
+                      </div>
+                    </td>
+                    <td className="text-right">{item.orderPrice}</td>
+                    <td className="text-right">{item.discount}</td>
+                    <td className="text-right">{item.quantity}</td>
+                    <td className="text-right">
+                      {item.netTotalCost * item.quantity}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+            <tfoot>
+              <tr>
+                <th scope="col">Total</th>
+                <th />
+                <th />
+                <th />
+                <th scope="col">{this.calculateOrderTotal()}</th>
+              </tr>
+            </tfoot>
+          </table>
         ) : (
-          'No items in your cart'
+          <div className="mt-2">Oh no, there are no items in your cart!</div>
         )}
       </div>
     );
   }
 }
 
-const mapStateToProps = state => {
-  //   console.log('state in cart MSTP', state);
+const mapStateToProps = ({ user, sessionCart }) => {
   return {
-    orders: state.orders,
-    user: state.user
+    user,
+    sessionCart
   };
 };
+
+// const mapStateToProps = state => {
+//   //   console.log('state in cart MSTP', state);
+//   return {
+//     orders: state.orders,
+//     user: state.user
+//   };
+// };
 
 export default connect(mapStateToProps)(Cart);

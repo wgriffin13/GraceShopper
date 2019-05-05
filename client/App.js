@@ -11,6 +11,7 @@ import {
   fetchProductImages,
   fetchUsers,
   sessionLogin,
+<<<<<<< HEAD
   fetchOrders,
   fetchUserOrders
 } from './store';
@@ -19,6 +20,14 @@ import Admin from './Admin/AdminPage';
 import Login from './Login';
 import Cart from './Cart';
 import CheckOut from './CheckOut';
+=======
+  getSessionCart,
+} from "./store";
+import Home from "./Home";
+import Admin from "./Admin/AdminPage";
+import Login from "./Login";
+import Cart from "./Cart";
+>>>>>>> ca22e175506e8c50f4958c79bc7cfea4d354f207
 
 class App extends Component {
   componentDidMount() {
@@ -27,8 +36,12 @@ class App extends Component {
     this.props.fetchInitialProductImages();
     this.props.fetchInitialUsers();
     this.props.sessionLogin();
+<<<<<<< HEAD
     this.props.fetchOrders();
     this.props.fetchUserOrders();
+=======
+    this.props.getSessionCart();
+>>>>>>> ca22e175506e8c50f4958c79bc7cfea4d354f207
   }
   render() {
     return (
@@ -63,8 +76,12 @@ const mapDispatchToProps = dispatch => {
     fetchInitialProductImages: () => dispatch(fetchProductImages()),
     fetchInitialUsers: () => dispatch(fetchUsers()),
     sessionLogin: () => dispatch(sessionLogin()),
+<<<<<<< HEAD
     fetchOrders: () => dispatch(fetchOrders()),
     fetchUserOrders: () => dispatch(fetchUserOrders())
+=======
+    getSessionCart: () => dispatch(getSessionCart()),
+>>>>>>> ca22e175506e8c50f4958c79bc7cfea4d354f207
   };
 };
 

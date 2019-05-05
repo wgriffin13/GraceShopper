@@ -36,51 +36,73 @@ class ProductDetail extends Component {
     this.setState({ displayImage: event.target.src });
   };
 
-  initSessionCart = (productId, qty) => {
+  initSessionCart = (product, qty) => {
     return {
       sessionCartId: 1,
       status: "pending",
       lineitems: [
         {
           quantity: qty,
+          orderPrice: product.price,
+          discount: 0,
+          netTotalCost: product.price,
+          productId: product.id,
           product: {
-            id: productId
+            id: product.id,
+            title: product.title,
+            imageUrl: product.imageUrl
           }
         }
       ]
     };
   };
 
-  updateSessionCart = (productId, qty) => {
+  updateSessionCart = (product, qty) => {
     const tempSessionCart = this.props.sessionCart;
-    const lineItemIdx = tempSessionCart.lineitems.findIndex(item => item.product.id === productId);
+    const lineItemIdx = tempSessionCart.lineitems.findIndex(item => item.product.id === product.id);
     if (lineItemIdx > -1) {
       tempSessionCart.lineitems[lineItemIdx].quantity += qty;
     } else {
       tempSessionCart.lineitems.push({
         quantity: qty,
+        orderPrice: product.price,
+        discount: 0,
+        netTotalCost: product.price,
+        productId: product.id,
         product: {
-          id: productId
+          id: product.id,
+          title: product.title,
+          imageUrl: product.imageUrl
         }
       });
     }
+    this.props.requestCreateSessionCart(tempSessionCart);
     console.log(tempSessionCart);
   }
 
-  addToCart = (productId, quantity) => {
+  addToCart = (product, quantity) => {
+    
     // Checks if user logged in
+    console.log(product)
     if (this.props.user.email) {
+
       console.log('User loggined in: ' + this.props.user);
+
     } else if (this.props.sessionCart.sessionCartId) {
+
       // Session cart exists -> updates quantity or adds line item
       console.log('Session cart exists: ' + this.props.sessionCart);
-      this.updateSessionCart(productId, quantity);
+      this.updateSessionCart(product, quantity);
 
     } else {
+
       // Create a session cart
-      const sessionCart = this.initSessionCart(productId, quantity);
+      const sessionCart = this.initSessionCart(product, quantity);
       this.props.requestCreateSessionCart(sessionCart);
+
     }
+    // Sends user to cart
+    this.props.history.push('/cart')
   };
 
   render() {
@@ -136,7 +158,7 @@ class ProductDetail extends Component {
                 handleClick={this.handleClick}
               />
               {/*TEMPORARY BUTTON TO TEST SESSION CART FUNCTIONALITY*/}
-              <button type="button" onClick={() => this.addToCart(displayProduct.id, 1)}>Add to Cart</button>
+              <button type="button" onClick={() => this.addToCart(displayProduct, 1)}>Add to Cart</button>
             </Col>
           </Row>
         ) : (

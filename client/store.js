@@ -149,6 +149,15 @@ const createSessionCart = sessionCart => {
   };
 };
 
+const getSessionCart = () => {
+  return dispatch => {
+    return axios
+      .get('/api/cart')
+      .then(res => res.data)
+      .then(data => dispatch(setSessionCart(data)));
+  };
+};
+
 //REDUCERS
 
 const categories = (state = [], action) => {
@@ -241,5 +250,6 @@ export {
   fetchOrders,
   fetchUserOrders,
   createSessionCart,
-  setSessionCart
+  setSessionCart,
+  getSessionCart
 };

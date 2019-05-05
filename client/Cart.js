@@ -11,8 +11,8 @@ class Cart extends Component {
     }
 
     componentDidMount() {
-        if (this.props.user.id) {
-            console.log(this.props.id);
+        if (this.props.user.id && this.props.currentOrder) {
+            this.setState({cart: this.props.currentOrder})
         } else if (this.props.sessionCart.sessionCartId) {
             this.setState({cart: this.props.sessionCart})
         }
@@ -88,10 +88,11 @@ class Cart extends Component {
     }
 }
 
-const mapStateToProps = ({ user, sessionCart }) => {
+const mapStateToProps = ({ user, sessionCart, orders }) => {
     return {
         user,
         sessionCart,
+        currentOrder: orders.find(order => order.status === 'pending')
     }
 }
 

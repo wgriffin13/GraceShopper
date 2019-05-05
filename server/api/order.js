@@ -67,11 +67,17 @@ router.get('/', (req, res, next) => {
 });
 
 //creates a new line item
-router.post('/:id', (req, res, next) => {
-    console.log(req.body)
-    LineItem.create(req.body)
-        .then(lineItem => res.send(lineItem))
-        .catch(next)
+router.post('/:id', async (req, res, next) => {
+  try {
+    const lineItem = await LineItem.create(req.body);
+    const lineItemWithProd = await LineItem.findByPk(lineItem.id, {
+    include: [ {model: Product}]
+    })
+    res.send(lineItemWithProd);
+  }
+  catch (er) {
+     next(er);
+  }
 })
 
 module.exports = router;

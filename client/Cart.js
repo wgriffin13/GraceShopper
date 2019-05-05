@@ -29,13 +29,17 @@ class Cart extends Component {
   }
 
   calculateOrderTotal = () => {
-    return this.state.cart.lineitems
+    return parseFloat(this.state.cart.lineitems
       .reduce((acc, item) => {
         acc += item.quantity * item.netTotalCost;
         console.log(acc);
         return acc;
       }, 0)
-      .toLocaleString();
+      .toFixed(2)).toLocaleString();
+  };
+
+  priceFormat = (numberString) => {
+    return parseFloat(parseFloat(numberString).toLocaleString()).toFixed(2);
   };
 
   render() {
@@ -70,9 +74,9 @@ class Cart extends Component {
                         </div>
                       </div>
                     </td>
-                    <td className="text-right">{item.orderPrice.toLocaleString()}</td>
-                    <td className="text-right">{item.discount.toLocaleString()}</td>
-                    <td className="text-right">{item.quantity.toLocaleString()}</td>
+                    <td className="text-right">{this.priceFormat(item.orderPrice)}</td>
+                    <td className="text-right">{this.priceFormat(item.discount)}</td>
+                    <td className="text-right">{item.quantity}</td>
                     <td className="text-right">
                       {(item.netTotalCost * item.quantity).toLocaleString()}
                     </td>

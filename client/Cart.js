@@ -9,24 +9,25 @@ class Cart extends Component {
     };
   }
 
-  componentDidMount() {
-    if (this.props.user.id) {
-      console.log(this.props.id);
-    } else if (this.props.sessionCart.sessionCartId) {
-      this.setState({ cart: this.props.sessionCart });
+    componentDidMount() {
+        if (this.props.user.id && this.props.currentOrder) {
+            this.setState({cart: this.props.currentOrder})
+        } else if (this.props.sessionCart.sessionCartId) {
+            this.setState({cart: this.props.sessionCart})
+        }
     }
-  }
 
-  componentDidUpdate(prevProps) {
-    if (this.props !== prevProps) {
-      if (this.props.user.id) {
-        console.log(this.props.id);
-      } else if (this.props.sessionCart.sessionCartId) {
-        this.setState({ cart: this.props.sessionCart });
+    componentDidUpdate(prevProps) {
+        if (this.props !== prevProps) {
+            if (this.props.user.id) {
+                this.setState({cart: this.props.currentOrder})
+            } else if (this.props.sessionCart.sessionCartId) {
+                this.setState({cart: this.props.sessionCart})
+            }
+            console.log(this.props.sessionCart)
+        }
       }
-      console.log(this.props.sessionCart);
-    }
-  }
+     
 
   calculateOrderTotal = () => {
     return parseFloat(this.state.cart.lineitems
@@ -102,11 +103,12 @@ class Cart extends Component {
   }
 }
 
-const mapStateToProps = ({ user, sessionCart }) => {
-  return {
-    user,
-    sessionCart
-  };
-};
+const mapStateToProps = ({ user, sessionCart, orders }) => {
+    return {
+        user,
+        sessionCart,
+        currentOrder: orders.find(order => order.status === 'pending')
+    }
+}
 
 export default connect(mapStateToProps)(Cart);

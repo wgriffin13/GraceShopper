@@ -1,7 +1,20 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Button } from 'reactstrap';
-import CheckOut from './CheckOut';
+import {
+  Badge,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Collapse,
+  FormGroup,
+  Input,
+  Label,
+  Table,
+  Row
+} from 'reactstrap';
+// import CheckOut from './CheckOut';
 
 class Cart extends Component {
   constructor() {
@@ -17,21 +30,27 @@ class Cart extends Component {
     });
   }
 
-  checkOutOrder = userId => {
-    let path = `/orders/user/${userId}`;
-    this.props.history.push(path);
-  };
+  // checkOutOrder = id => {
+  //   let path = `/orders/${id}`;
+  //   this.props.history.push(path);
+  // };
 
   render() {
     console.log('props in cart render', this.props);
-    const pendingOrder = this.state;
-    const user = this.props.user;
+    const order = this.props.orders.find(_order => _order.status === 'pending');
+    console.log('order in cart render', order);
+    // const user = this.props.user;
     return (
       <div>
-        {pendingOrder ? (
+        {order ? (
           <Fragment>
-            <div>Order found - {this.state.pendingOrder.id} </div>
-            <Button color="success" onClick={this.checkOutOrder(user.id)}>
+            <div>found Order Id: {order.id} </div>
+            <hr />
+
+            <Button
+              color="success"
+              //   onClick={this.checkOutOrder(this.state.pendingOrder.id)}
+            >
               Confirm Order
             </Button>
           </Fragment>
@@ -44,7 +63,7 @@ class Cart extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log('state in cart MSTP', state);
+  //   console.log('state in cart MSTP', state);
   return {
     orders: state.orders,
     user: state.user

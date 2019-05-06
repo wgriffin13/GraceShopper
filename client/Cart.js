@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Card } from 'react-bootstrap';
 
 class Cart extends Component {
   constructor() {
@@ -30,18 +31,27 @@ class Cart extends Component {
      
 
   calculateOrderTotal = () => {
-    return parseFloat(this.state.cart.lineitems
+    return this.state.cart.lineitems
       .reduce((acc, item) => {
         acc += item.quantity * item.netTotalCost;
-        console.log(acc);
         return acc;
       }, 0)
-      .toFixed(2)).toLocaleString();
   };
 
   priceFormat = (numberString) => {
-    return parseFloat(parseFloat(numberString).toLocaleString()).toFixed(2);
+    return numberString.toLocaleString(undefined, {minimumFractionDigits: 2});
   };
+
+  handleChange = (evt) => {
+    const tempCart = this.state.cart;
+    tempCart.lineitems = tempCart.lineitems.map(item => {
+      if (parseInt(evt.target.id, 10) === parseInt(item.productId, 10)) {
+        item.quantity = evt.target.value;
+      }
+      return item;
+    })
+    this.setState({cart: tempCart})
+  }
 
   render() {
     return (
@@ -71,15 +81,24 @@ class Cart extends Component {
                           />
                         </div>
                         <div className="col-5 col-lg-7">
-                          {item.product.title}
+                          <Card.Link
+                            style={{ textDecoration: 'none' }}
+                            href={`/#/products/${item.productId}`}
+                          >
+                            {item.product.title}
+                          </Card.Link>
                         </div>
                       </div>
                     </td>
                     <td className="text-right">{this.priceFormat(item.orderPrice)}</td>
                     <td className="text-right">{this.priceFormat(item.discount)}</td>
-                    <td className="text-right">{item.quantity}</td>
                     <td className="text-right">
-                      {(item.netTotalCost * item.quantity).toLocaleString()}
+                      <div className="form-group">
+                        <input name="quantity" className="form-control text-right" value={item.quantity} id={item.productId} onChange={this.handleChange} />
+                      </div>
+                    </td>
+                    <td className="text-right">
+                      {this.priceFormat(item.netTotalCost * item.quantity)}
                     </td>
                   </tr>
                 );
@@ -91,13 +110,27 @@ class Cart extends Component {
                 <th />
                 <th />
                 <th />
-                <th scope="col">${this.calculateOrderTotal()}</th>
+                <th scope="col">${this.priceFormat(this.calculateOrderTotal())}</th>
               </tr>
             </tfoot>
           </table>
         ) : (
-          <div className="mt-2">Oh no, there are no items in your cart!</div>
+          <div className="mt-2 mb-2">Oh no, there are no items in your cart!</div>
         )}
+        <div className="row">
+          <div className="col align-self-start">
+            <button type="button" className="btn btn-info" onClick={() => this.props.history.push('/products')}>
+              {'<- '}Continue Shopping
+            </button>
+          </div>
+          {(this.props.user.id && this.props.currentOrder) ?
+            <div className="col text-right">
+              <button type="button" className="btn btn-success" onClick={() => this.props.history.push('/products')}>
+                Checkout{' ->'}
+              </button>
+            </div> : ''
+          }
+        </div>
       </div>
     );
   }

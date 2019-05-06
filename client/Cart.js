@@ -1,45 +1,48 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Button } from 'react-bootstrap';
 
 class Cart extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       cart: {}
     };
   }
 
-    componentDidMount() {
-        if (this.props.user.id && this.props.currentOrder) {
-            this.setState({cart: this.props.currentOrder})
-        } else if (this.props.sessionCart.sessionCartId) {
-            this.setState({cart: this.props.sessionCart})
-        }
+  componentDidMount() {
+    if (this.props.user.id && this.props.currentOrder) {
+      this.setState({ cart: this.props.currentOrder });
+    } else if (this.props.sessionCart.sessionCartId) {
+      this.setState({ cart: this.props.sessionCart });
     }
+  }
 
-    componentDidUpdate(prevProps) {
-        if (this.props !== prevProps) {
-            if (this.props.user.id) {
-                this.setState({cart: this.props.currentOrder})
-            } else if (this.props.sessionCart.sessionCartId) {
-                this.setState({cart: this.props.sessionCart})
-            }
-            console.log(this.props.sessionCart)
-        }
+  componentDidUpdate(prevProps) {
+    if (this.props !== prevProps) {
+      if (this.props.user.id) {
+        this.setState({ cart: this.props.currentOrder });
+      } else if (this.props.sessionCart.sessionCartId) {
+        this.setState({ cart: this.props.sessionCart });
       }
-     
+      console.log('sessionCart in CDU', this.props.sessionCart);
+    }
+  }
 
   calculateOrderTotal = () => {
     return this.state.cart.lineitems
       .reduce((acc, item) => {
         acc += item.quantity * item.netTotalCost;
-        console.log(acc);
+        // console.log(acc);
         return acc;
       }, 0)
       .toFixed(2);
   };
 
   render() {
+    console.log('props in cart render', this.props);
+    const { user } = this.props;
+
     return (
       <div className="container">
         <h2 className="mt-2">Shopping Cart</h2>
@@ -94,17 +97,23 @@ class Cart extends Component {
         ) : (
           <div className="mt-2">Oh no, there are no items in your cart!</div>
         )}
+        <Button
+          variant="success"
+          href={`/#/orders/${this.props.currentOrder.id}`}
+        >
+          Checkout
+        </Button>
       </div>
     );
   }
 }
 
 const mapStateToProps = ({ user, sessionCart, orders }) => {
-    return {
-        user,
-        sessionCart,
-        currentOrder: orders.find(order => order.status === 'pending')
-    }
-}
+  return {
+    user,
+    sessionCart,
+    currentOrder: orders.find(order => order.status === 'pending')
+  };
+};
 
 export default connect(mapStateToProps)(Cart);

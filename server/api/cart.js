@@ -13,9 +13,7 @@ router.get('/', (req, res, next) => {
         error.status = 401;
         return next(error);
     }
-    console.log(req.session.sessionCart);
     res.send(req.session.sessionCart);
 })
-
 
 module.exports = router;

@@ -1,45 +1,60 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Card } from 'react-bootstrap';
 
 class Cart extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       cart: {}
     };
   }
 
-    componentDidMount() {
-        if (this.props.user.id && this.props.currentOrder) {
-            this.setState({cart: this.props.currentOrder})
-        } else if (this.props.sessionCart.sessionCartId) {
-            this.setState({cart: this.props.sessionCart})
-        }
+  componentDidMount() {
+    if (this.props.user.id && this.props.currentOrder) {
+      this.setState({ cart: this.props.currentOrder });
+    } else if (this.props.sessionCart.sessionCartId) {
+      this.setState({ cart: this.props.sessionCart });
     }
+  }
 
-    componentDidUpdate(prevProps) {
-        if (this.props !== prevProps) {
-            if (this.props.user.id) {
-                this.setState({cart: this.props.currentOrder})
-            } else if (this.props.sessionCart.sessionCartId) {
-                this.setState({cart: this.props.sessionCart})
-            }
-            console.log(this.props.sessionCart)
-        }
+  componentDidUpdate(prevProps) {
+    if (this.props !== prevProps) {
+      if (this.props.user.id) {
+        this.setState({ cart: this.props.currentOrder });
+      } else if (this.props.sessionCart.sessionCartId) {
+        this.setState({ cart: this.props.sessionCart });
       }
-     
+      console.log('sessionCart in CDU', this.props.sessionCart);
+    }
+  }
 
   calculateOrderTotal = () => {
-    return this.state.cart.lineitems
-      .reduce((acc, item) => {
-        acc += item.quantity * item.netTotalCost;
-        console.log(acc);
-        return acc;
-      }, 0)
-      .toFixed(2);
+    return this.state.cart.lineitems.reduce((acc, item) => {
+      acc += item.quantity * item.netTotalCost;
+      return acc;
+    }, 0);
+  };
+
+  priceFormat = numberString => {
+    return numberString.toLocaleString(undefined, { minimumFractionDigits: 2 });
+  };
+
+  handleChange = evt => {
+    const tempCart = this.state.cart;
+    tempCart.lineitems = tempCart.lineitems.map(item => {
+      if (parseInt(evt.target.id, 10) === parseInt(item.productId, 10)) {
+        item.quantity = evt.target.value;
+      }
+      return item;
+    });
+    this.setState({ cart: tempCart });
   };
 
   render() {
+    console.log('props in cart render', this.props);
+    const { user } = this.props;
+
     return (
       <div className="container">
         <h2 className="mt-2">Shopping Cart</h2>
@@ -67,15 +82,34 @@ class Cart extends Component {
                           />
                         </div>
                         <div className="col-5 col-lg-7">
-                          {item.product.title}
+                          <Card.Link
+                            style={{ textDecoration: 'none' }}
+                            href={`/#/products/${item.productId}`}
+                          >
+                            {item.product.title}
+                          </Card.Link>
                         </div>
                       </div>
                     </td>
-                    <td className="text-right">{item.orderPrice}</td>
-                    <td className="text-right">{item.discount}</td>
-                    <td className="text-right">{item.quantity}</td>
                     <td className="text-right">
-                      {item.netTotalCost * item.quantity}
+                      {this.priceFormat(item.orderPrice)}
+                    </td>
+                    <td className="text-right">
+                      {this.priceFormat(item.discount)}
+                    </td>
+                    <td className="text-right">
+                      <div className="form-group">
+                        <input
+                          name="quantity"
+                          className="form-control text-right"
+                          value={item.quantity}
+                          id={item.productId}
+                          onChange={this.handleChange}
+                        />
+                      </div>
+                    </td>
+                    <td className="text-right">
+                      {this.priceFormat(item.netTotalCost * item.quantity)}
                     </td>
                   </tr>
                 );
@@ -87,24 +121,56 @@ class Cart extends Component {
                 <th />
                 <th />
                 <th />
-                <th scope="col">{this.calculateOrderTotal()}</th>
+                <th scope="col">
+                  ${this.priceFormat(this.calculateOrderTotal())}
+                </th>
               </tr>
             </tfoot>
           </table>
         ) : (
-          <div className="mt-2">Oh no, there are no items in your cart!</div>
+          <div className="mt-2 mb-2">
+            Oh no, there are no items in your cart!
+          </div>
         )}
+        <div className="row">
+          <div className="col align-self-start">
+            <button
+              type="button"
+              className="btn btn-info"
+              onClick={() => this.props.history.push('/products')}
+            >
+              {'<- '}Continue Shopping
+            </button>
+          </div>
+          {this.props.user.id && this.props.currentOrder ? (
+            <div className="col text-right">
+              <button
+                type="button"
+                className="btn btn-success"
+                onClick={() =>
+                  this.props.history.push(
+                    `/orders/${this.props.currentOrder.id}`
+                  )
+                }
+              >
+                Checkout{' ->'}
+              </button>
+            </div>
+          ) : (
+            ''
+          )}
+        </div>
       </div>
     );
   }
 }
 
 const mapStateToProps = ({ user, sessionCart, orders }) => {
-    return {
-        user,
-        sessionCart,
-        currentOrder: orders.find(order => order.status === 'pending')
-    }
-}
+  return {
+    user,
+    sessionCart,
+    currentOrder: orders.find(order => order.status === 'pending')
+  };
+};
 
 export default connect(mapStateToProps)(Cart);

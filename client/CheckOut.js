@@ -1,10 +1,11 @@
-import React, { Component, Container } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
   Button,
   Card,
   CardBody,
   CardHeader,
+  CardFooter,
   Col,
   Collapse,
   FormGroup,
@@ -13,16 +14,22 @@ import {
   Row
 } from 'reactstrap';
 
-class CheckOut extends Component {
+class Checkout extends Component {
   constructor(props) {
     super(props);
     this.state = {
       collapseShipping: false,
       collapsePayment: false,
-      customShipping: [true, false],
-      customPayment: [true, false]
+      collapseItems: false,
+      customShipping: [false, false],
+      customPayment: [false, false],
+      customItems: [true, false]
     };
   }
+
+  toggleItems = () => {
+    this.setState({ collapseItems: !this.state.collapseItems });
+  };
 
   toggleShipping = () => {
     this.setState({ collapseShipping: !this.state.collapseShipping });
@@ -32,6 +39,14 @@ class CheckOut extends Component {
     this.setState({ collapsePayment: !this.state.collapsePayment });
   };
 
+  toggleCustomItems = tab => {
+    const prevState = this.state.customItems;
+    const state = prevState.map((x, index) => (tab === index ? !x : false));
+
+    this.setState({
+      customItems: state
+    });
+  };
   toggleCustomShipping = tab => {
     const prevState = this.state.customShipping;
     const state = prevState.map((x, index) => (tab === index ? !x : false));
@@ -50,13 +65,21 @@ class CheckOut extends Component {
     });
   };
 
+  calculateOrderTotal = () => {
+    return this.props.order.lineitems
+      .reduce((acc, item) => {
+        acc += item.quantity * item.netTotalCost;
+        return acc;
+      }, 0)
+      .toFixed(2);
+  };
+
   render() {
-    const { user, orders } = this.props;
+    const { user, order } = this.props;
     console.log('props in Checkout render', this.props);
-    const order = orders.find(_order => _order.status === 'pending');
 
     return (
-      <Container>
+      <div>
         <hr />
         {user ? (
           <Row>
@@ -84,6 +107,74 @@ class CheckOut extends Component {
             </CardHeader>
 
             <CardBody>
+              <div id="itemsAccordion" data-children=".item">
+                <div className="item">
+                  <Button
+                    className="mb-3 p-0"
+                    color="link"
+                    onClick={() => this.toggleCustomItems(0)}
+                    aria-expanded={this.state.customItems[0]}
+                    aria-controls="itemsAccordion1"
+                  >
+                    Products
+                  </Button>
+                  <Collapse
+                    isOpen={this.state.customItems[0]}
+                    data-parent="#itemsAccordion"
+                    id="itemsAccordion1"
+                    className="ml-3"
+                  >
+                    <table className="table mt-2">
+                      <thead>
+                        <tr>
+                          <th scope="col">Product</th>
+                          <th scope="col">Price</th>
+                          <th scope="col">Discount</th>
+                          <th scope="col">Quantity</th>
+                          <th scope="col">Subtotal</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {order.lineitems.map(item => {
+                          return (
+                            <tr key={item.productId}>
+                              <td>
+                                <div className="row">
+                                  <div className="col-6 col-lg-3">
+                                    <img
+                                      src={item.product.imageUrl}
+                                      className="img-thumbnail"
+                                    />
+                                  </div>
+                                  <div className="col-5 col-lg-7">
+                                    {item.product.title}
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="text-right">{item.orderPrice}</td>
+                              <td className="text-right">{item.discount}</td>
+                              <td className="text-right">{item.quantity}</td>
+                              <td className="text-right">
+                                {item.netTotalCost * item.quantity}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <th scope="col">Total</th>
+                          <th />
+                          <th />
+                          <th />
+                          <th scope="col">{this.calculateOrderTotal()}</th>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </Collapse>
+                </div>
+              </div>
+
               <div id="shippingAccordion" data-children=".item">
                 <div className="item">
                   <Button
@@ -106,12 +197,16 @@ class CheckOut extends Component {
                       <Input
                         type="text"
                         id="company"
-                        placeholder="Enter your company name"
+                        placeholder="Enter your name"
                       />
                     </FormGroup>
                     <FormGroup>
                       <Label htmlFor="vat">Company</Label>
-                      <Input type="text" id="vat" placeholder="DE1234567890" />
+                      <Input
+                        type="text"
+                        id="vat"
+                        placeholder="Enter your company"
+                      />
                     </FormGroup>
                     <FormGroup>
                       <Label htmlFor="street">Street</Label>
@@ -128,7 +223,7 @@ class CheckOut extends Component {
                           <Input
                             type="text"
                             id="city"
-                            placeholder="Enter your city"
+                            placeholder="Enter city"
                           />
                         </FormGroup>
                       </Col>
@@ -250,21 +345,25 @@ class CheckOut extends Component {
                 </div>
               </div>
             </CardBody>
+            <CardFooter>
+              <Button color="secondary" size="lg" block>
+                Confirm Purchase
+              </Button>
+            </CardFooter>
           </Card>
         ) : (
           <div> no order found </div>
         )}
-      </Container>
+      </div>
     );
   }
 }
 
-const mapStateToProps = state => {
-  console.log('state in Checkout', state);
+const mapStateToProps = ({ user, orders }) => {
   return {
-    orders: state.orders,
-    user: state.user
+    user: user,
+    order: orders.find(order => order.status === 'pending')
   };
 };
 
-export default connect(mapStateToProps)(CheckOut);
+export default connect(mapStateToProps)(Checkout);

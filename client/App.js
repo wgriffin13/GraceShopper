@@ -54,9 +54,10 @@ class App extends Component {
             <Route exact path="/admin" component={Admin} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/cart" component={Cart} />
-            <Route exact path="/orders/user/:userId" component={CheckOut} />
-            <Route render={() => <div>Sorry We Couldn't Find That Page</div>} />
             <Route exact path="/orders/:orderId" component={Checkout} />
+            <Route
+              render={() => <div>Sorry That Page Couldn't Be Found</div>}
+            />
           </Switch>
         </HashRouter>
       </Fragment>

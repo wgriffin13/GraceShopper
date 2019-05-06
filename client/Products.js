@@ -5,9 +5,25 @@ import { connect } from 'react-redux';
 const Products = ({ products, categories, match }) => {
   let displayProducts = [];
 
-  if (match.params.categoryId) {
-    displayProducts = products.filter(
-      prod => prod.categoryId === match.params.categoryId * 1
+  //just a category search
+  if (match.params.categoryId && !match.params.searchTerm) {
+    displayProducts = products.filter(prod =>
+      match.params.categoryId === 'all'
+        ? true
+        : prod.categoryId === match.params.categoryId * 1
+    );
+  }
+  //category & title search
+  else if (match.params.searchTerm) {
+    displayProducts = products.filter(prod =>
+      match.params.categoryId === 'all'
+        ? prod.title
+            .toLowerCase()
+            .includes(match.params.searchTerm.toLowerCase())
+        : prod.title
+            .toLowerCase()
+            .includes(match.params.searchTerm.toLowerCase()) &&
+          prod.categoryId === match.params.categoryId * 1
     );
   } else {
     displayProducts = products;
@@ -29,7 +45,7 @@ const Products = ({ products, categories, match }) => {
                   style={{
                     width: '15rem',
                     height: '27rem',
-                    borderColor: `${findCategory(product, categories).color}`
+                    borderColor: `${findCategory(product, categories).color}`,
                   }}
                   className="mb-3 mt-3 shadow bg-white rounded"
                 >
@@ -38,7 +54,7 @@ const Products = ({ products, categories, match }) => {
                     style={{
                       backgroundColor: `${
                         findCategory(product, categories).color
-                      }`
+                      }`,
                     }}
                   >
                     {findCategory(product, categories).name}
@@ -57,7 +73,7 @@ const Products = ({ products, categories, match }) => {
                     style={{
                       backgroundColor: `${
                         findCategory(product, categories).color
-                      }`
+                      }`,
                     }}
                   >
                     ${product.price}
@@ -78,7 +94,7 @@ const Products = ({ products, categories, match }) => {
 const mapStateToProps = ({ categories, products }) => {
   return {
     categories,
-    products
+    products,
   };
 };
 

@@ -18,7 +18,7 @@ class ProductDetail extends Component {
   }
 
   componentDidMount() {
-    if (this.props.match.params.id !== localStorage.getItem('matchParams')) {
+    if (this.props.match.params.id !== localStorage.getItem('matchParams') && this.props.products.length) {
       this.setState({
         displayImage: this.displayProduct().imageUrl
       });
@@ -28,6 +28,7 @@ class ProductDetail extends Component {
   }
 
   hydrateStateWithLocalStorage = () => {
+    console.log("hydrate");
     if (localStorage.hasOwnProperty('displayImage')) {
       let value = localStorage.getItem('displayImage');
       try {
@@ -47,10 +48,13 @@ class ProductDetail extends Component {
   };
 
   displayProduct = () => {
+    console.log("display");
+    console.log(this.props.products.length);
     if (this.props.products.length) {
       const displayProd = this.props.products.find(
         prod => prod.id === this.props.match.params.id * 1
       );
+      console.log(displayProd);
       return displayProd;
     }
   };
@@ -150,6 +154,14 @@ class ProductDetail extends Component {
   };
 
   render() {
+    if (!this.props.products.length || !this.props.categories.length) {
+      return (
+        <div> loading </div>
+      )
+    }
+
+    else {
+
     const { categories } = this.props;
 
     const product = this.props.products.find(
@@ -157,6 +169,8 @@ class ProductDetail extends Component {
     );
 
     console.log('props in ProductDetail', this.props);
+
+   
 
     return (
       <Container className="d-flex mt-5">
@@ -219,7 +233,9 @@ class ProductDetail extends Component {
           'No Product Found'
         )}
       </Container>
+        
     );
+        }
   }
 }
 

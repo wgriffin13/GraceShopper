@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Card, Table } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 
 class Cart extends Component {
   constructor(props) {
@@ -52,9 +52,6 @@ class Cart extends Component {
   };
 
   render() {
-    // console.log('props in cart render', this.props);
-    // const { user } = this.props;
-
     return (
       <Fragment>
         <Card text="white">

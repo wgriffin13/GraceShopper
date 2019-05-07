@@ -14,7 +14,7 @@ import {
   getSessionCart
 } from './store';
 import Home from './Home';
-import Admin from './Admin/AdminPage';
+import Admin from './Admin/AdminAccount';
 import Login from './Login';
 import Cart from './Cart';
 import Checkout from './CheckOut';

@@ -78,27 +78,10 @@ class Checkout extends Component {
 
   render() {
     const { user, order } = this.props;
-    console.log('props in Checkout render', this.props);
+    // console.log('props in Checkout render', this.props);
 
     return (
       <div>
-        {/* <hr />
-        {user ? (
-
-          <Row>
-            <Col>{user.name}</Col>
-            <Col>
-              <small className="text-center">
-                registered user since {user.createdAt.slice(0, 10)}
-              </small>
-            </Col>
-            <Col>
-              <span className="float-right">{user.email}</span>
-            </Col>
-          </Row>
-        ) : (
-          'no user!'
-        )} */}
         <hr />
         {order ? (
           <Card>

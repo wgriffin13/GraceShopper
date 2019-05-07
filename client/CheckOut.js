@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
   Button,
   Card,
@@ -11,6 +12,7 @@ import {
   FormGroup,
   Input,
   Label,
+  Table,
   Row
 } from 'reactstrap';
 
@@ -80,8 +82,9 @@ class Checkout extends Component {
 
     return (
       <div>
-        <hr />
+        {/* <hr />
         {user ? (
+
           <Row>
             <Col>{user.name}</Col>
             <Col>
@@ -95,11 +98,14 @@ class Checkout extends Component {
           </Row>
         ) : (
           'no user!'
-        )}
+        )} */}
         <hr />
         {order ? (
           <Card>
-            <CardHeader>
+            <CardHeader
+              className="text-white"
+              style={{ backgroundColor: '#7cc245' }}
+            >
               Order # {order.id}
               <span className="float-right">
                 {order.createdAt.slice(0, 10)}
@@ -107,6 +113,21 @@ class Checkout extends Component {
             </CardHeader>
 
             <CardBody>
+              <Row>
+                <Col>{user.name}</Col>
+              </Row>
+              <Row>
+                <Col>{user.email}</Col>
+              </Row>
+              <Row>
+                <Col>
+                  <small className="text-center">
+                    registered user since {user.createdAt.slice(0, 10)}
+                  </small>
+                </Col>
+              </Row>
+
+              <hr />
               <div id="itemsAccordion" data-children=".item">
                 <div className="item">
                   <Button
@@ -124,7 +145,7 @@ class Checkout extends Component {
                     id="itemsAccordion1"
                     className="ml-3"
                   >
-                    <table className="table mt-2">
+                    <Table striped bordered hover size="small" className="mt-2">
                       <thead>
                         <tr>
                           <th scope="col">Product</th>
@@ -140,14 +161,20 @@ class Checkout extends Component {
                             <tr key={item.productId}>
                               <td>
                                 <div className="row">
-                                  <div className="col-6 col-lg-3">
+                                  <div className="col-6 col-sm-3">
                                     <img
                                       src={item.product.imageUrl}
                                       className="img-thumbnail"
                                     />
                                   </div>
                                   <div className="col-5 col-lg-7">
-                                    {item.product.title}
+                                    {/* {item.product.title} */}
+                                    <Link
+                                      style={{ textDecoration: 'none' }}
+                                      to={`/products/${item.productId}`}
+                                    >
+                                      {item.product.title}
+                                    </Link>
                                   </div>
                                 </div>
                               </td>
@@ -170,7 +197,7 @@ class Checkout extends Component {
                           <th scope="col">{this.calculateOrderTotal()}</th>
                         </tr>
                       </tfoot>
-                    </table>
+                    </Table>
                   </Collapse>
                 </div>
               </div>
@@ -346,7 +373,7 @@ class Checkout extends Component {
               </div>
             </CardBody>
             <CardFooter>
-              <Button color="secondary" size="lg" block>
+              <Button color="outline-success" size="lg" block>
                 Confirm Purchase
               </Button>
             </CardFooter>

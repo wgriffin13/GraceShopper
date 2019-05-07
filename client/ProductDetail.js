@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
-import { Card, Col, Container, Row } from 'react-bootstrap';
+import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import ProductImages from './ProductImages';
-import { createPendingOrder, addToCart, createSessionCart, setSessionCart  } from './store';
+import {
+  createPendingOrder,
+  addToCart,
+  createSessionCart,
+  setSessionCart
+} from './store';
 
 class ProductDetail extends Component {
   constructor(props) {
@@ -54,31 +59,33 @@ class ProductDetail extends Component {
     return cats.find(cat => cat.id === prod.categoryId);
   };
 
-  addToCartOrder = (order) => {
-    this.props.addToCart({
-      orderId: order.id,
-      productId: this.props.match.params.id * 1,
-      quantity: 1,
-      orderPrice: this.displayProduct().price,
-      netTotalCost: this.displayProduct().price
-    })
-      .then(() => this.props.history.push('/cart'))
-  }
+  addToCartOrder = order => {
+    this.props
+      .addToCart({
+        orderId: order.id,
+        productId: this.props.match.params.id * 1,
+        quantity: 1,
+        orderPrice: this.displayProduct().price,
+        netTotalCost: this.displayProduct().price
+      })
+      .then(() => this.props.history.push('/cart'));
+  };
 
   handleAddToCartLoggedIn = () => {
-    const {order, user } = this.props;
+    const { order, user } = this.props;
     if (order) {
-      this.addToCartOrder(order)
+      this.addToCartOrder(order);
     } else {
-      this.props.createPendingOrder({
-        userId: user.id,
-        status: 'pending'
-      })
-        .then( newOrder => {
-          this.addToCartOrder(newOrder)
+      this.props
+        .createPendingOrder({
+          userId: user.id,
+          status: 'pending'
         })
+        .then(newOrder => {
+          this.addToCartOrder(newOrder);
+        });
     }
-  }
+  };
 
   initSessionCart = (product, qty) => {
     return {
@@ -123,7 +130,6 @@ class ProductDetail extends Component {
       });
     }
     this.props.requestCreateSessionCart(tempSessionCart);
-    // console.log(tempSessionCart);
   };
 
   addToCart = (product, quantity) => {
@@ -149,6 +155,8 @@ class ProductDetail extends Component {
     const product = this.props.products.find(
       prd => prd.id === this.props.match.params.id * 1
     );
+
+    console.log('props in ProductDetail', this.props);
 
     return (
       <Container className="d-flex mt-5">
@@ -184,21 +192,27 @@ class ProductDetail extends Component {
                   </Card.Subtitle>
                 </Card.Footer>
               </Card>
+
+              <Button
+                className="mt-2"
+                variant="outline-success"
+                type="button"
+                onClick={() => this.addToCart(product, 1)}
+                block
+              >
+                Add to Cart
+              </Button>
             </Col>
             <Col className="d-flex flex-column align-items-start">
               <Row className="d-flex mt-auto mb-auto">
                 <h4>{product.title}</h4>
-
                 <p className="text-justify">{product.description}</p>
               </Row>
               <ProductImages
-                prodIdx={product.id}
+                categoryColor={this.findCategory(product, categories).color}
+                prodId={product.id}
                 handleClick={this.handleClick}
               />
-              {/*TEMPORARY BUTTON TO TEST SESSION CART FUNCTIONALITY*/}
-              <button type="button" onClick={() => this.addToCart(product, 1)}>
-                Add to Cart
-              </button>
             </Col>
           </Row>
         ) : (
@@ -209,8 +223,13 @@ class ProductDetail extends Component {
   }
 }
 
-
-const mapStateToProps = ({ categories, products, user, sessionCart, orders }) => {
+const mapStateToProps = ({
+  categories,
+  products,
+  user,
+  sessionCart,
+  orders
+}) => {
   return {
     user,
     products,
@@ -222,13 +241,13 @@ const mapStateToProps = ({ categories, products, user, sessionCart, orders }) =>
 
 const mapDispatchToProps = dispatch => {
   return {
-    createPendingOrder: (order) => dispatch(createPendingOrder(order)),
-    addToCart: (item) => dispatch(addToCart(item)),
-    requestCreateSessionCart: (sessionCart) => dispatch(createSessionCart(sessionCart)),
-    requestUpdateCart: (sessionCart) => dispatch(setSessionCart(sessionCart))
+    createPendingOrder: order => dispatch(createPendingOrder(order)),
+    addToCart: item => dispatch(addToCart(item)),
+    requestCreateSessionCart: sessionCart =>
+      dispatch(createSessionCart(sessionCart)),
+    requestUpdateCart: sessionCart => dispatch(setSessionCart(sessionCart))
   };
 };
-
 
 export default connect(
   mapStateToProps,

@@ -31,7 +31,7 @@ const Products = ({ products, categories, match }) => {
                     height: '27rem',
                     borderColor: `${findCategory(product, categories).color}`
                   }}
-                  className="mb-3 mt-3 shadow bg-white rounded"
+                  className="mb-3 mt-3 shadow rounded"
                 >
                   <Card.Header
                     className="text-center"

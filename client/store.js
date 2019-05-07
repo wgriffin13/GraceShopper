@@ -248,23 +248,25 @@ const users = (state = {}, action) => {
 
 const orders = (state = [], action) => {
   switch (action.type) {
-    case GET_ORDERS:
-      return action.orders;
-    case CREATE_CART:
-      return [...state, action.order];
-    case ADD_LINEITEM:
-      return state.map(order => {
-        if (order.status === 'pending') {
-          if (!order.lineitems) {
-            order.lineitems = [action.item];
-          } else {
-            order.lineitems.push(action.item);
-          }
-        }
-        return order;
-      });
-    default:
-      return state;
+      case GET_ORDERS:
+          return action.orders;
+      case CREATE_CART:
+          const cart = action.order;
+          cart.lineitems = [];
+          return [...state, cart];
+      case ADD_LINEITEM:
+          return state.map(order => {
+            if (order.status === 'pending') {
+              if (!order.lineitems){
+                order.lineitems = [action.item]
+              } else {
+              order.lineitems.push(action.item)
+              }
+            }
+            return order;
+          })
+      default:
+          return state;
   }
 };
 const sessionCart = (state = {}, action) => {

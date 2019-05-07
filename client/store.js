@@ -222,7 +222,9 @@ const orders = (state = [], action) => {
       case GET_ORDERS:
           return action.orders;
       case CREATE_CART:
-          return [...state, action.order];
+          const cart = action.order;
+          cart.lineitems = [];
+          return [...state, cart];
       case ADD_LINEITEM:
           return state.map(order => {
             if (order.status === 'pending') {

@@ -1,28 +1,37 @@
-import React, { Component, Container } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
   Button,
   Card,
   CardBody,
   CardHeader,
+  CardFooter,
   Col,
   Collapse,
   FormGroup,
   Input,
   Label,
+  Table,
   Row
 } from 'reactstrap';
 
-class CheckOut extends Component {
+class Checkout extends Component {
   constructor(props) {
     super(props);
     this.state = {
       collapseShipping: false,
       collapsePayment: false,
-      customShipping: [true, false],
-      customPayment: [true, false]
+      collapseItems: false,
+      customShipping: [false, false],
+      customPayment: [false, false],
+      customItems: [true, false]
     };
   }
+
+  toggleItems = () => {
+    this.setState({ collapseItems: !this.state.collapseItems });
+  };
 
   toggleShipping = () => {
     this.setState({ collapseShipping: !this.state.collapseShipping });
@@ -32,6 +41,14 @@ class CheckOut extends Component {
     this.setState({ collapsePayment: !this.state.collapsePayment });
   };
 
+  toggleCustomItems = tab => {
+    const prevState = this.state.customItems;
+    const state = prevState.map((x, index) => (tab === index ? !x : false));
+
+    this.setState({
+      customItems: state
+    });
+  };
   toggleCustomShipping = tab => {
     const prevState = this.state.customShipping;
     const state = prevState.map((x, index) => (tab === index ? !x : false));
@@ -50,33 +67,28 @@ class CheckOut extends Component {
     });
   };
 
+  calculateOrderTotal = () => {
+    return this.props.order.lineitems
+      .reduce((acc, item) => {
+        acc += item.quantity * item.netTotalCost;
+        return acc;
+      }, 0)
+      .toFixed(2);
+  };
+
   render() {
-    const { user, orders } = this.props;
-    console.log('props in Checkout render', this.props);
-    const order = orders.find(_order => _order.status === 'pending');
+    const { user, order } = this.props;
+    // console.log('props in Checkout render', this.props);
 
     return (
-      <Container>
-        <hr />
-        {user ? (
-          <Row>
-            <Col>{user.name}</Col>
-            <Col>
-              <small className="text-center">
-                registered user since {user.createdAt.slice(0, 10)}
-              </small>
-            </Col>
-            <Col>
-              <span className="float-right">{user.email}</span>
-            </Col>
-          </Row>
-        ) : (
-          'no user!'
-        )}
+      <div>
         <hr />
         {order ? (
           <Card>
-            <CardHeader>
+            <CardHeader
+              className="text-white"
+              style={{ backgroundColor: '#7cc245' }}
+            >
               Order # {order.id}
               <span className="float-right">
                 {order.createdAt.slice(0, 10)}
@@ -84,6 +96,95 @@ class CheckOut extends Component {
             </CardHeader>
 
             <CardBody>
+              <Row>
+                <Col>{user.name}</Col>
+              </Row>
+              <Row>
+                <Col>{user.email}</Col>
+              </Row>
+              <Row>
+                <Col>
+                  <small className="text-center">
+                    registered user since {user.createdAt.slice(0, 10)}
+                  </small>
+                </Col>
+              </Row>
+
+              <hr />
+              <div id="itemsAccordion" data-children=".item">
+                <div className="item">
+                  <Button
+                    className="mb-3 p-0"
+                    color="link"
+                    onClick={() => this.toggleCustomItems(0)}
+                    aria-expanded={this.state.customItems[0]}
+                    aria-controls="itemsAccordion1"
+                  >
+                    Products
+                  </Button>
+                  <Collapse
+                    isOpen={this.state.customItems[0]}
+                    data-parent="#itemsAccordion"
+                    id="itemsAccordion1"
+                    className="ml-3"
+                  >
+                    <Table striped bordered hover size="small" className="mt-2">
+                      <thead>
+                        <tr>
+                          <th scope="col">Product</th>
+                          <th scope="col">Price</th>
+                          <th scope="col">Discount</th>
+                          <th scope="col">Quantity</th>
+                          <th scope="col">Subtotal</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {order.lineitems.map(item => {
+                          return (
+                            <tr key={item.productId}>
+                              <td>
+                                <div className="row">
+                                  <div className="col-6 col-sm-3">
+                                    <img
+                                      src={item.product.imageUrl}
+                                      className="img-thumbnail"
+                                    />
+                                  </div>
+                                  <div className="col-5 col-lg-7">
+                                    {/* {item.product.title} */}
+                                    <Link
+                                      style={{ textDecoration: 'none' }}
+                                      to={`/products/${item.productId}`}
+                                    >
+                                      {item.product.title}
+                                    </Link>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="text-right">{item.orderPrice}</td>
+                              <td className="text-right">{item.discount}</td>
+                              <td className="text-right">{item.quantity}</td>
+                              <td className="text-right">
+                                {item.netTotalCost * item.quantity}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <th scope="col">Total</th>
+                          <th />
+                          <th />
+                          <th />
+                          <th scope="col">{this.calculateOrderTotal()}</th>
+                        </tr>
+                      </tfoot>
+                    </Table>
+                  </Collapse>
+                </div>
+              </div>
+
               <div id="shippingAccordion" data-children=".item">
                 <div className="item">
                   <Button
@@ -106,12 +207,16 @@ class CheckOut extends Component {
                       <Input
                         type="text"
                         id="company"
-                        placeholder="Enter your company name"
+                        placeholder="Enter your name"
                       />
                     </FormGroup>
                     <FormGroup>
                       <Label htmlFor="vat">Company</Label>
-                      <Input type="text" id="vat" placeholder="DE1234567890" />
+                      <Input
+                        type="text"
+                        id="vat"
+                        placeholder="Enter your company"
+                      />
                     </FormGroup>
                     <FormGroup>
                       <Label htmlFor="street">Street</Label>
@@ -128,7 +233,7 @@ class CheckOut extends Component {
                           <Input
                             type="text"
                             id="city"
-                            placeholder="Enter your city"
+                            placeholder="Enter city"
                           />
                         </FormGroup>
                       </Col>
@@ -250,21 +355,25 @@ class CheckOut extends Component {
                 </div>
               </div>
             </CardBody>
+            <CardFooter>
+              <Button color="outline-success" size="lg" block>
+                Confirm Purchase
+              </Button>
+            </CardFooter>
           </Card>
         ) : (
           <div> no order found </div>
         )}
-      </Container>
+      </div>
     );
   }
 }
 
-const mapStateToProps = state => {
-  console.log('state in Checkout', state);
+const mapStateToProps = ({ user, orders }) => {
   return {
-    orders: state.orders,
-    user: state.user
+    user: user,
+    order: orders.find(order => order.status === 'pending')
   };
 };
 
-export default connect(mapStateToProps)(CheckOut);
+export default connect(mapStateToProps)(Checkout);

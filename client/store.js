@@ -6,15 +6,15 @@ import axios from 'axios';
 
 //CONSTANTS
 
-const SET_USER = "SET_USER";
-const GET_USERS = "GET_USERS";
-const GET_CATEGORIES = "GET_CATEGORIES";
-const GET_PRODUCTS = "GET_PRODUCTS";
-const GET_PRODUCT_IMAGES = "GET_PRODUCTS_IMAGES";
-const CREATE_CART = "CREATE_CART";
+const SET_USER = 'SET_USER';
+const GET_USERS = 'GET_USERS';
+const GET_CATEGORIES = 'GET_CATEGORIES';
+const GET_PRODUCTS = 'GET_PRODUCTS';
+const GET_PRODUCT_IMAGES = 'GET_PRODUCTS_IMAGES';
+const CREATE_CART = 'CREATE_CART';
 const GET_ORDERS = 'GET_ORDERS';
-const ADD_LINEITEM = "ADD_LINEITEM";
-const SET_SESSION_CART = "SET_SESSION_CART";
+const ADD_LINEITEM = 'ADD_LINEITEM';
+const SET_SESSION_CART = 'SET_SESSION_CART';
 
 //ACTION CREATORS
 
@@ -48,16 +48,15 @@ const getProductImages = productImages => ({
   productImages
 });
 
-
 const createCartActionCreator = order => ({
   type: CREATE_CART,
   order
-})
+});
 
 const addLineItemAC = item => ({
   type: ADD_LINEITEM,
   item
-})
+});
 const setSessionCart = sessionCart => ({
   type: SET_SESSION_CART,
   sessionCart
@@ -170,6 +169,36 @@ const getSessionCart = () => {
   };
 };
 
+//create a cart for logged-in user by calling the post route
+const createPendingOrder = order => {
+  return dispatch => {
+    return axios
+      .post(`/api/orders/user/${order.userId}`, order)
+      .then(response => response.data)
+      .then(data => {
+        console.log('Pending Order Created!');
+        dispatch(createCartActionCreator(data));
+        return data;
+      });
+  };
+};
+
+//create a line-item when a  product is added to the cart
+const addToCart = item => {
+  return dispatch => {
+    return axios
+      .post(`/api/orders/${item.orderId}`, item)
+      .then(response => response.data)
+      .then(data => {
+        dispatch(addLineItemAC(data));
+      });
+  };
+};
+
+// const mergeCarts = (sessionCart, pendingOrder) => {
+
+// }
+
 //REDUCERS
 
 const categories = (state = [], action) => {
@@ -219,25 +248,25 @@ const users = (state = {}, action) => {
 
 const orders = (state = [], action) => {
   switch (action.type) {
-      case GET_ORDERS:
-          return action.orders;
-      case CREATE_CART:
-          return [...state, action.order];
-      case ADD_LINEITEM:
-          return state.map(order => {
-            if (order.status === 'pending') {
-              if (!order.lineitems){
-                order.lineitems = [action.item]
-              } else {
-              order.lineitems.push(action.item)
-              }
-            }
-            return order;
-          })
-      default:
-          return state;
+    case GET_ORDERS:
+      return action.orders;
+    case CREATE_CART:
+      return [...state, action.order];
+    case ADD_LINEITEM:
+      return state.map(order => {
+        if (order.status === 'pending') {
+          if (!order.lineitems) {
+            order.lineitems = [action.item];
+          } else {
+            order.lineitems.push(action.item);
+          }
+        }
+        return order;
+      });
+    default:
+      return state;
   }
-}
+};
 const sessionCart = (state = {}, action) => {
   switch (action.type) {
     case SET_SESSION_CART:
@@ -246,37 +275,6 @@ const sessionCart = (state = {}, action) => {
       return state;
   }
 };
-
-
-//create a cart for logged-in user by calling the post route
-const createPendingOrder = (order) => {
-  return (dispatch) => {
-    return axios.post(`/api/orders/user/${order.userId}`, order)
-      .then(response => response.data)
-      .then(data => {
-        console.log("Pending Order Created!")
-        dispatch(createCartActionCreator(data));
-        return data;
-      })
-  }
-}
-
-//create a line-item when a  product is added to the cart
-const addToCart = (item) => {
-  return (dispatch) => {
-    return axios.post(`/api/orders/${item.orderId}`, item)
-      .then(response => response.data)
-      .then(data => {
-        dispatch(addLineItemAC(data));
-      })
-  }
-}
-
-// const mergeCarts = (sessionCart, pendingOrder) => {
-
-// }
-
-
 
 const reducer = combineReducers({
   categories,

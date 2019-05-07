@@ -14,10 +14,11 @@ import {
   getSessionCart
 } from './store';
 import Home from './Home';
-import Admin from './Admin/AdminPage';
+import Admin from './Admin/AdminAccount';
 import Login from './Login';
 import Cart from './Cart';
-import CheckOut from './CheckOut';
+import Checkout from './CheckOut';
+import UserAccount from './UserAccount';
 
 class App extends Component {
   componentDidMount() {
@@ -35,7 +36,15 @@ class App extends Component {
           <Route component={Navigation} />
           <Switch>
             <Route exact path="/products" component={Products} />
-            <Route path="/products/category/:categoryId" component={Products} />
+            <Route
+              exact
+              path="/products/category/:categoryId?"
+              component={Products}
+            />
+            <Route
+              path="/products/category/:categoryId/search/:searchTerm?"
+              component={Products}
+            />
             <Route exact path="/products/:id" component={ProductDetail} />
             <Route
               exact
@@ -44,9 +53,13 @@ class App extends Component {
             />
             <Route exact path="/" component={Home} />
             <Route exact path="/admin" component={Admin} />
+            <Route exact path="/user" component={UserAccount} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/cart" component={Cart} />
-            <Route exact path="/orders/user/:userId" component={CheckOut} />
+            <Route exact path="/orders/:orderId" component={Checkout} />
+            <Route
+              render={() => <div>Sorry That Page Couldn't Be Found</div>}
+            />
           </Switch>
         </HashRouter>
       </Fragment>

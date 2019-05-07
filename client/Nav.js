@@ -9,7 +9,7 @@ class Navigation extends Component {
     super(props);
     this.state = {
       searchTerm: '',
-      categoryId: 'all',
+      categoryId: 'all'
     };
   }
   onChange = ev => {
@@ -22,8 +22,12 @@ class Navigation extends Component {
   };
   render() {
     const { searchTerm, categoryId } = this.state;
-    const { categories } = this.props;
+    const { categories, isLoggedIn, user } = this.props;
     const { onChange, searchByTerm } = this;
+    // console.log('user in Nav', user);
+    console.log('props in Nav', this.props);
+    console.log('isLoggedIn in Nav', this.props.isLoggedIn);
+
     return (
       <Fragment>
         <Navbar bg="light">
@@ -47,60 +51,69 @@ class Navigation extends Component {
             >
               Products
             </Nav.Link>
-          </Nav>
-          <Nav className="justify-content-end">
-            <Nav.Link as={Link} to="/admin" className="mr-auto">
-              admin
-            </Nav.Link>
-            {this.props.isLoggedIn ? (
-              <button
-                className="mr-auto"
-                type="button"
-                onClick={this.props.logout}
-              >
-                logout
-              </button>
+
+            {user.isAdmin ? (
+              <Nav.Link as={Link} to="/admin" className="mr-auto">
+                admin
+              </Nav.Link>
             ) : (
-              <Nav.Link as={Link} to="/login" className="mr-auto">
-                login
+              <Nav.Link as={Link} to="/user" className="mr-auto">
+                user
               </Nav.Link>
             )}
+            <Nav.Item>
+              {this.props.isLoggedIn ? (
+                <button
+                  className="mr-auto"
+                  type="button"
+                  onClick={this.props.logout}
+                >
+                  logout
+                </button>
+              ) : (
+                <Nav.Link as={Link} to="/login" className="mr-auto">
+                  login
+                </Nav.Link>
+              )}
+            </Nav.Item>
+
             <Nav.Link as={Link} to="/cart">
               cart
             </Nav.Link>
-          </Nav>
-          <div className="input-group">
-            <Form.Control
-              as="select"
-              variant="outline-secondary"
-              value={categoryId}
-              onChange={onChange}
-              name="categoryId"
-            >
-              <option value="all">All</option>
-              {categories.map(cat => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.name}
-                </option>
-              ))}
-            </Form.Control>
-            <FormControl
-              type="text"
-              placeholder="Search By Title"
-              className="mx-sm-2"
-              name="searchTerm"
-              value={searchTerm}
-              onChange={onChange}
-            />
-            <div className="input-group-append">
-              <Button
+
+            <div className="input-group">
+              <Form.Control
+                as="select"
                 variant="outline-secondary"
-                onClick={() => searchByTerm()}
+                value={categoryId}
+                onChange={onChange}
+                name="categoryId"
               >
-                Search
-              </Button>
+                <option value="all">All</option>
+                {categories.map(cat => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </Form.Control>
+              <FormControl
+                type="text"
+                placeholder="Search By Title"
+                className="mx-sm-2"
+                name="searchTerm"
+                value={searchTerm}
+                onChange={onChange}
+              />
+              <div className="input-group-append">
+                <Button
+                  variant="outline-secondary"
+                  onClick={() => searchByTerm()}
+                >
+                  Search
+                </Button>
+              </div>
             </div>
-          </div>
+          </Nav>
         </Navbar>
       </Fragment>
     );
@@ -111,12 +124,13 @@ const mapStateToProps = ({ user, categories }) => {
   return {
     isLoggedIn: !!user.id,
     categories,
+    user
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    logout: () => dispatch(logout()),
+    logout: () => dispatch(logout())
   };
 };
 

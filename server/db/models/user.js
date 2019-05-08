@@ -2,7 +2,21 @@ const Sequelize = require('sequelize');
 const conn = require('../db');
 
 const User = conn.define('user', {
-  name: {
+  username: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    validate: {
+      notEmpty: true
+    }
+  },
+  firstname: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    validate: {
+      notEmpty: true
+    }
+  },
+  lastname: {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {

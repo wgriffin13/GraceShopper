@@ -1,24 +1,32 @@
-import React from "react";
-import { Card, Container, Col, Figure, Row } from "react-bootstrap";
-import { connect } from "react-redux";
+import React from 'react';
+import { Card, Container, Col, Figure, Row } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import Gallery from './Carousel';
 
 const Home = ({ categories }) => {
   const dvdUrls = [
-    "http://i65.tinypic.com/2sblgz5.jpg",
-    "http://i65.tinypic.com/j6515e.jpg",
-    "http://i65.tinypic.com/anbp8h.jpg"
+    'http://i65.tinypic.com/2sblgz5.jpg',
+    'http://i65.tinypic.com/j6515e.jpg',
+    'http://i65.tinypic.com/anbp8h.jpg'
   ];
 
   return (
     <Container className="d-flex-row">
+      <Row>
+        <Col />
+        <Col>
+          <Gallery />
+        </Col>
+        <Col />
+      </Row>
       <Row>
         {categories.map(category => {
           return (
             <Col lg={true} xl={true} key={category.id}>
               <Card
                 style={{
-                  width: "15rem",
-                  height: "15rem",
+                  width: '15rem',
+                  height: '15rem',
                   backgroundColor: `${category.color}`
                 }}
                 className="my-3 justify-content-center "
@@ -27,8 +35,8 @@ const Home = ({ categories }) => {
                   <Card.Text
                     className="white-text-with-blue-shadow text-center"
                     style={{
-                      fontSize: "22px",
-                      color: "white"
+                      fontSize: '22px',
+                      color: 'white'
                     }}
                   >
                     {category.name}

@@ -1,17 +1,19 @@
-const Product = require("./models/product");
-const ProductImage = require("./models/productimage");
-const Category = require("./models/category");
-const User = require("./models/user");
-const Order = require("./models/order");
-const LineItem = require("./models/lineitem");
+const Product = require('./models/product');
+const ProductImage = require('./models/productimage');
+const ProductReview = require('./models/productreview');
+const Category = require('./models/category');
+const User = require('./models/user');
+const Order = require('./models/order');
+const LineItem = require('./models/lineitem');
 const {
   seedCategories,
   seedProducts,
   seedUsers,
   seedOrders,
-  seedLineItems
-} = require("./seed");
-const conn = require("./db");
+  seedLineItems,
+  seedReviews
+} = require('./seed');
+const conn = require('./db');
 
 const syncAndSeed = () => {
   return conn
@@ -25,13 +27,14 @@ const syncAndSeed = () => {
           Product.create(prod).then(product =>
             prod.detailImages.map(img => {
               ProductImage.create({ imageUrl: img, productId: product.id });
-            })
-          )
-        )
+            })))
       );
     })
     .then(() => {
       seedUsers.map(user => User.create(user));
+    })
+    .then(() => {
+      seedReviews.map(review => ProductReview.create(review));
     })
     .then(() => {
       seedOrders.map(order => Order.create(order));

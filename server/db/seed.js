@@ -9,6 +9,16 @@ const seedCategories = [
   { name: 'resistance', color: '#00A1CB' }
 ];
 
+const seedReviews = [
+  {
+    rating: 3,
+    review:
+      "If you are comfortable with Pilates and using a Reformer solo, this machine is great given the price point. Every time I look at it, I fall in love. I subscribe to the website Pilates Anytime and do rigorous workouts. Their are some advanced moves you will be unable to do (like Snake) but you won't feel like you are missing out on performing different positions. After paying $110 for private sessions for years, buying this Reformer made complete sense. Very happy with this purchase.",
+    productId: 3,
+    userId: 1
+  }
+];
+
 const seedProducts = [
   {
     title: 'Gaiam Coreplus Reformer',
@@ -396,20 +406,40 @@ const seedProducts = [
 
 const seedUsers = [
   {
-    name: 'JaneD',
+    username: 'JaneD',
+    firstname: 'Jane',
+    lastname: 'DiMagio',
     email: 'jane@email.com',
     password: '12345'
   },
   {
-    name: 'JoeD',
+    username: 'JoeD',
+    firstname: 'Joe',
+    lastname: 'DiMagio',
     email: 'joe@email.com',
-    password: 'catsdogs'
+    password: '12345'
   },
   {
-    name: 'owner',
+    username: 'owner',
+    firstname: 'Preston',
+    lastname: 'Chaplin',
     email: 'owner@email.com',
     password: '54321',
     isAdmin: true
+  },
+  {
+    username: 'Jim',
+    firstname: 'Jim',
+    lastname: 'Dartanian',
+    email: 'jim@email.com',
+    password: '12345'
+  },
+  {
+    username: 'Bob',
+    firstname: 'Bob',
+    lastname: 'Expialidocious',
+    email: 'bob@email.com',
+    password: '12345'
   }
 ];
 
@@ -491,5 +521,6 @@ module.exports = {
   seedProducts,
   seedUsers,
   seedOrders,
-  seedLineItems
+  seedLineItems,
+  seedReviews
 };

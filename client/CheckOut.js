@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import {
   Button,
   Card,
@@ -14,7 +14,7 @@ import {
   Label,
   Table,
   Row
-} from 'reactstrap';
+} from "reactstrap";
 
 class Checkout extends Component {
   constructor(props) {
@@ -76,6 +76,10 @@ class Checkout extends Component {
       .toFixed(2);
   };
 
+  priceFormat = numberString => {
+    return numberString.toLocaleString(undefined, { minimumFractionDigits: 2 });
+  };
+
   render() {
     const { user, order } = this.props;
     // console.log('props in Checkout render', this.props);
@@ -87,7 +91,7 @@ class Checkout extends Component {
           <Card>
             <CardHeader
               className="text-white"
-              style={{ backgroundColor: '#7cc245' }}
+              style={{ backgroundColor: "#7cc245" }}
             >
               Order # {order.id}
               <span className="float-right">
@@ -153,7 +157,7 @@ class Checkout extends Component {
                                   <div className="col-5 col-lg-7">
                                     {/* {item.product.title} */}
                                     <Link
-                                      style={{ textDecoration: 'none' }}
+                                      style={{ textDecoration: "none" }}
                                       to={`/products/${item.productId}`}
                                     >
                                       {item.product.title}
@@ -161,7 +165,9 @@ class Checkout extends Component {
                                   </div>
                                 </div>
                               </td>
-                              <td className="text-right">{item.orderPrice}</td>
+                              <td className="text-right">
+                                {this.priceFormat(item.orderPrice)}
+                              </td>
                               <td className="text-right">{item.discount}</td>
                               <td className="text-right">{item.quantity}</td>
                               <td className="text-right">
@@ -372,7 +378,7 @@ class Checkout extends Component {
 const mapStateToProps = ({ user, orders }) => {
   return {
     user: user,
-    order: orders.find(order => order.status === 'pending')
+    order: orders.find(order => order.status === "pending")
   };
 };
 

@@ -1,10 +1,10 @@
-import React, { Component, Fragment } from 'react';
-import { HashRouter, Route, Switch } from 'react-router-dom';
-import Products from './Products';
-import Navigation from './Nav';
-import ProductDetail from './ProductDetail';
-import ProductImages from './ProductImages';
-import { connect } from 'react-redux';
+import React, { Component, Fragment } from "react";
+import { HashRouter, Route, Switch } from "react-router-dom";
+import Products from "./Products";
+import Navigation from "./Nav";
+import ProductDetail from "./ProductDetail";
+import ProductImages from "./ProductImages";
+import { connect } from "react-redux";
 import {
   fetchCategories,
   fetchProducts,
@@ -12,13 +12,13 @@ import {
   fetchUsers,
   sessionLogin,
   getSessionCart
-} from './store';
-import Home from './Home';
-import Admin from './Admin/AdminAccount';
-import Login from './Login';
-import Cart from './Cart';
-import Checkout from './CheckOut';
-import UserAccount from './UserAccount';
+} from "./store";
+import Home from "./Home";
+import Admin from "./AccountViews/AdminAccount";
+import Login from "./Login";
+import Cart from "./Cart";
+import Checkout from "./CheckOut";
+import UserAccount from "./AccountViews/UserAccount";
 
 class App extends Component {
   componentDidMount() {

@@ -6,8 +6,14 @@ const ProductReview = conn.define("productreview", {
     allowNull: false,
     validate: {
       notEmpty: true
-    },
-    review: conn.Sequelize.TEXT
+    }
+  },
+  review: {
+    type: conn.Sequelize.TEXT,
+    allowNull: false,
+    validate: {
+      notEmpty: true
+    }
   }
 });
 

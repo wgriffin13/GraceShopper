@@ -54,9 +54,9 @@ class Cart extends Component {
   render() {
     return (
       <Fragment>
-        <Card text="white">
+        <Card>
           <Card.Header style={{ backgroundColor: '#91c7f9' }}>
-            Shopping Cart
+            <div className="text-white">Shopping Cart</div>
           </Card.Header>
           <Card.Body>
             {this.state.cart.status ? (

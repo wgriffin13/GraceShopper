@@ -1,12 +1,16 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Card } from 'react-bootstrap';
+import { deleteItemSessionCart, createSessionCart } from './store';
+import axios from 'axios';
 
 class Cart extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      cart: {}
+      cart: {},
+      lineitems: {},
+      warningMessage: ''
     };
   }
 
@@ -24,6 +28,9 @@ class Cart extends Component {
         this.setState({ cart: this.props.currentOrder });
       } else if (this.props.sessionCart.sessionCartId) {
         this.setState({ cart: this.props.sessionCart });
+      } else {
+        // Sets state to an empty cart if the store no longger has a cart to reference since the user fully deleted the items
+        this.setState({ cart: {} })
       }
       console.log('sessionCart in CDU', this.props.sessionCart);
     }
@@ -40,15 +47,36 @@ class Cart extends Component {
     return numberString.toLocaleString(undefined, { minimumFractionDigits: 2 });
   };
 
+  updateQuantity = productId => {
+    axios.get(`/api/products/${productId}`)
+      .then(response => response.data)
+      .then(data => {
+        // Get available quantity of product from server
+        const availableQty = data.quantity;
+        // Find matching item on current cart
+        if (parseInt(this.state.lineitems[productId], 10) <= availableQty) {
+          const templineitems = this.state.cart.lineitems.map(item => {
+            if (parseInt(item.productId, 10) === parseInt(productId, 10)) {
+              item.quantity = this.state.lineitems[productId];
+            }
+            return item;
+          })
+          // Upload changes to session cart
+          this.setState({ warningMessage: '' });
+          this.props.requestCreateSessionCart({...this.state.cart, lineitems: templineitems});
+        } else {
+          const prevItem = this.state.cart.lineitems.find(item => parseInt(item.productId, 10) === parseInt(productId, 10));
+          this.setState(prevState => ({ warningMessage: 'Please enter a value less than the available quantity.',
+            lineitems: { ...prevState.lineitems,  [productId]: prevItem.quantity } }));
+        }
+      });
+  };
+
   handleChange = evt => {
-    const tempCart = this.state.cart;
-    tempCart.lineitems = tempCart.lineitems.map(item => {
-      if (parseInt(evt.target.id, 10) === parseInt(item.productId, 10)) {
-        item.quantity = evt.target.value;
-      }
-      return item;
-    });
-    this.setState({ cart: tempCart });
+    const templineitems = this.state.lineitems;
+    templineitems[evt.target.id] = evt.target.value;
+    this.setState({ lineitems: templineitems });
+    console.log(this.state.lineitems)
   };
 
   render() {
@@ -82,7 +110,7 @@ class Cart extends Component {
                                 className="img-thumbnail"
                               />
                             </div>
-                            <div className="col-5 col-lg-7">
+                            <div className="col-lg-7">
                               <Card.Link
                                 style={{ textDecoration: 'none' }}
                                 href={`/#/products/${item.productId}`}
@@ -100,17 +128,33 @@ class Cart extends Component {
                         </td>
                         <td className="text-right">
                           <div className="form-group">
-                            <input
-                              name="quantity"
-                              className="form-control text-right"
-                              value={item.quantity}
-                              id={item.productId}
-                              onChange={this.handleChange}
-                            />
+                            {this.state.lineitems[item.productId] === undefined ?
+                              <input
+                                name="quantity"
+                                className="form-control text-right"
+                                value={item.quantity}
+                                id={item.productId}
+                                onChange={this.handleChange}
+                              /> :
+                              <input
+                                name="quantity"
+                                className="form-control text-right"
+                                value={this.state.lineitems[item.productId]}
+                                id={item.productId}
+                                onChange={this.handleChange}
+                            />}
                           </div>
                         </td>
                         <td className="text-right">
                           {this.priceFormat(item.netTotalCost * item.quantity)}
+                          <div className="row d-flex flex-nowrap justify-content-end">
+                            <button type="button" className="btn btn-info btn-sm mt-3 mr-1" id={item.productId} onClick={() => this.updateQuantity(item.productId)}>
+                              <i className="fa fa-refresh" aria-hidden="true" />
+                            </button>
+                            <button type="button" className="btn btn-danger btn-sm mt-3 mr-2" id={item.productId} onClick={() => this.props.requestDeleteItemSessionCart(item.productId)}>
+                              <i className="fa fa-trash" aria-hidden="true" />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     );
@@ -133,6 +177,8 @@ class Cart extends Component {
                 Oh no, there are no items in your cart!
               </div>
             )}
+            {/* Warning message for quantity update issues */}
+            {(this.state.warningMessage !== '' ? <div className="alert alert-warning" role="alert">{this.state.warningMessage}</div> : '')}
           </Card.Body>
           <Card.Footer>
             <div className="row">
@@ -145,7 +191,6 @@ class Cart extends Component {
                   {'<- '}Continue Shopping
                 </button>
               </div>
-              {this.props.user.id && this.props.currentOrder ? (
                 <div className="col text-right">
                   <button
                     type="button"
@@ -159,9 +204,6 @@ class Cart extends Component {
                     Checkout{' ->'}
                   </button>
                 </div>
-              ) : (
-                ''
-              )}
             </div>
           </Card.Footer>
         </Card>
@@ -178,4 +220,11 @@ const mapStateToProps = ({ user, sessionCart, orders }) => {
   };
 };
 
-export default connect(mapStateToProps)(Cart);
+const mapDispatchToProps = dispatch => {
+  return {
+    requestDeleteItemSessionCart: productId => dispatch(deleteItemSessionCart(productId)),
+    requestCreateSessionCart: sessionCart => dispatch(createSessionCart(sessionCart))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);

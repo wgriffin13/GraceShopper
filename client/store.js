@@ -15,51 +15,58 @@ const CREATE_CART = 'CREATE_CART';
 const GET_ORDERS = 'GET_ORDERS';
 const ADD_LINEITEM = 'ADD_LINEITEM';
 const SET_SESSION_CART = 'SET_SESSION_CART';
+const SET_NAV_SEARCH_VALUES = 'SET_NAV_SEARCH_VALUES';
 
 //ACTION CREATORS
 
 const getOrders = orders => ({
   type: GET_ORDERS,
-  orders
+  orders,
 });
 
 const setUserActionCreator = user => ({
   type: SET_USER,
-  user
+  user,
 });
 
 const getUsers = users => ({
   type: GET_USERS,
-  users
+  users,
 });
 
 const getCategories = categories => ({
   type: GET_CATEGORIES,
-  categories
+  categories,
 });
 
 const getProducts = products => ({
   type: GET_PRODUCTS,
-  products
+  products,
 });
 
 const getProductImages = productImages => ({
   type: GET_PRODUCT_IMAGES,
-  productImages
+  productImages,
 });
 
 const createCartActionCreator = order => ({
   type: CREATE_CART,
-  order
+  order,
 });
 
 const addLineItemAC = item => ({
   type: ADD_LINEITEM,
-  item
+  item,
 });
 const setSessionCart = sessionCart => ({
   type: SET_SESSION_CART,
-  sessionCart
+  sessionCart,
+});
+
+const setNavSearchValues = (categoryId, searchTerm) => ({
+  type: SET_NAV_SEARCH_VALUES,
+  categoryId,
+  searchTerm,
 });
 
 //THUNKS
@@ -195,6 +202,12 @@ const addToCart = item => {
   };
 };
 
+const updateNavSearchValsBasedOnURL = (categoryId, searchTerm) => {
+  return dispatch => {
+    dispatch(setNavSearchValues(categoryId, searchTerm));
+  };
+};
+
 // const mergeCarts = (sessionCart, pendingOrder) => {
 
 // }
@@ -248,31 +261,40 @@ const users = (state = {}, action) => {
 
 const orders = (state = [], action) => {
   switch (action.type) {
-      case GET_ORDERS:
-          return action.orders;
-      case CREATE_CART:
-          const cart = action.order;
-          cart.lineitems = [];
-          return [...state, cart];
-      case ADD_LINEITEM:
-          return state.map(order => {
-            if (order.status === 'pending') {
-              if (!order.lineitems){
-                order.lineitems = [action.item]
-              } else {
-              order.lineitems.push(action.item)
-              }
-            }
-            return order;
-          })
-      default:
-          return state;
+    case GET_ORDERS:
+      return action.orders;
+    case CREATE_CART:
+      const cart = action.order;
+      cart.lineitems = [];
+      return [...state, cart];
+    case ADD_LINEITEM:
+      return state.map(order => {
+        if (order.status === 'pending') {
+          if (!order.lineitems) {
+            order.lineitems = [action.item];
+          } else {
+            order.lineitems.push(action.item);
+          }
+        }
+        return order;
+      });
+    default:
+      return state;
   }
 };
 const sessionCart = (state = {}, action) => {
   switch (action.type) {
     case SET_SESSION_CART:
       return action.sessionCart;
+    default:
+      return state;
+  }
+};
+
+const navSearchTerms = (state = {}, action) => {
+  switch (action.type) {
+    case SET_NAV_SEARCH_VALUES:
+      return { categoryId: action.categoryId, searchTerm: action.searchTerm };
     default:
       return state;
   }
@@ -285,7 +307,8 @@ const reducer = combineReducers({
   user,
   users,
   orders,
-  sessionCart
+  sessionCart,
+  navSearchTerms,
 });
 
 const store = createStore(
@@ -308,5 +331,6 @@ export {
   addToCart,
   createSessionCart,
   setSessionCart,
-  getSessionCart
+  getSessionCart,
+  updateNavSearchValsBasedOnURL,
 };

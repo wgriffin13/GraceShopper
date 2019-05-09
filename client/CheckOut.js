@@ -13,7 +13,7 @@ import {
   Input,
   Label,
   Table,
-  Row
+  Row,
 } from 'reactstrap';
 
 class Checkout extends Component {
@@ -25,7 +25,7 @@ class Checkout extends Component {
       collapseItems: false,
       customShipping: [false, false],
       customPayment: [false, false],
-      customItems: [true, false]
+      customItems: [true, false],
     };
   }
 
@@ -46,7 +46,7 @@ class Checkout extends Component {
     const state = prevState.map((x, index) => (tab === index ? !x : false));
 
     this.setState({
-      customItems: state
+      customItems: state,
     });
   };
   toggleCustomShipping = tab => {
@@ -54,7 +54,7 @@ class Checkout extends Component {
     const state = prevState.map((x, index) => (tab === index ? !x : false));
 
     this.setState({
-      customShipping: state
+      customShipping: state,
     });
   };
 
@@ -63,7 +63,7 @@ class Checkout extends Component {
     const state = prevState.map((x, index) => (tab === index ? !x : false));
 
     this.setState({
-      customPayment: state
+      customPayment: state,
     });
   };
 
@@ -154,7 +154,7 @@ class Checkout extends Component {
                                     {/* {item.product.title} */}
                                     <Link
                                       style={{ textDecoration: 'none' }}
-                                      to={`/products/${item.productId}`}
+                                      to={`/products/detail/${item.productId}`}
                                     >
                                       {item.product.title}
                                     </Link>
@@ -372,7 +372,7 @@ class Checkout extends Component {
 const mapStateToProps = ({ user, orders }) => {
   return {
     user: user,
-    order: orders.find(order => order.status === 'pending')
+    order: orders.find(order => order.status === 'pending'),
   };
 };
 

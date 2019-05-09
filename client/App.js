@@ -11,7 +11,7 @@ import {
   fetchProductImages,
   fetchUsers,
   sessionLogin,
-  getSessionCart
+  getSessionCart,
 } from './store';
 import Home from './Home';
 import Admin from './Admin/AdminAccount';
@@ -35,17 +35,22 @@ class App extends Component {
         <HashRouter>
           <Route component={Navigation} />
           <Switch>
-            <Route exact path="/products" component={Products} />
+            <Route exact path="/products/:index?" component={Products} />
             <Route
               exact
-              path="/products/category/:categoryId?"
+              path="/products/filter/category/:categoryId?/:index?"
               component={Products}
             />
             <Route
-              path="/products/category/:categoryId/search/:searchTerm?"
+              exact
+              path="/products/search/category/:categoryId/term/:searchTerm?/:index?"
               component={Products}
             />
-            <Route exact path="/products/:id" component={ProductDetail} />
+            <Route
+              exact
+              path="/products/detail/:id"
+              component={ProductDetail}
+            />
             <Route
               exact
               path="/products/productImages"
@@ -74,7 +79,7 @@ const mapDispatchToProps = dispatch => {
     fetchInitialProductImages: () => dispatch(fetchProductImages()),
     fetchInitialUsers: () => dispatch(fetchUsers()),
     sessionLogin: () => dispatch(sessionLogin()),
-    getSessionCart: () => dispatch(getSessionCart())
+    getSessionCart: () => dispatch(getSessionCart()),
   };
 };
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, Container, Col, Figure, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import Gallery from './Carousel';
 
 const Home = ({ categories }) => {
   const dvdUrls = [
@@ -11,6 +12,13 @@ const Home = ({ categories }) => {
 
   return (
     <Container className="d-flex-row">
+      {/* <Row>
+        <Col />
+        <Col>
+          <Gallery />
+        </Col>
+        <Col />
+      </Row> */}
       <Row>
         {categories.map(category => {
           return (

@@ -6,6 +6,7 @@ import ProductDetail from './ProductDetail';
 import ProductImages from './ProductImages';
 import { connect } from 'react-redux';
 import {
+  fetchReviews,
   fetchCategories,
   fetchProducts,
   fetchProductImages,
@@ -14,11 +15,11 @@ import {
   getSessionCart
 } from './store';
 import Home from './Home';
-import Admin from './Admin/AdminAccount';
+import Admin from './AccountViews/AdminAccount';
 import Login from './Login';
 import Cart from './Cart';
 import Checkout from './CheckOut';
-import UserAccount from './UserAccount';
+import UserAccount from './AccountViews/UserAccount';
 
 class App extends Component {
   componentDidMount() {
@@ -28,6 +29,7 @@ class App extends Component {
     this.props.fetchInitialUsers();
     this.props.sessionLogin();
     this.props.getSessionCart();
+    this.props.fetchInitialProductReviews();
   }
   render() {
     return (
@@ -69,9 +71,11 @@ class App extends Component {
 
 const mapDispatchToProps = dispatch => {
   return {
+    fetchReviews: () => dispatch(fetchReviews()),
     fetchInitialCategories: () => dispatch(fetchCategories()),
     fetchInitialProducts: () => dispatch(fetchProducts()),
     fetchInitialProductImages: () => dispatch(fetchProductImages()),
+    fetchInitialProductReviews: () => dispatch(fetchReviews()),
     fetchInitialUsers: () => dispatch(fetchUsers()),
     sessionLogin: () => dispatch(sessionLogin()),
     getSessionCart: () => dispatch(getSessionCart())

@@ -1,22 +1,22 @@
-import React, { Component, Fragment } from 'react';
-import { Navbar, Nav, Form, FormControl, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { logout } from './store';
+import React, { Component, Fragment } from "react";
+import { Navbar, Nav, Form, FormControl, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { logout } from "./store";
 
 class Navigation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchTerm: '',
-      categoryId: 'all'
+      searchTerm: "",
+      categoryId: "all"
     };
   }
 
   logout = () => {
     this.props.logout();
-    this.props.history.push('/')
-  }
+    this.props.history.push("/");
+  };
   onChange = ev => {
     this.setState({ [ev.target.name]: ev.target.value });
   };
@@ -27,11 +27,11 @@ class Navigation extends Component {
   };
   render() {
     const { searchTerm, categoryId } = this.state;
-    const { categories, isLoggedIn, user } = this.props;
+    const { categories, user } = this.props;
     const { onChange, searchByTerm } = this;
     // console.log('user in Nav', user);
-    console.log('props in Nav', this.props);
-    console.log('isLoggedIn in Nav', this.props.isLoggedIn);
+    // console.log("props in Nav", this.props);
+    // console.log("isLoggedIn in Nav", this.props.isLoggedIn);
 
     return (
       <Fragment>
@@ -42,7 +42,7 @@ class Navigation extends Component {
               as={Link}
               to="/"
               onClick={() =>
-                this.setState({ searchTerm: '', categoryId: 'all' })
+                this.setState({ searchTerm: "", categoryId: "all" })
               }
             >
               Home
@@ -51,7 +51,7 @@ class Navigation extends Component {
               as={Link}
               to="/products"
               onClick={() =>
-                this.setState({ searchTerm: '', categoryId: 'all' })
+                this.setState({ searchTerm: "", categoryId: "all" })
               }
             >
               Products
@@ -61,8 +61,10 @@ class Navigation extends Component {
               <Nav.Link as={Link} to="/admin" className="mr-auto">
                 admin
               </Nav.Link>
-            ) : ('')}
-            
+            ) : (
+              ""
+            )}
+
             <Nav.Item>
               {this.props.isLoggedIn ? (
                 <div>
@@ -71,7 +73,7 @@ class Navigation extends Component {
                     type="button"
                     onClick={this.logout}
                   >
-                  logout
+                    logout
                   </button>
                   <Nav.Link as={Link} to="/user" className="mr-auto">
                     user

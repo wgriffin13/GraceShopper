@@ -1,8 +1,9 @@
 import React from 'react';
 import { Card, Container, Col, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import Ratings from './Ratings';
 
-const Products = ({ products, categories, match }) => {
+const Products = ({ products, categories, match, reviews }) => {
   let displayProducts = [];
 
   //just a category search
@@ -28,6 +29,15 @@ const Products = ({ products, categories, match }) => {
   }
   const findCategory = (product, cats) => {
     return cats.find(cat => cat.id === product.categoryId);
+  };
+
+  const averageRating = product => {
+    let ratingsSum = 0;
+    const prodReviews = reviews.filter(rev => rev.productId === product.id);
+    prodReviews.forEach(review => {
+      ratingsSum += review.rating;
+    });
+    return Math.ceil(ratingsSum / prodReviews.length);
   };
 
   return (
@@ -58,12 +68,12 @@ const Products = ({ products, categories, match }) => {
                     {findCategory(product, categories).name}
                   </Card.Header>
                   <Card.Body className="text-center">
-                    <Card.Link
-                      style={{ textDecoration: 'none' }}
-                      href={`/#/products/${product.id}`}
-                    >
+                    <Card.Link href={`/#/products/${product.id}`}>
                       <Card.Img src={product.imageUrl} />
+
                       <Card.Title>{product.title}</Card.Title>
+
+                      <Ratings rating={averageRating(product)} />
                     </Card.Link>
                   </Card.Body>
                   <Card.Footer
@@ -89,10 +99,11 @@ const Products = ({ products, categories, match }) => {
   );
 };
 
-const mapStateToProps = ({ categories, products }) => {
+const mapStateToProps = ({ categories, products, reviews }) => {
   return {
     categories,
-    products
+    products,
+    reviews
   };
 };
 

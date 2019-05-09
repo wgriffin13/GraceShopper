@@ -45,9 +45,7 @@ class Cart extends Component {
 
   handleChange = evt => {
     //if logged in, call the thunk to update the quantity on the back-end
-    if (this.props.user.id) {
-        this.props.updateQuantity(evt.target.id, evt.target.value)
-    } else {
+    
     //otherwise store in local state
         const tempCart = this.state.cart;
         tempCart.lineitems = tempCart.lineitems.map(item => {
@@ -57,7 +55,10 @@ class Cart extends Component {
         return item;
         });
         this.setState({ cart: tempCart });
-    }
+        if (this.props.user.id) {
+            const lineItem = this.state.cart.lineitems.find(item => item.productId === parseInt(evt.target.id, 10));
+            this.props.updateQuantity(lineItem.id, evt.target.value);
+        }
   };
 
   render() {

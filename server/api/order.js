@@ -81,11 +81,10 @@ router.post('/:id', async (req, res, next) => {
 })
 
 //edits a line item
-router.put('/:orderId/lineitems/:id', (req, res, next) => {
+router.put('/lineitems/:id', (req, res, next) => {
     LineItem.findByPk(req.params.id)
         .then(lineItem => lineItem.update(req.body))
-        .then( () => LineItem.findByPk(req.params.id, {include: [Product]}))
-        .then(lineitem => res.send(lineitem))
+        .then(() => res.sendStatus(200))
         .catch(next);
 })
 

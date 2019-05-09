@@ -1,23 +1,29 @@
 /* eslint-disable default-case */
-import { createStore, applyMiddleware, combineReducers } from 'redux';
-import loggerMiddleware from 'redux-logger';
-import thunkMiddleware from 'redux-thunk';
-import axios from 'axios';
+import { createStore, applyMiddleware, combineReducers } from "redux";
+import loggerMiddleware from "redux-logger";
+import thunkMiddleware from "redux-thunk";
+import axios from "axios";
 
 //CONSTANTS
 
-const SET_USER = 'SET_USER';
-const GET_USERS = 'GET_USERS';
-const GET_CATEGORIES = 'GET_CATEGORIES';
-const GET_PRODUCTS = 'GET_PRODUCTS';
-const GET_PRODUCT_IMAGES = 'GET_PRODUCTS_IMAGES';
-const CREATE_CART = 'CREATE_CART';
-const GET_ORDERS = 'GET_ORDERS';
-const ADD_LINEITEM = 'ADD_LINEITEM';
-const SET_SESSION_CART = 'SET_SESSION_CART';
-const UPDATE_QUANTITY = 'UPDATE_QUANTITY';
+const SET_USER = "SET_USER";
+const GET_USERS = "GET_USERS";
+const GET_CATEGORIES = "GET_CATEGORIES";
+const GET_PRODUCTS = "GET_PRODUCTS";
+const GET_PRODUCT_IMAGES = "GET_PRODUCTS_IMAGES";
+const GET_ORDERS = "GET_ORDERS";
+const ADD_LINEITEM = "ADD_LINEITEM";
+const CREATE_CART = "CREATE_CART";
+const SET_SESSION_CART = "SET_SESSION_CART";
+const GET_REVIEWS = "GET_REVIEWS";
+const UPDATE_QUANTITY = "UPDATE_QUANTITY";
 
 //ACTION CREATORS
+
+const getReviews = reviews => ({
+  type: GET_REVIEWS,
+  reviews
+});
 
 const getOrders = orders => ({
   type: GET_ORDERS,
@@ -63,16 +69,26 @@ const setSessionCart = sessionCart => ({
   sessionCart
 });
 
-const updateQuantityAC = lineItem => ({
+const updateQuantityAC = (id, quantity) => ({
   type: UPDATE_QUANTITY,
-  lineItem
+  quantity,
+  id
 })
 //THUNKS
+
+const fetchReviews = () => {
+  return dispatch => {
+    return axios
+      .get("/api/reviews")
+      .then(response => response.data)
+      .then(reviews => dispatch(getReviews(reviews)));
+  };
+};
 
 const fetchCategories = () => {
   return dispatch => {
     return axios
-      .get('/api/categories')
+      .get("/api/categories")
       .then(response => response.data)
       .then(categories => dispatch(getCategories(categories)));
   };
@@ -81,7 +97,7 @@ const fetchCategories = () => {
 const fetchProducts = () => {
   return dispatch => {
     return axios
-      .get('/api/products')
+      .get("/api/products")
       .then(response => response.data)
       .then(products => dispatch(getProducts(products)));
   };
@@ -90,7 +106,7 @@ const fetchProducts = () => {
 const fetchProductImages = () => {
   return dispatch => {
     return axios
-      .get('/api/products/productImages')
+      .get("/api/products/productImages")
       .then(response => response.data)
       .then(images => dispatch(getProductImages(images)));
   };
@@ -99,7 +115,7 @@ const fetchProductImages = () => {
 const fetchUsers = () => {
   return dispatch => {
     return axios
-      .get('/api/users')
+      .get("/api/users")
       .then(response => response.data)
       .then(users => dispatch(getUsers(users)));
   };
@@ -108,7 +124,7 @@ const fetchUsers = () => {
 const loginAttempt = user => {
   return dispatch => {
     return axios
-      .post('/api/auth', user)
+      .post("/api/auth", user)
       .then(res => res.data)
       .then(userData => {
         dispatch(setUserActionCreator(userData));
@@ -120,7 +136,7 @@ const loginAttempt = user => {
 const sessionLogin = () => {
   return dispatch => {
     return axios
-      .get('/api/auth')
+      .get("/api/auth")
       .then(res => res.data)
       .then(userData => {
         dispatch(setUserActionCreator(userData));
@@ -132,7 +148,7 @@ const sessionLogin = () => {
 const logout = () => {
   return dispatch => {
     return axios
-      .delete('/api/auth')
+      .delete("/api/auth")
       .then(() => dispatch(setUserActionCreator({})));
   };
 };
@@ -140,7 +156,7 @@ const logout = () => {
 const fetchOrders = () => {
   return dispatch => {
     return axios
-      .get('/api/orders')
+      .get("/api/orders")
       .then(response => response.data)
       .then(data => {
         dispatch(getOrders(data));
@@ -163,7 +179,7 @@ const fetchUserOrders = userId => {
 const createSessionCart = sessionCart => {
   return dispatch => {
     return axios
-      .post('/api/cart', sessionCart)
+      .post("/api/cart", sessionCart)
       .then(() => dispatch(setSessionCart(sessionCart)));
   };
 };
@@ -171,7 +187,7 @@ const createSessionCart = sessionCart => {
 const getSessionCart = () => {
   return dispatch => {
     return axios
-      .get('/api/cart')
+      .get("/api/cart")
       .then(res => res.data)
       .then(data => dispatch(setSessionCart(data)));
   };
@@ -184,7 +200,7 @@ const createPendingOrder = order => {
       .post(`/api/orders/user/${order.userId}`, order)
       .then(response => response.data)
       .then(data => {
-        console.log('Pending Order Created!');
+        console.log("Pending Order Created!");
         dispatch(createCartActionCreator(data));
         return data;
       });
@@ -208,8 +224,7 @@ const updateQuantity = (id, quantity) => {
   return dispatch => {
     return axios
       .put(`/api/orders/lineitems/${id}`, {quantity})
-      .then(response => response.data)
-      .then(data => dispatch(updateQuantityAC(data)))
+      .then(() => dispatch(updateQuantityAC(id, quantity)))
   }
 }
 
@@ -218,6 +233,15 @@ const updateQuantity = (id, quantity) => {
 // }
 
 //REDUCERS
+
+const reviews = (state = [], action) => {
+  switch (action.type) {
+    case GET_REVIEWS:
+      return action.reviews;
+    default:
+      return state;
+  }
+};
 
 const categories = (state = [], action) => {
   switch (action.type) {
@@ -287,8 +311,8 @@ const orders = (state = [], action) => {
           return state.map(order => {
             if (order.status === 'pending') {
               order.lineitems.map(lineitem => {
-                if (lineitem.it === action.lineItem.id) {
-                  lineitem.quantity = action.lineItem.quantity;
+                if (lineitem.id === action.id) {
+                  lineitem.quantity = action.quantity;
                 }
                 return lineitem;
               })
@@ -315,7 +339,8 @@ const reducer = combineReducers({
   user,
   users,
   orders,
-  sessionCart
+  sessionCart,
+  reviews
 });
 
 const store = createStore(
@@ -339,5 +364,6 @@ export {
   createSessionCart,
   setSessionCart,
   getSessionCart,
-  updateQuantity
+  updateQuantity,
+  fetchReviews
 };

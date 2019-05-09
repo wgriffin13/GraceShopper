@@ -13,6 +13,7 @@ import {
   fetchUsers,
   sessionLogin,
   getSessionCart,
+  fetchUserOrders,
 } from './store';
 import Home from './Home';
 import Admin from './AccountViews/AdminAccount';
@@ -84,6 +85,7 @@ const mapDispatchToProps = dispatch => {
     fetchInitialUsers: () => dispatch(fetchUsers()),
     sessionLogin: () => dispatch(sessionLogin()),
     getSessionCart: () => dispatch(getSessionCart()),
+    fetchUserOrders: userId => dispatch(fetchUserOrders(userId)),
   };
 };
 

@@ -17,6 +17,7 @@ const ADD_LINEITEM = 'ADD_LINEITEM';
 const SET_SESSION_CART = 'SET_SESSION_CART';
 const SET_NAV_SEARCH_VALUES = 'SET_NAV_SEARCH_VALUES';
 const GET_REVIEWS = 'GET_REVIEWS';
+const UPDATE_QUANTITY = 'UPDATE_QUANTITY';
 
 //ACTION CREATORS
 
@@ -220,6 +221,15 @@ const addToCart = item => {
 const updateNavSearchValsBasedOnURL = (categoryId, searchTerm) => {
   return dispatch => {
     dispatch(setNavSearchValues(categoryId, searchTerm));
+  };
+};
+
+//update a line-item when quantity in cart is changed
+const updateQuantity = (id, quantity) => {
+  return dispatch => {
+    return axios
+      .put(`/api/orders/lineitems/${id}`, { quantity })
+      .then(() => dispatch(updateQuantityAC(id, quantity)));
   };
 };
 

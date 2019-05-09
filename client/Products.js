@@ -1,33 +1,42 @@
-import React from 'react';
-import { Card, Container, Col, Row } from 'react-bootstrap';
-import { connect } from 'react-redux';
+import React from "react";
+import { Card, Container, Col, Row } from "react-bootstrap";
+import { connect } from "react-redux";
+import Ratings from "./Ratings";
 
-const Products = ({ products, categories, match }) => {
+const Products = ({ products, categories, match, reviews }) => {
   let displayProducts = [];
+
+  console.log(reviews);
 
   //just a category search
   if (match.params.categoryId && !match.params.searchTerm) {
     displayProducts = products.filter(prod =>
-      (match.params.categoryId === "all"
+      match.params.categoryId === "all"
         ? true
-        : prod.categoryId === match.params.categoryId * 1));
+        : prod.categoryId === match.params.categoryId * 1
+    );
   }
   //category & title search
   else if (match.params.searchTerm) {
     displayProducts = products.filter(prod =>
-      (match.params.categoryId === "all"
+      match.params.categoryId === "all"
         ? prod.title
             .toLowerCase()
             .includes(match.params.searchTerm.toLowerCase())
         : prod.title
             .toLowerCase()
             .includes(match.params.searchTerm.toLowerCase()) &&
-          prod.categoryId === match.params.categoryId * 1));
+          prod.categoryId === match.params.categoryId * 1
+    );
   } else {
     displayProducts = products;
   }
   const findCategory = (product, cats) => {
     return cats.find(cat => cat.id === product.categoryId);
+  };
+
+  const findReview = (product, reviews) => {
+    return reviews.find(review => review.productId === product.id);
   };
 
   return (
@@ -41,8 +50,8 @@ const Products = ({ products, categories, match }) => {
                 <Card
                   key={product.id}
                   style={{
-                    width: '15rem',
-                    height: '27rem',
+                    width: "15rem",
+                    height: "27rem",
                     borderColor: `${findCategory(product, categories).color}`
                   }}
                   className="mb-3 mt-3 shadow rounded"
@@ -59,12 +68,13 @@ const Products = ({ products, categories, match }) => {
                   </Card.Header>
                   <Card.Body className="text-center">
                     <Card.Link
-                      style={{ textDecoration: 'none' }}
+                      style={{ textDecoration: "none" }}
                       href={`/#/products/${product.id}`}
                     >
                       <Card.Img src={product.imageUrl} />
                       <Card.Title>{product.title}</Card.Title>
                     </Card.Link>
+                    <Ratings rating={findReview(product, reviews)} />
                   </Card.Body>
                   <Card.Footer
                     className="text-center"
@@ -83,16 +93,17 @@ const Products = ({ products, categories, match }) => {
           })}
         </Row>
       ) : (
-        'No Products Found'
+        "No Products Found"
       )}
     </Container>
   );
 };
 
-const mapStateToProps = ({ categories, products }) => {
+const mapStateToProps = ({ categories, products, reviews }) => {
   return {
     categories,
-    products
+    products,
+    reviews
   };
 };
 

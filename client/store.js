@@ -1,22 +1,28 @@
 /* eslint-disable default-case */
-import { createStore, applyMiddleware, combineReducers } from 'redux';
-import loggerMiddleware from 'redux-logger';
-import thunkMiddleware from 'redux-thunk';
-import axios from 'axios';
+import { createStore, applyMiddleware, combineReducers } from "redux";
+import loggerMiddleware from "redux-logger";
+import thunkMiddleware from "redux-thunk";
+import axios from "axios";
 
 //CONSTANTS
 
-const SET_USER = 'SET_USER';
-const GET_USERS = 'GET_USERS';
-const GET_CATEGORIES = 'GET_CATEGORIES';
-const GET_PRODUCTS = 'GET_PRODUCTS';
-const GET_PRODUCT_IMAGES = 'GET_PRODUCTS_IMAGES';
-const CREATE_CART = 'CREATE_CART';
-const GET_ORDERS = 'GET_ORDERS';
-const ADD_LINEITEM = 'ADD_LINEITEM';
-const SET_SESSION_CART = 'SET_SESSION_CART';
+const SET_USER = "SET_USER";
+const GET_USERS = "GET_USERS";
+const GET_CATEGORIES = "GET_CATEGORIES";
+const GET_PRODUCTS = "GET_PRODUCTS";
+const GET_PRODUCT_IMAGES = "GET_PRODUCTS_IMAGES";
+const GET_ORDERS = "GET_ORDERS";
+const ADD_LINEITEM = "ADD_LINEITEM";
+const CREATE_CART = "CREATE_CART";
+const SET_SESSION_CART = "SET_SESSION_CART";
+const GET_REVIEWS = "GET_REVIEWS";
 
 //ACTION CREATORS
+
+const getReviews = reviews => ({
+  type: GET_REVIEWS,
+  reviews
+});
 
 const getOrders = orders => ({
   type: GET_ORDERS,
@@ -64,10 +70,19 @@ const setSessionCart = sessionCart => ({
 
 //THUNKS
 
+const fetchReviews = () => {
+  return dispatch => {
+    return axios
+      .get("/api/reviews")
+      .then(response => response.data)
+      .then(reviews => dispatch(getReviews(reviews)));
+  };
+};
+
 const fetchCategories = () => {
   return dispatch => {
     return axios
-      .get('/api/categories')
+      .get("/api/categories")
       .then(response => response.data)
       .then(categories => dispatch(getCategories(categories)));
   };
@@ -76,7 +91,7 @@ const fetchCategories = () => {
 const fetchProducts = () => {
   return dispatch => {
     return axios
-      .get('/api/products')
+      .get("/api/products")
       .then(response => response.data)
       .then(products => dispatch(getProducts(products)));
   };
@@ -85,7 +100,7 @@ const fetchProducts = () => {
 const fetchProductImages = () => {
   return dispatch => {
     return axios
-      .get('/api/products/productImages')
+      .get("/api/products/productImages")
       .then(response => response.data)
       .then(images => dispatch(getProductImages(images)));
   };
@@ -94,7 +109,7 @@ const fetchProductImages = () => {
 const fetchUsers = () => {
   return dispatch => {
     return axios
-      .get('/api/users')
+      .get("/api/users")
       .then(response => response.data)
       .then(users => dispatch(getUsers(users)));
   };
@@ -103,7 +118,7 @@ const fetchUsers = () => {
 const loginAttempt = user => {
   return dispatch => {
     return axios
-      .post('/api/auth', user)
+      .post("/api/auth", user)
       .then(res => res.data)
       .then(userData => {
         dispatch(setUserActionCreator(userData));
@@ -115,7 +130,7 @@ const loginAttempt = user => {
 const sessionLogin = () => {
   return dispatch => {
     return axios
-      .get('/api/auth')
+      .get("/api/auth")
       .then(res => res.data)
       .then(userData => dispatch(setUserActionCreator(userData)));
   };
@@ -124,7 +139,7 @@ const sessionLogin = () => {
 const logout = () => {
   return dispatch => {
     return axios
-      .delete('/api/auth')
+      .delete("/api/auth")
       .then(() => dispatch(setUserActionCreator({})));
   };
 };
@@ -132,7 +147,7 @@ const logout = () => {
 const fetchOrders = () => {
   return dispatch => {
     return axios
-      .get('/api/orders')
+      .get("/api/orders")
       .then(response => response.data)
       .then(data => {
         dispatch(getOrders(data));
@@ -155,7 +170,7 @@ const fetchUserOrders = userId => {
 const createSessionCart = sessionCart => {
   return dispatch => {
     return axios
-      .post('/api/cart', sessionCart)
+      .post("/api/cart", sessionCart)
       .then(() => dispatch(setSessionCart(sessionCart)));
   };
 };
@@ -163,7 +178,7 @@ const createSessionCart = sessionCart => {
 const getSessionCart = () => {
   return dispatch => {
     return axios
-      .get('/api/cart')
+      .get("/api/cart")
       .then(res => res.data)
       .then(data => dispatch(setSessionCart(data)));
   };
@@ -176,7 +191,7 @@ const createPendingOrder = order => {
       .post(`/api/orders/user/${order.userId}`, order)
       .then(response => response.data)
       .then(data => {
-        console.log('Pending Order Created!');
+        console.log("Pending Order Created!");
         dispatch(createCartActionCreator(data));
         return data;
       });
@@ -200,6 +215,15 @@ const addToCart = item => {
 // }
 
 //REDUCERS
+
+const reviews = (state = [], action) => {
+  switch (action.type) {
+    case GET_REVIEWS:
+      return action.reviews;
+    default:
+      return state;
+  }
+};
 
 const categories = (state = [], action) => {
   switch (action.type) {
@@ -248,25 +272,25 @@ const users = (state = {}, action) => {
 
 const orders = (state = [], action) => {
   switch (action.type) {
-      case GET_ORDERS:
-          return action.orders;
-      case CREATE_CART:
-          const cart = action.order;
-          cart.lineitems = [];
-          return [...state, cart];
-      case ADD_LINEITEM:
-          return state.map(order => {
-            if (order.status === 'pending') {
-              if (!order.lineitems){
-                order.lineitems = [action.item]
-              } else {
-              order.lineitems.push(action.item)
-              }
-            }
-            return order;
-          })
-      default:
-          return state;
+    case GET_ORDERS:
+      return action.orders;
+    case CREATE_CART:
+      const cart = action.order;
+      cart.lineitems = [];
+      return [...state, cart];
+    case ADD_LINEITEM:
+      return state.map(order => {
+        if (order.status === "pending") {
+          if (!order.lineitems) {
+            order.lineitems = [action.item];
+          } else {
+            order.lineitems.push(action.item);
+          }
+        }
+        return order;
+      });
+    default:
+      return state;
   }
 };
 const sessionCart = (state = {}, action) => {
@@ -285,7 +309,8 @@ const reducer = combineReducers({
   user,
   users,
   orders,
-  sessionCart
+  sessionCart,
+  reviews
 });
 
 const store = createStore(
@@ -308,5 +333,6 @@ export {
   addToCart,
   createSessionCart,
   setSessionCart,
-  getSessionCart
+  getSessionCart,
+  fetchReviews
 };

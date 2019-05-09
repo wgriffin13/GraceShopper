@@ -6,6 +6,7 @@ import ProductDetail from "./ProductDetail";
 import ProductImages from "./ProductImages";
 import { connect } from "react-redux";
 import {
+  fetchReviews,
   fetchCategories,
   fetchProducts,
   fetchProductImages,
@@ -28,6 +29,7 @@ class App extends Component {
     this.props.fetchInitialUsers();
     this.props.sessionLogin();
     this.props.getSessionCart();
+    this.props.fetchReviews();
   }
   render() {
     return (
@@ -69,6 +71,7 @@ class App extends Component {
 
 const mapDispatchToProps = dispatch => {
   return {
+    fetchReviews: () => dispatch(fetchReviews()),
     fetchInitialCategories: () => dispatch(fetchCategories()),
     fetchInitialProducts: () => dispatch(fetchProducts()),
     fetchInitialProductImages: () => dispatch(fetchProductImages()),

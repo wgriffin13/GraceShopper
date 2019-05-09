@@ -1,3 +1,40 @@
+const faker = require('faker');
+
+// console.log("faker in seed.js", faker.lorem.paragraph());
+console.log('faker in seed.js', faker.random.number(1, 5));
+
+function getRandomNum(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+const generateReviews = () => {
+  const reviews = [];
+  const fakeReview = () => {
+    return {
+      rating: getRandomNum(2, 5),
+      review: faker.lorem.paragraph(),
+      productId: getRandomNum(1, 24),
+      userId: getRandomNum(1, 5),
+    };
+  };
+  for (let i = 0; i < 100; i++) {
+    reviews.push(fakeReview());
+  }
+  return reviews;
+};
+
+const seedReviews = generateReviews();
+
+// {
+//   rating: 5,
+//   review:
+//     "If you are comfortable with Pilates and using a Reformer solo, this machine is great given the price point. Every time I look at it, I fall in love. I subscribe to the website Pilates Anytime and do rigorous workouts. Their are some advanced moves you will be unable to do (like Snake) but you won't feel like you are missing out on performing different positions. After paying $110 for private sessions for years, buying this Reformer made complete sense. Very happy with this purchase.",
+//   productId: 3,
+//   userId: 1
+// }
+
 const seedCategories = [
   { name: 'Accessories', color: '#eaeb4e' },
   { name: 'Boxing', color: '#9161e8' },
@@ -7,6 +44,143 @@ const seedCategories = [
   { name: 'Smart fitness', color: '#ee2a82' },
   { name: 'Yoga', color: '#f46854' },
   { name: 'Resistance', color: '#00A1CB' },
+];
+
+const seedUsers = [
+  {
+    username: 'JaneD',
+    firstname: 'Jane',
+    lastname: 'DiMagio',
+    email: 'jane@email.com',
+    password: '12345',
+    creditcard: '1234 5678 9012 3456',
+    street: faker.address.streetAddress(),
+    city: faker.address.city(),
+    state: faker.address.state(),
+    zip: faker.address.zipCode(),
+  },
+  {
+    username: 'JoeD',
+    firstname: 'Joe',
+    lastname: 'DiMagio',
+    email: 'joe@email.com',
+    password: '12345',
+    creditcard: '1234 5678 9012 3456',
+    street: faker.address.streetAddress(),
+    city: faker.address.city(),
+    state: faker.address.state(),
+    zip: faker.address.zipCode(),
+  },
+  {
+    username: 'owner',
+    firstname: 'Preston',
+    lastname: 'Chaplin',
+    email: 'owner@email.com',
+    password: '54321',
+    isAdmin: true,
+    creditcard: '1234 5678 9012 3456',
+    street: faker.address.streetAddress(),
+    city: faker.address.city(),
+    state: faker.address.state(),
+    zip: faker.address.zipCode(),
+  },
+  {
+    username: 'Jim',
+    firstname: 'Jim',
+    lastname: 'Dartanian',
+    email: 'jim@email.com',
+    password: '12345',
+    creditcard: '1234 5678 9012 3456',
+    street: faker.address.streetAddress(),
+    city: faker.address.city(),
+    state: faker.address.state(),
+    zip: faker.address.zipCode(),
+  },
+  {
+    username: 'Bob',
+    firstname: 'Bob',
+    lastname: 'Expialidocious',
+    email: 'bob@email.com',
+    password: '12345',
+    creditcard: '1234 5678 9012 3456',
+    street: faker.address.streetAddress(),
+    city: faker.address.city(),
+    state: faker.address.state(),
+    zip: faker.address.zipCode(),
+  },
+];
+
+const seedOrders = [
+  {
+    userId: 1,
+    status: 'pending',
+  },
+  {
+    userId: 1,
+    status: 'purchased',
+  },
+  {
+    userId: 2,
+    status: 'cancelled',
+  },
+  {
+    userId: 2,
+    status: 'shipped',
+  },
+];
+
+const seedLineItems = [
+  {
+    quantity: 3,
+    productId: 12,
+    orderPrice: 32.95,
+    netTotalCost: 32.95,
+    orderId: 1,
+  },
+  {
+    quantity: 1,
+    productId: 19,
+    orderPrice: 332.94,
+    discount: -30,
+    netTotalCost: 302.94,
+    orderId: 1,
+  },
+  {
+    quantity: 1,
+    productId: 24,
+    orderPrice: 38.07,
+    netTotalCost: 38.07,
+    orderId: 1,
+  },
+  {
+    quantity: 2,
+    productId: 3,
+    orderPrice: 9.99,
+    netTotalCost: 9.99,
+    orderId: 2,
+  },
+  {
+    quantity: 4,
+    productId: 6,
+    orderPrice: 14.99,
+    netTotalCost: 14.99,
+    orderId: 2,
+  },
+  {
+    quantity: 1,
+    productId: 11,
+    orderPrice: 945,
+    discount: -50,
+    netTotalCost: 895,
+    orderId: 3,
+  },
+  {
+    quantity: 1,
+    productId: 20,
+    orderPrice: 79,
+    netTotalCost: 79,
+    orderId: 4,
+  },
 ];
 
 const seedProducts = [
@@ -120,7 +294,7 @@ const seedProducts = [
   {
     title: 'Bowflex Weight Bench',
     categoryId: 8,
-    price: 13.99,
+    price: 229.0,
     quantity: 10,
     imageUrl:
       'https://images-na.ssl-images-amazon.com/images/I/8104o354qFL._SX679_.jpg',
@@ -394,102 +568,11 @@ const seedProducts = [
   },
 ];
 
-const seedUsers = [
-  {
-    name: 'JaneD',
-    email: 'jane@email.com',
-    password: '12345',
-  },
-  {
-    name: 'JoeD',
-    email: 'joe@email.com',
-    password: 'catsdogs',
-  },
-  {
-    name: 'owner',
-    email: 'owner@email.com',
-    password: '54321',
-    isAdmin: true,
-  },
-];
-
-const seedOrders = [
-  {
-    userId: 1,
-    status: 'pending',
-  },
-  {
-    userId: 1,
-    status: 'purchased',
-  },
-  {
-    userId: 2,
-    status: 'cancelled',
-  },
-  {
-    userId: 2,
-    status: 'shipped',
-  },
-];
-
-const seedLineItems = [
-  {
-    quantity: 3,
-    productId: 12,
-    orderPrice: 32.95,
-    netTotalCost: 32.95,
-    orderId: 1,
-  },
-  {
-    quantity: 1,
-    productId: 19,
-    orderPrice: 332.94,
-    discount: -30,
-    netTotalCost: 302.94,
-    orderId: 1,
-  },
-  {
-    quantity: 1,
-    productId: 24,
-    orderPrice: 38.07,
-    netTotalCost: 38.07,
-    orderId: 1,
-  },
-  {
-    quantity: 2,
-    productId: 3,
-    orderPrice: 9.99,
-    netTotalCost: 9.99,
-    orderId: 2,
-  },
-  {
-    quantity: 4,
-    productId: 6,
-    orderPrice: 14.99,
-    netTotalCost: 14.99,
-    orderId: 2,
-  },
-  {
-    quantity: 1,
-    productId: 11,
-    orderPrice: 945,
-    discount: -50,
-    netTotalCost: 895,
-    orderId: 3,
-  },
-  {
-    quantity: 1,
-    productId: 20,
-    orderPrice: 79,
-    netTotalCost: 79,
-    orderId: 4,
-  },
-];
-
 module.exports = {
   seedCategories,
   seedProducts,
   seedUsers,
   seedOrders,
   seedLineItems,
+  seedReviews,
 };

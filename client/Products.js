@@ -3,6 +3,7 @@ import { Card, Container, Col, Row, Pagination } from 'react-bootstrap';
 import { updateNavSearchValsBasedOnURL } from './store';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import Ratings from './Ratings';
 
 class Products extends Component {
   constructor(props) {
@@ -88,6 +89,16 @@ class Products extends Component {
   findCategory = (product, cats) => {
     return cats.find(cat => cat.id === product.categoryId);
   };
+  averageRating = product => {
+    let ratingsSum = 0;
+    const prodReviews = this.props.reviews.filter(
+      rev => rev.productId === product.id
+    );
+    prodReviews.forEach(review => {
+      ratingsSum += review.rating;
+    });
+    return Math.ceil(ratingsSum / prodReviews.length);
+  };
   pageChange = index => {
     //Have to page the next results based on the current URL and count
     const { history, match } = this.props;
@@ -122,7 +133,7 @@ class Products extends Component {
     }
   };
   render() {
-    const { findCategory, pageChange } = this;
+    const { findCategory, pageChange, averageRating } = this;
     const { categories, match } = this.props;
     const { products, count } = this.state;
     const current = match.params.index ? match.params.index * 1 : 0;
@@ -213,6 +224,7 @@ class Products extends Component {
                         >
                           <Card.Img src={product.imageUrl} />
                           <Card.Title>{product.title}</Card.Title>
+                          <Ratings rating={averageRating(product)} />
                         </Card.Link>
                       </Card.Body>
                       <Card.Footer
@@ -242,9 +254,10 @@ class Products extends Component {
   }
 }
 
-const mapStateToProps = ({ categories }) => {
+const mapStateToProps = ({ categories, reviews }) => {
   return {
     categories,
+    reviews,
   };
 };
 

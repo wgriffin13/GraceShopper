@@ -14,7 +14,7 @@ import {
   Label,
   Table,
   Row,
-} from 'reactstrap';
+} from 'react-bootstrap';
 
 class Checkout extends Component {
   constructor(props) {
@@ -74,6 +74,10 @@ class Checkout extends Component {
         return acc;
       }, 0)
       .toFixed(2);
+  };
+
+  priceFormat = numberString => {
+    return numberString.toLocaleString(undefined, { minimumFractionDigits: 2 });
   };
 
   render() {
@@ -161,7 +165,9 @@ class Checkout extends Component {
                                   </div>
                                 </div>
                               </td>
-                              <td className="text-right">{item.orderPrice}</td>
+                              <td className="text-right">
+                                {this.priceFormat(item.orderPrice)}
+                              </td>
                               <td className="text-right">{item.discount}</td>
                               <td className="text-right">{item.quantity}</td>
                               <td className="text-right">
@@ -211,14 +217,6 @@ class Checkout extends Component {
                       />
                     </FormGroup>
                     <FormGroup>
-                      <Label htmlFor="vat">Company</Label>
-                      <Input
-                        type="text"
-                        id="vat"
-                        placeholder="Enter your company"
-                      />
-                    </FormGroup>
-                    <FormGroup>
                       <Label htmlFor="street">Street</Label>
                       <Input
                         type="text"
@@ -227,13 +225,23 @@ class Checkout extends Component {
                       />
                     </FormGroup>
                     <FormGroup row className="my-0">
-                      <Col xs="8">
+                      <Col xs="6">
                         <FormGroup>
                           <Label htmlFor="city">City</Label>
                           <Input
                             type="text"
                             id="city"
                             placeholder="Enter city"
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col xs="2">
+                        <FormGroup>
+                          <Label htmlFor="city">State</Label>
+                          <Input
+                            type="text"
+                            id="state"
+                            placeholder="Enter State"
                           />
                         </FormGroup>
                       </Col>

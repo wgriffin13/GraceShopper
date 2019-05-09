@@ -16,8 +16,14 @@ const GET_ORDERS = 'GET_ORDERS';
 const ADD_LINEITEM = 'ADD_LINEITEM';
 const SET_SESSION_CART = 'SET_SESSION_CART';
 const SET_NAV_SEARCH_VALUES = 'SET_NAV_SEARCH_VALUES';
+const GET_REVIEWS = 'GET_REVIEWS';
 
 //ACTION CREATORS
+
+const getReviews = reviews => ({
+  type: GET_REVIEWS,
+  reviews,
+});
 
 const getOrders = orders => ({
   type: GET_ORDERS,
@@ -70,6 +76,15 @@ const setNavSearchValues = (categoryId, searchTerm) => ({
 });
 
 //THUNKS
+
+const fetchReviews = () => {
+  return dispatch => {
+    return axios
+      .get('/api/reviews')
+      .then(response => response.data)
+      .then(reviews => dispatch(getReviews(reviews)));
+  };
+};
 
 const fetchCategories = () => {
   return dispatch => {
@@ -214,6 +229,15 @@ const updateNavSearchValsBasedOnURL = (categoryId, searchTerm) => {
 
 //REDUCERS
 
+const reviews = (state = [], action) => {
+  switch (action.type) {
+    case GET_REVIEWS:
+      return action.reviews;
+    default:
+      return state;
+  }
+};
+
 const categories = (state = [], action) => {
   switch (action.type) {
     case GET_CATEGORIES:
@@ -309,6 +333,7 @@ const reducer = combineReducers({
   orders,
   sessionCart,
   navSearchTerms,
+  reviews,
 });
 
 const store = createStore(
@@ -333,4 +358,5 @@ export {
   setSessionCart,
   getSessionCart,
   updateNavSearchValsBasedOnURL,
+  fetchReviews,
 };

@@ -7,7 +7,7 @@ class Cart extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      cart: {}
+      cart: {},
     };
   }
 
@@ -95,7 +95,7 @@ class Cart extends Component {
                             <div className="col-5 col-lg-7">
                               <Card.Link
                                 style={{ textDecoration: 'none' }}
-                                href={`/#/products/${item.productId}`}
+                                href={`/#/products/detail/${item.productId}`}
                               >
                                 {item.product.title}
                               </Card.Link>
@@ -184,7 +184,7 @@ const mapStateToProps = ({ user, sessionCart, orders }) => {
   return {
     user,
     sessionCart,
-    currentOrder: orders.find(order => order.status === 'pending')
+    currentOrder: orders.find(order => order.status === 'pending'),
   };
 };
 

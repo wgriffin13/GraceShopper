@@ -13,7 +13,7 @@ import {
   fetchUsers,
   sessionLogin,
   getSessionCart,
-  fetchUserOrders
+  fetchUserOrders,
 } from './store';
 import Home from './Home';
 import Admin from './AccountViews/AdminAccount';
@@ -38,17 +38,22 @@ class App extends Component {
         <HashRouter>
           <Route component={Navigation} />
           <Switch>
-            <Route exact path="/products" component={Products} />
+            <Route exact path="/products/:index?" component={Products} />
             <Route
               exact
-              path="/products/category/:categoryId?"
+              path="/products/filter/category/:categoryId?/:index?"
               component={Products}
             />
             <Route
-              path="/products/category/:categoryId/search/:searchTerm?"
+              exact
+              path="/products/search/category/:categoryId/term/:searchTerm?/:index?"
               component={Products}
             />
-            <Route exact path="/products/:id" component={ProductDetail} />
+            <Route
+              exact
+              path="/products/detail/:id"
+              component={ProductDetail}
+            />
             <Route
               exact
               path="/products/productImages"
@@ -70,7 +75,6 @@ class App extends Component {
   }
 }
 
-
 const mapDispatchToProps = dispatch => {
   return {
     fetchReviews: () => dispatch(fetchReviews()),
@@ -81,12 +85,11 @@ const mapDispatchToProps = dispatch => {
     fetchInitialUsers: () => dispatch(fetchUsers()),
     sessionLogin: () => dispatch(sessionLogin()),
     getSessionCart: () => dispatch(getSessionCart()),
-    fetchUserOrders: (userId) => dispatch(fetchUserOrders(userId))
+    fetchUserOrders: userId => dispatch(fetchUserOrders(userId)),
   };
 };
 
-
 export default connect(
- null,
+  null,
   mapDispatchToProps
 )(App);

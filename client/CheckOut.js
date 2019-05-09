@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
   Button,
   Card,
@@ -13,8 +13,8 @@ import {
   Input,
   Label,
   Table,
-  Row
-} from "reactstrap";
+  Row,
+} from 'reactstrap';
 
 class Checkout extends Component {
   constructor(props) {
@@ -25,7 +25,7 @@ class Checkout extends Component {
       collapseItems: false,
       customShipping: [false, false],
       customPayment: [false, false],
-      customItems: [true, false]
+      customItems: [true, false],
     };
   }
 
@@ -46,7 +46,7 @@ class Checkout extends Component {
     const state = prevState.map((x, index) => (tab === index ? !x : false));
 
     this.setState({
-      customItems: state
+      customItems: state,
     });
   };
   toggleCustomShipping = tab => {
@@ -54,7 +54,7 @@ class Checkout extends Component {
     const state = prevState.map((x, index) => (tab === index ? !x : false));
 
     this.setState({
-      customShipping: state
+      customShipping: state,
     });
   };
 
@@ -63,7 +63,7 @@ class Checkout extends Component {
     const state = prevState.map((x, index) => (tab === index ? !x : false));
 
     this.setState({
-      customPayment: state
+      customPayment: state,
     });
   };
 
@@ -91,7 +91,7 @@ class Checkout extends Component {
           <Card>
             <CardHeader
               className="text-white"
-              style={{ backgroundColor: "#7cc245" }}
+              style={{ backgroundColor: '#7cc245' }}
             >
               Order # {order.id}
               <span className="float-right">
@@ -157,8 +157,8 @@ class Checkout extends Component {
                                   <div className="col-5 col-lg-7">
                                     {/* {item.product.title} */}
                                     <Link
-                                      style={{ textDecoration: "none" }}
-                                      to={`/products/${item.productId}`}
+                                      style={{ textDecoration: 'none' }}
+                                      to={`/products/detail/${item.productId}`}
                                     >
                                       {item.product.title}
                                     </Link>
@@ -380,7 +380,7 @@ class Checkout extends Component {
 const mapStateToProps = ({ user, orders }) => {
   return {
     user: user,
-    order: orders.find(order => order.status === "pending")
+    order: orders.find(order => order.status === 'pending'),
   };
 };
 

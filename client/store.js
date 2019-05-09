@@ -369,4 +369,5 @@ export {
   getSessionCart,
   updateNavSearchValsBasedOnURL,
   fetchReviews,
+  updateQuantity,
 };

@@ -14,7 +14,7 @@ import {
   Label,
   Table,
   Row,
-} from 'react-bootstrap';
+} from 'reactstrap';
 
 class Checkout extends Component {
   constructor(props) {

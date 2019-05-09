@@ -76,13 +76,18 @@ class Navigation extends Component {
                     logout
                   </button>
                   <Nav.Link as={Link} to="/user" className="mr-auto">
-                    user
+                    my account
                   </Nav.Link>
                 </div>
               ) : (
+                <div>
                 <Nav.Link as={Link} to="/login" className="mr-auto">
                   login
                 </Nav.Link>
+                <Nav.Link as={Link} to="/signup" className="mr-auto">
+                 sign-up
+                </Nav.Link>
+                </div>
               )}
             </Nav.Item>
 

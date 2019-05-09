@@ -12,13 +12,13 @@ const Home = ({ categories }) => {
 
   return (
     <Container className="d-flex-row">
-      <Row>
+      {/* <Row>
         <Col />
         <Col>
           <Gallery />
         </Col>
         <Col />
-      </Row>
+      </Row> */}
       <Row>
         {categories.map(category => {
           return (

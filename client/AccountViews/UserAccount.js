@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Accordion, Card, Col, Row } from "react-bootstrap";
-import OrdersPanel from "./OrdersPanel";
-import ReviewsPanel from "../ReviewsPanel";
-import CreditCardsPanel from "./CreditCardsPanel";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Accordion, Card, Col, Row } from 'react-bootstrap';
+import OrdersPanel from './OrdersPanel';
+import ReviewsPanel from './ReviewsPanel';
+import CreditCardsPanel from './CreditCardsPanel';
 
 class UserAccount extends Component {
   constructor(props) {
@@ -13,14 +13,12 @@ class UserAccount extends Component {
   render() {
     const { user, orders } = this.props;
 
-    // console.log('props in UserAccount', this.props);
-
     if (user) {
       return (
         <Accordion>
           <Card>
             <Card.Header
-              style={{ backgroundColor: "#f46854" }}
+              style={{ backgroundColor: '#f46854' }}
               className="text-white"
             >
               User Account
@@ -49,7 +47,7 @@ class UserAccount extends Component {
         </Accordion>
       );
     } else {
-      return "";
+      return '';
     }
   }
 }

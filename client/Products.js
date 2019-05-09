@@ -6,8 +6,6 @@ import Ratings from './Ratings';
 const Products = ({ products, categories, match, reviews }) => {
   let displayProducts = [];
 
-  // console.log('reviews in Products', reviews);
-
   //just a category search
   if (match.params.categoryId && !match.params.searchTerm) {
     displayProducts = products.filter(prod =>
@@ -33,8 +31,13 @@ const Products = ({ products, categories, match, reviews }) => {
     return cats.find(cat => cat.id === product.categoryId);
   };
 
-  const findReviewsByProduct = product => {
-    return reviews.filter(rev => rev.productId === product.id);
+  const averageRating = product => {
+    let ratingsSum = 0;
+    const prodReviews = reviews.filter(rev => rev.productId === product.id);
+    prodReviews.forEach(review => {
+      ratingsSum += review.rating;
+    });
+    return Math.ceil(ratingsSum / prodReviews.length);
   };
 
   return (
@@ -65,14 +68,13 @@ const Products = ({ products, categories, match, reviews }) => {
                     {findCategory(product, categories).name}
                   </Card.Header>
                   <Card.Body className="text-center">
-                    <Card.Link
-                      style={{ textDecoration: 'none' }}
-                      href={`/#/products/${product.id}`}
-                    >
+                    <Card.Link href={`/#/products/${product.id}`}>
                       <Card.Img src={product.imageUrl} />
+
                       <Card.Title>{product.title}</Card.Title>
+
+                      <Ratings rating={averageRating(product)} />
                     </Card.Link>
-                    {/* <Ratings review={findReviewsByProduct(product, reviews)} /> */}
                   </Card.Body>
                   <Card.Footer
                     className="text-center"

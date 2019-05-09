@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Accordion, Card, Col, Row } from 'react-bootstrap';
-import OrdersPanel from './OrdersPanel';
-import ReviewsPanel from './ReviewsPanel';
-import CreditCardsPanel from './CreditCardsPanel';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Accordion, Card, Col, Row } from "react-bootstrap";
+import OrdersPanel from "./OrdersPanel";
+import ReviewsPanel from "./ReviewsPanel";
+import CreditCardsPanel from "./CreditCardsPanel";
 
 class UserAccount extends Component {
   constructor(props) {
@@ -11,14 +11,16 @@ class UserAccount extends Component {
   }
 
   render() {
-    const { user, orders } = this.props;
+    const { user, orders, reviews } = this.props;
+
+    console.log("reviews in userAccount", reviews);
 
     if (user) {
       return (
         <Accordion>
           <Card>
             <Card.Header
-              style={{ backgroundColor: '#f46854' }}
+              style={{ backgroundColor: "#f46854" }}
               className="text-white"
             >
               User Account
@@ -40,23 +42,24 @@ class UserAccount extends Component {
               <hr />
 
               <OrdersPanel orders={orders} />
-              <ReviewsPanel />
+              <ReviewsPanel reviews={reviews} user={user} />
               <CreditCardsPanel />
             </Card.Body>
           </Card>
         </Accordion>
       );
     } else {
-      return '';
+      return "";
     }
   }
 }
 
-const mapStateToProps = ({ products, user, orders }) => {
+const mapStateToProps = ({ products, user, orders, reviews }) => {
   return {
     products,
     user,
-    orders
+    orders,
+    reviews
   };
 };
 

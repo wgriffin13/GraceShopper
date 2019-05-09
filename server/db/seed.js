@@ -13,7 +13,7 @@ const generateReviews = () => {
   const reviews = [];
   const fakeReview = () => {
     return {
-      rating: getRandomNum(1, 5),
+      rating: getRandomNum(2, 5),
       review: faker.lorem.paragraph(),
       productId: getRandomNum(1, 24),
       userId: getRandomNum(1, 5)
@@ -294,7 +294,7 @@ const seedProducts = [
   {
     title: "Bowflex Weight Bench",
     categoryId: 8,
-    price: 13.99,
+    price: 229.0,
     quantity: 10,
     imageUrl:
       "https://images-na.ssl-images-amazon.com/images/I/8104o354qFL._SX679_.jpg",

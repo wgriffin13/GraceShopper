@@ -1,6 +1,6 @@
-const conn = require("../db");
+const conn = require('../db');
 
-const ProductReview = conn.define("productreview", {
+const ProductReview = conn.define('productreview', {
   rating: {
     type: conn.Sequelize.INTEGER,
     allowNull: false,

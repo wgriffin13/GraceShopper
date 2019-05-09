@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import ProductImages from './ProductImages';
+import Ratings from './Ratings';
 import {
   createPendingOrder,
   addToCart,
@@ -157,14 +158,26 @@ class ProductDetail extends Component {
     if (!this.props.products.length || !this.props.categories.length) {
       return <div> loading </div>;
     } else {
-      const { categories } = this.props;
+      const { categories, reviews } = this.props;
 
       const product = this.props.products.find(
         prd => prd.id === this.props.match.params.id * 1
       );
 
-      console.log('props in ProductDetail', this.props);
+      const averageRating = () => {
+        let ratingsSum = 0;
+        const prodReviews = reviews.filter(rev => rev.productId === product.id);
 
+        prodReviews.forEach(review => {
+          ratingsSum += review.rating;
+        });
+
+        return Math.ceil(ratingsSum / prodReviews.length);
+      };
+
+      // console.log("reviews in ProductDetail", reviews);
+      // console.log('ratingsSum', ratingsSum);
+      console.log('averageRating', averageRating());
       return (
         <Container className="d-flex-row mt-5">
           {/* Make sure to be defensive when loading a single product */}
@@ -200,8 +213,11 @@ class ProductDetail extends Component {
                   </Card.Footer>
                 </Card>
                 <Row className="justify-content-center">
+                  <div className="m-3">
+                    <Ratings rating={averageRating()} />
+                  </div>
                   <Button
-                    className=" mt-2"
+                    className=" m-3"
                     variant="outline-success"
                     type="button"
                     onClick={() => this.addToCart(product, 1)}
@@ -212,7 +228,7 @@ class ProductDetail extends Component {
                 </Row>
               </Col>
               <Col className="d-flex flex-column align-item-start">
-                <Row className="d-flex mt-auto mb-auto">
+                <Row className="d-flex m-auto">
                   <h4>{product.title}</h4>
                   <p className="text-justify">{product.description}</p>
                 </Row>
@@ -237,11 +253,13 @@ const mapStateToProps = ({
   products,
   user,
   sessionCart,
-  orders
+  orders,
+  reviews
 }) => {
   return {
     user,
     products,
+    reviews,
     categories,
     sessionCart,
     order: orders.find(order => order.status === 'pending')

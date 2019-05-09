@@ -1,10 +1,10 @@
-import React, { Component, Fragment } from "react";
-import { HashRouter, Route, Switch } from "react-router-dom";
-import Products from "./Products";
-import Navigation from "./Nav";
-import ProductDetail from "./ProductDetail";
-import ProductImages from "./ProductImages";
-import { connect } from "react-redux";
+import React, { Component, Fragment } from 'react';
+import { HashRouter, Route, Switch } from 'react-router-dom';
+import Products from './Products';
+import Navigation from './Nav';
+import ProductDetail from './ProductDetail';
+import ProductImages from './ProductImages';
+import { connect } from 'react-redux';
 import {
   fetchReviews,
   fetchCategories,
@@ -13,13 +13,13 @@ import {
   fetchUsers,
   sessionLogin,
   getSessionCart
-} from "./store";
-import Home from "./Home";
-import Admin from "./AccountViews/AdminAccount";
-import Login from "./Login";
-import Cart from "./Cart";
-import Checkout from "./CheckOut";
-import UserAccount from "./AccountViews/UserAccount";
+} from './store';
+import Home from './Home';
+import Admin from './AccountViews/AdminAccount';
+import Login from './Login';
+import Cart from './Cart';
+import Checkout from './CheckOut';
+import UserAccount from './AccountViews/UserAccount';
 
 class App extends Component {
   componentDidMount() {
@@ -29,7 +29,7 @@ class App extends Component {
     this.props.fetchInitialUsers();
     this.props.sessionLogin();
     this.props.getSessionCart();
-    this.props.fetchReviews();
+    this.props.fetchInitialProductReviews();
   }
   render() {
     return (
@@ -75,6 +75,7 @@ const mapDispatchToProps = dispatch => {
     fetchInitialCategories: () => dispatch(fetchCategories()),
     fetchInitialProducts: () => dispatch(fetchProducts()),
     fetchInitialProductImages: () => dispatch(fetchProductImages()),
+    fetchInitialProductReviews: () => dispatch(fetchReviews()),
     fetchInitialUsers: () => dispatch(fetchUsers()),
     sessionLogin: () => dispatch(sessionLogin()),
     getSessionCart: () => dispatch(getSessionCart())

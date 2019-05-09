@@ -1,19 +1,28 @@
-import React, { Fragment } from "react";
+import React, { Fragment } from 'react';
 
-const Ratings = rating => {
+const Ratings = ({ rating }) => {
   const generateStars = () => {
-    const stars = [];
-    const star = 1;
+    const generatedStars = [];
     let count = 0;
     while (count < rating) {
-      stars.push(star);
+      generatedStars.push('s');
+      count++;
     }
-    return stars;
+    return generatedStars;
   };
+
+  // const numberOfStars = generateStars();
+  // console.log('rating', numberOfStars);
   return (
     <Fragment>
+      {/* <hr /> */}
+
       {generateStars().map(str => (
-        <i className="fas fa-star" />
+        <i
+          key={str.idx}
+          className="fas fa-star fa-3x"
+          style={{ color: 'yellow' }}
+        />
       ))}
     </Fragment>
   );

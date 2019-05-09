@@ -16,6 +16,7 @@ const ADD_LINEITEM = "ADD_LINEITEM";
 const CREATE_CART = "CREATE_CART";
 const SET_SESSION_CART = "SET_SESSION_CART";
 const GET_REVIEWS = "GET_REVIEWS";
+const UPDATE_QUANTITY = "UPDATE_QUANTITY";
 
 //ACTION CREATORS
 
@@ -68,6 +69,11 @@ const setSessionCart = sessionCart => ({
   sessionCart
 });
 
+const updateQuantityAC = (id, quantity) => ({
+  type: UPDATE_QUANTITY,
+  quantity,
+  id
+})
 //THUNKS
 
 const fetchReviews = () => {
@@ -132,7 +138,10 @@ const sessionLogin = () => {
     return axios
       .get("/api/auth")
       .then(res => res.data)
-      .then(userData => dispatch(setUserActionCreator(userData)));
+      .then(userData => {
+        dispatch(setUserActionCreator(userData));
+        return userData;
+      });
   };
 };
 
@@ -210,6 +219,15 @@ const addToCart = item => {
   };
 };
 
+//update a line-item when quantity in cart is changed
+const updateQuantity = (id, quantity) => {
+  return dispatch => {
+    return axios
+      .put(`/api/orders/lineitems/${id}`, {quantity})
+      .then(() => dispatch(updateQuantityAC(id, quantity)))
+  }
+}
+
 // const mergeCarts = (sessionCart, pendingOrder) => {
 
 // }
@@ -272,25 +290,37 @@ const users = (state = {}, action) => {
 
 const orders = (state = [], action) => {
   switch (action.type) {
-    case GET_ORDERS:
-      return action.orders;
-    case CREATE_CART:
-      const cart = action.order;
-      cart.lineitems = [];
-      return [...state, cart];
-    case ADD_LINEITEM:
-      return state.map(order => {
-        if (order.status === "pending") {
-          if (!order.lineitems) {
-            order.lineitems = [action.item];
-          } else {
-            order.lineitems.push(action.item);
-          }
-        }
-        return order;
-      });
-    default:
-      return state;
+      case GET_ORDERS:
+          return action.orders;
+      case CREATE_CART:
+          const cart = action.order;
+          cart.lineitems = [];
+          return [...state, cart];
+      case ADD_LINEITEM:
+          return state.map(order => {
+            if (order.status === 'pending') {
+              if (!order.lineitems){
+                order.lineitems = [action.item]
+              } else {
+              order.lineitems.push(action.item)
+              }
+            }
+            return order;
+          })
+      case UPDATE_QUANTITY:
+          return state.map(order => {
+            if (order.status === 'pending') {
+              order.lineitems.map(lineitem => {
+                if (lineitem.id === action.id) {
+                  lineitem.quantity = action.quantity;
+                }
+                return lineitem;
+              })
+            }
+            return order;
+          })
+      default:
+          return state;
   }
 };
 const sessionCart = (state = {}, action) => {
@@ -334,5 +364,6 @@ export {
   createSessionCart,
   setSessionCart,
   getSessionCart,
+  updateQuantity,
   fetchReviews
 };

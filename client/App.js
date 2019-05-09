@@ -12,7 +12,8 @@ import {
   fetchProductImages,
   fetchUsers,
   sessionLogin,
-  getSessionCart
+  getSessionCart,
+  fetchUserOrders
 } from './store';
 import Home from './Home';
 import Admin from './AccountViews/AdminAccount';
@@ -69,6 +70,7 @@ class App extends Component {
   }
 }
 
+
 const mapDispatchToProps = dispatch => {
   return {
     fetchReviews: () => dispatch(fetchReviews()),
@@ -78,11 +80,13 @@ const mapDispatchToProps = dispatch => {
     fetchInitialProductReviews: () => dispatch(fetchReviews()),
     fetchInitialUsers: () => dispatch(fetchUsers()),
     sessionLogin: () => dispatch(sessionLogin()),
-    getSessionCart: () => dispatch(getSessionCart())
+    getSessionCart: () => dispatch(getSessionCart()),
+    fetchUserOrders: (userId) => dispatch(fetchUserOrders(userId))
   };
 };
 
+
 export default connect(
-  null,
+ null,
   mapDispatchToProps
 )(App);

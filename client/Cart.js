@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Card } from 'react-bootstrap';
+import { fetchUserOrders, updateQuantity } from './store';
 
 class Cart extends Component {
   constructor(props) {
@@ -13,6 +14,8 @@ class Cart extends Component {
   componentDidMount() {
     if (this.props.user.id && this.props.currentOrder) {
       this.setState({ cart: this.props.currentOrder });
+    } else if (this.props.user.id && !this.props.currentOrder) {
+      this.props.fetchUserOrders(this.props.user.id);
     } else if (this.props.sessionCart.sessionCartId) {
       this.setState({ cart: this.props.sessionCart });
     }
@@ -41,14 +44,21 @@ class Cart extends Component {
   };
 
   handleChange = evt => {
-    const tempCart = this.state.cart;
-    tempCart.lineitems = tempCart.lineitems.map(item => {
-      if (parseInt(evt.target.id, 10) === parseInt(item.productId, 10)) {
-        item.quantity = evt.target.value;
-      }
-      return item;
-    });
-    this.setState({ cart: tempCart });
+    //if logged in, call the thunk to update the quantity on the back-end
+    
+    //otherwise store in local state
+        const tempCart = this.state.cart;
+        tempCart.lineitems = tempCart.lineitems.map(item => {
+        if (parseInt(evt.target.id, 10) === parseInt(item.productId, 10)) {
+            item.quantity = evt.target.value;
+        }
+        return item;
+        });
+        this.setState({ cart: tempCart });
+        if (this.props.user.id) {
+            const lineItem = this.state.cart.lineitems.find(item => item.productId === parseInt(evt.target.id, 10));
+            this.props.updateQuantity(lineItem.id, evt.target.value);
+        }
   };
 
   render() {
@@ -178,4 +188,11 @@ const mapStateToProps = ({ user, sessionCart, orders }) => {
   };
 };
 
-export default connect(mapStateToProps)(Cart);
+const mapDispatchToProps = dispatch => {
+    return {
+        fetchUserOrders: (id) => dispatch(fetchUserOrders(id)),
+        updateQuantity: (id, quantity) => dispatch(updateQuantity(id, quantity))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);

@@ -13,7 +13,7 @@ import Ratings from "../Ratings";
 const ReviewsPanel = ({ reviews, user }) => {
   const userReviews = reviews.filter(rev => rev.userId === user.id);
 
-  console.log("userReviews in reviewsPanel", userReviews);
+  // console.log("userReviews in reviewsPanel", userReviews);
 
   return (
     <Row>

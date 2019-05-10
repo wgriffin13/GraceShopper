@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Accordion,
   Button,
@@ -7,10 +7,12 @@ import {
   Pagination,
   Table,
   Row
-} from 'react-bootstrap';
+} from "react-bootstrap";
 
 const OrdersPanel = props => {
   const orders = props.orders;
+
+  console.log("orders in ordersPanel", orders);
 
   return (
     <Row>

@@ -13,7 +13,7 @@ import {
   Input,
   Label,
   Table,
-  Row,
+  Row
 } from 'reactstrap';
 
 class Checkout extends Component {
@@ -25,7 +25,7 @@ class Checkout extends Component {
       collapseItems: false,
       customShipping: [false, false],
       customPayment: [false, false],
-      customItems: [true, false],
+      customItems: [true, false]
     };
   }
 
@@ -46,7 +46,7 @@ class Checkout extends Component {
     const state = prevState.map((x, index) => (tab === index ? !x : false));
 
     this.setState({
-      customItems: state,
+      customItems: state
     });
   };
   toggleCustomShipping = tab => {
@@ -54,7 +54,7 @@ class Checkout extends Component {
     const state = prevState.map((x, index) => (tab === index ? !x : false));
 
     this.setState({
-      customShipping: state,
+      customShipping: state
     });
   };
 
@@ -63,7 +63,7 @@ class Checkout extends Component {
     const state = prevState.map((x, index) => (tab === index ? !x : false));
 
     this.setState({
-      customPayment: state,
+      customPayment: state
     });
   };
 
@@ -214,6 +214,7 @@ class Checkout extends Component {
                         type="text"
                         id="company"
                         placeholder="Enter your name"
+                        defaultValue={`${user.firstname} ${user.lastname}`}
                       />
                     </FormGroup>
                     <FormGroup>
@@ -380,7 +381,7 @@ class Checkout extends Component {
 const mapStateToProps = ({ user, orders }) => {
   return {
     user: user,
-    order: orders.find(order => order.status === 'pending'),
+    order: orders.find(order => order.status === 'pending')
   };
 };
 

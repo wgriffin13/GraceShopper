@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import React, { Component, Fragment } from 'react';
 import { Card, Container, Col, Row, Pagination } from 'react-bootstrap';
 import { updateNavSearchValsBasedOnURL } from './store';
@@ -10,7 +11,7 @@ class Products extends Component {
     super(props);
     this.state = {
       count: '',
-      products: [],
+      products: []
     };
   }
   componentDidMount() {
@@ -43,7 +44,7 @@ class Products extends Component {
         .then(productsAndCount => {
           this.setState({
             products: productsAndCount.products,
-            count: productsAndCount.count,
+            count: productsAndCount.count
           });
         });
       setNavSearchValues(match.params.categoryId, '');
@@ -66,7 +67,7 @@ class Products extends Component {
         .then(productsAndCount => {
           this.setState({
             products: productsAndCount.products,
-            count: productsAndCount.count,
+            count: productsAndCount.count
           });
         });
       setNavSearchValues(match.params.categoryId, match.params.searchTerm);
@@ -81,7 +82,7 @@ class Products extends Component {
         .then(productsAndCount => {
           this.setState({
             products: productsAndCount.products,
-            count: productsAndCount.count,
+            count: productsAndCount.count
           });
         });
     }
@@ -199,7 +200,7 @@ class Products extends Component {
                           product && categories.length
                             ? findCategory(product, categories).color
                             : 'white'
-                        }`,
+                        }`
                       }}
                       className="mb-3 mt-3 shadow rounded"
                     >
@@ -210,7 +211,7 @@ class Products extends Component {
                             product && categories.length
                               ? findCategory(product, categories).color
                               : 'white'
-                          }`,
+                          }`
                         }}
                       >
                         {product && categories.length
@@ -234,7 +235,7 @@ class Products extends Component {
                             product && categories.length
                               ? findCategory(product, categories).color
                               : 'white'
-                          }`,
+                          }`
                         }}
                       >
                         ${product.price}
@@ -257,14 +258,14 @@ class Products extends Component {
 const mapStateToProps = ({ categories, reviews }) => {
   return {
     categories,
-    reviews,
+    reviews
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     setNavSearchValues: (categoryId, searchTerm) =>
-      dispatch(updateNavSearchValsBasedOnURL(categoryId, searchTerm)),
+      dispatch(updateNavSearchValsBasedOnURL(categoryId, searchTerm))
   };
 };
 

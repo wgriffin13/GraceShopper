@@ -11,7 +11,7 @@ class UserAccount extends Component {
   }
 
   render() {
-    const { user, orders } = this.props;
+    const { user, orders, reviews } = this.props;
 
     if (user) {
       return (
@@ -40,8 +40,8 @@ class UserAccount extends Component {
               <hr />
 
               <OrdersPanel orders={orders} />
-              <ReviewsPanel />
-              <CreditCardsPanel />
+              <CreditCardsPanel user={user} />
+              <ReviewsPanel reviews={reviews} user={user} />
             </Card.Body>
           </Card>
         </Accordion>
@@ -52,11 +52,12 @@ class UserAccount extends Component {
   }
 }
 
-const mapStateToProps = ({ products, user, orders }) => {
+const mapStateToProps = ({ products, user, orders, reviews }) => {
   return {
     products,
     user,
-    orders
+    orders,
+    reviews
   };
 };
 

@@ -1,25 +1,25 @@
-import React, { Component, Fragment } from 'react';
-import { Navbar, Nav, Form, FormControl, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { logout, updateNavSearchValsBasedOnURL } from './store';
+import React, { Component, Fragment } from "react";
+import { Navbar, Nav, Form, FormControl, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { logout, updateNavSearchValsBasedOnURL } from "./store";
 
 class Navigation extends Component {
   constructor(props) {
     super(props);
     if (!props.navSearchTerms.categoryId || !props.navSearchTerms.searchTerm) {
       this.state = {
-        searchTerm: '',
-        categoryId: '0',
+        searchTerm: "",
+        categoryId: "0"
       };
     } else {
       this.state = {
         searchTerm: props.navSearchTerms.searchTerm
           ? props.navSearchTerms.searchTerm
-          : '',
+          : "",
         categoryId: props.navSearchTerms.categoryId
           ? props.navSearchTerms.categoryId
-          : '0',
+          : "0"
       };
     }
   }
@@ -30,14 +30,14 @@ class Navigation extends Component {
       prevProps.navSearchTerms.searchTerm !== navSearchTerms.searchTerm
     ) {
       this.setState({
-        searchTerm: navSearchTerms.searchTerm ? navSearchTerms.searchTerm : '',
-        categoryId: navSearchTerms.categoryId ? navSearchTerms.categoryId : '0',
+        searchTerm: navSearchTerms.searchTerm ? navSearchTerms.searchTerm : "",
+        categoryId: navSearchTerms.categoryId ? navSearchTerms.categoryId : "0"
       });
     }
   }
   logout = () => {
     this.props.logout();
-    this.props.history.push('/');
+    this.props.history.push("/");
   };
   onChange = ev => {
     this.setState({ [ev.target.name]: ev.target.value });
@@ -54,7 +54,7 @@ class Navigation extends Component {
 
     return (
       <Fragment>
-        <Navbar bg="light">
+        <Navbar bg="light" className="mb-3">
           <Navbar.Brand>Grace Shopper</Navbar.Brand>
           <Nav className="mr-auto">
             <Nav.Link as={Link} to="/" onClick={() => clearNavSearchTerms()}>
@@ -73,7 +73,7 @@ class Navigation extends Component {
                 admin
               </Nav.Link>
             ) : (
-              ''
+              ""
             )}
 
             <Nav.Item>
@@ -92,12 +92,12 @@ class Navigation extends Component {
                 </div>
               ) : (
                 <div>
-                <Nav.Link as={Link} to="/login" className="mr-auto">
-                  login
-                </Nav.Link>
-                <Nav.Link as={Link} to="/signup" className="mr-auto">
-                 sign-up
-                </Nav.Link>
+                  <Nav.Link as={Link} to="/login" className="mr-auto">
+                    login
+                  </Nav.Link>
+                  <Nav.Link as={Link} to="/signup" className="mr-auto">
+                    sign-up
+                  </Nav.Link>
                 </div>
               )}
             </Nav.Item>
@@ -150,14 +150,14 @@ const mapStateToProps = ({ user, categories, navSearchTerms }) => {
     isLoggedIn: !!user.id,
     categories,
     user,
-    navSearchTerms,
+    navSearchTerms
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     logout: () => dispatch(logout()),
-    clearNavSearchTerms: () => dispatch(updateNavSearchValsBasedOnURL('0', '')),
+    clearNavSearchTerms: () => dispatch(updateNavSearchValsBasedOnURL("0", ""))
   };
 };
 

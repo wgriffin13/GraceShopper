@@ -1,8 +1,13 @@
-import React, { Component, Fragment } from 'react';
-import { connect } from 'react-redux';
-import { Card } from 'react-bootstrap';
-import { deleteItemSessionCart, createSessionCart, fetchUserOrders, updateQuantity } from './store';
-import axios from 'axios';
+import React, { Component, Fragment } from "react";
+import { connect } from "react-redux";
+import { Card } from "react-bootstrap";
+import {
+  deleteItemSessionCart,
+  createSessionCart,
+  fetchUserOrders,
+  updateQuantity
+} from "./store";
+import axios from "axios";
 
 class Cart extends Component {
   constructor(props) {
@@ -10,7 +15,7 @@ class Cart extends Component {
     this.state = {
       cart: {},
       lineitems: {},
-      warningMessage: ''
+      warningMessage: ""
     };
   }
 
@@ -32,9 +37,9 @@ class Cart extends Component {
         this.setState({ cart: this.props.sessionCart });
       } else {
         // Sets state to an empty cart if the store no longger has a cart to reference since the user fully deleted the items
-        this.setState({ cart: {} })
+        this.setState({ cart: {} });
       }
-      console.log('sessionCart in CDU', this.props.sessionCart);
+      console.log("sessionCart in CDU", this.props.sessionCart);
     }
   }
 
@@ -50,7 +55,8 @@ class Cart extends Component {
   };
 
   updateQuantity = productId => {
-    axios.get(`/api/products/${productId}`)
+    axios
+      .get(`/api/products/${productId}`)
       .then(response => response.data)
       .then(data => {
         // Get available quantity of product from server
@@ -62,24 +68,40 @@ class Cart extends Component {
               item.quantity = parseInt(this.state.lineitems[productId], 10);
             }
             return item;
-          })
+          });
           // Upload changes to session cart
-          this.setState({ warningMessage: '' });
+          this.setState({ warningMessage: "" });
           // Check for user's pending order
-          if (this.props.user.id && this.props.currentOrder)  {
+          if (this.props.user.id && this.props.currentOrder) {
             console.log(this.state.cart);
             console.log(this.state.lineitems);
-            const lineItem = this.state.cart.lineitems.find(item => item.productId === parseInt(productId, 10));
-            console.log(lineItem)
-            this.props.updateQuantity(lineItem.id, parseInt(this.state.lineitems[productId], 10));
+            const lineItem = this.state.cart.lineitems.find(
+              item => item.productId === parseInt(productId, 10)
+            );
+            console.log(lineItem);
+            this.props.updateQuantity(
+              lineItem.id,
+              parseInt(this.state.lineitems[productId], 10)
+            );
           } else {
             // Upload changes to session cart
-            this.props.requestCreateSessionCart({...this.state.cart, lineitems: templineitems});
+            this.props.requestCreateSessionCart({
+              ...this.state.cart,
+              lineitems: templineitems
+            });
           }
         } else {
-          const prevItem = this.state.cart.lineitems.find(item => parseInt(item.productId, 10) === parseInt(productId, 10));
-          this.setState(prevState => ({ warningMessage: 'Please enter a value less than the available quantity.',
-            lineitems: { ...prevState.lineitems,  [productId]: prevItem.quantity } }));
+          const prevItem = this.state.cart.lineitems.find(
+            item => parseInt(item.productId, 10) === parseInt(productId, 10)
+          );
+          this.setState(prevState => ({
+            warningMessage:
+              "Please enter a value less than the available quantity.",
+            lineitems: {
+              ...prevState.lineitems,
+              [productId]: prevItem.quantity
+            }
+          }));
         }
       });
   };
@@ -93,8 +115,9 @@ class Cart extends Component {
   render() {
     return (
       <Fragment>
+        <hr className="my-4" />
         <Card>
-          <Card.Header style={{ backgroundColor: '#91c7f9' }}>
+          <Card.Header style={{ backgroundColor: "#91c7f9" }}>
             <div className="text-white">Shopping Cart</div>
           </Card.Header>
           <Card.Body>
@@ -123,7 +146,7 @@ class Cart extends Component {
                             </div>
                             <div className="col-lg-7">
                               <Card.Link
-                                style={{ textDecoration: 'none' }}
+                                style={{ textDecoration: "none" }}
                                 href={`/#/products/detail/${item.productId}`}
                               >
                                 {item.product.title}
@@ -139,31 +162,53 @@ class Cart extends Component {
                         </td>
                         <td className="text-right">
                           <div className="form-group">
-                            {this.state.lineitems[item.productId] === undefined ?
+                            {this.state.lineitems[item.productId] ===
+                            undefined ? (
                               <input
                                 name="quantity"
                                 className="form-control text-right"
                                 value={item.quantity}
                                 id={item.productId}
                                 onChange={this.handleChange}
-                              /> :
+                              />
+                            ) : (
                               <input
                                 name="quantity"
                                 className="form-control text-right"
                                 value={this.state.lineitems[item.productId]}
                                 id={item.productId}
                                 onChange={this.handleChange}
-                            />}
+                              />
+                            )}
                           </div>
                         </td>
                         <td className="text-right">
                           {this.priceFormat(item.netTotalCost * item.quantity)}
                           <div className="row d-flex flex-nowrap justify-content-end">
-                            <button type="button" className="btn btn-info btn-sm mt-3 mr-1" id={item.productId} onClick={() => this.updateQuantity(item.productId)}>
+                            <button
+                              type="button"
+                              className="btn btn-info btn-sm mt-3 mr-1"
+                              id={item.productId}
+                              onClick={() =>
+                                this.updateQuantity(item.productId)
+                              }
+                            >
                               <i className="fas fa-sync" aria-hidden="true" />
                             </button>
-                            <button type="button" className="btn btn-danger btn-sm mt-3 mr-2" id={item.productId} onClick={() => this.props.requestDeleteItemSessionCart(item.productId)}>
-                              <i className="fas fa-trash-alt" aria-hidden="true" />
+                            <button
+                              type="button"
+                              className="btn btn-danger btn-sm mt-3 mr-2"
+                              id={item.productId}
+                              onClick={() =>
+                                this.props.requestDeleteItemSessionCart(
+                                  item.productId
+                                )
+                              }
+                            >
+                              <i
+                                className="fas fa-trash-alt"
+                                aria-hidden="true"
+                              />
                             </button>
                           </div>
                         </td>
@@ -189,7 +234,13 @@ class Cart extends Component {
               </div>
             )}
             {/* Warning message for quantity update issues */}
-            {(this.state.warningMessage !== '' ? <div className="alert alert-warning" role="alert">{this.state.warningMessage}</div> : '')}
+            {this.state.warningMessage !== "" ? (
+              <div className="alert alert-warning" role="alert">
+                {this.state.warningMessage}
+              </div>
+            ) : (
+              ""
+            )}
           </Card.Body>
           <Card.Footer>
             <div className="row">
@@ -197,27 +248,28 @@ class Cart extends Component {
                 <button
                   type="button"
                   className="btn btn-info"
-                  onClick={() => this.props.history.push('/products')}
+                  onClick={() => this.props.history.push("/products")}
                 >
-                  {'<- '}Continue Shopping
+                  {"<- "}Continue Shopping
                 </button>
               </div>
-                <div className="col text-right">
-                  <button
-                    type="button"
-                    className="btn btn-success"
-                    onClick={() =>
-                      this.props.history.push(
-                        `/orders/${this.props.currentOrder.id}`
-                      )
-                    }
-                  >
-                    Checkout{' ->'}
-                  </button>
-                </div>
+              <div className="col text-right">
+                <button
+                  type="button"
+                  className="btn btn-success"
+                  onClick={() =>
+                    this.props.history.push(
+                      `/orders/${this.props.currentOrder.id}`
+                    )
+                  }
+                >
+                  Checkout{" ->"}
+                </button>
+              </div>
             </div>
           </Card.Footer>
         </Card>
+        <hr className="my-4" />
       </Fragment>
     );
   }
@@ -227,17 +279,22 @@ const mapStateToProps = ({ user, sessionCart, orders }) => {
   return {
     user,
     sessionCart,
-    currentOrder: orders.find(order => order.status === 'pending'),
+    currentOrder: orders.find(order => order.status === "pending")
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    requestDeleteItemSessionCart: productId => dispatch(deleteItemSessionCart(productId)),
-    requestCreateSessionCart: sessionCart => dispatch(createSessionCart(sessionCart)),
-    fetchUserOrders: (id) => dispatch(fetchUserOrders(id)),
+    requestDeleteItemSessionCart: productId =>
+      dispatch(deleteItemSessionCart(productId)),
+    requestCreateSessionCart: sessionCart =>
+      dispatch(createSessionCart(sessionCart)),
+    fetchUserOrders: id => dispatch(fetchUserOrders(id)),
     updateQuantity: (id, quantity) => dispatch(updateQuantity(id, quantity))
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Cart);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Cart);

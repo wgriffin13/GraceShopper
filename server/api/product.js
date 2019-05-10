@@ -166,6 +166,13 @@ router.get(
   }
 );
 
+//GET /api/products
+router.get('/:productId', (req, res, next) => {
+  Product.findByPk(req.params.productId)
+    .then(product => res.send(product))
+    .catch(next);
+});
+
 //GET /api/products/productId/productimagesId
 router.get('/productImages', (req, res, next) => {
   ProductImage.findAll({

@@ -192,6 +192,15 @@ const getSessionCart = () => {
   };
 };
 
+const deleteItemSessionCart = (productId) => {
+  return dispatch => {
+    return axios
+      .delete(`./api/cart/${productId}`)
+      .then(res => res.data)
+      .then(data => dispatch(setSessionCart(data)))
+  }
+}
+
 //create a cart for logged-in user by calling the post route
 const createPendingOrder = order => {
   return dispatch => {
@@ -367,6 +376,7 @@ export {
   createSessionCart,
   setSessionCart,
   getSessionCart,
+  deleteItemSessionCart,
   updateNavSearchValsBasedOnURL,
   fetchReviews,
   updateQuantity,

@@ -20,6 +20,7 @@ import Admin from './AccountViews/AdminAccount';
 import Login from './Login';
 import Cart from './Cart';
 import Checkout from './CheckOut';
+import CheckoutGeneric from './CheckoutGeneric'; 
 import UserAccount from './AccountViews/UserAccount';
 
 class App extends Component {
@@ -64,6 +65,7 @@ class App extends Component {
             <Route exact path="/user" component={UserAccount} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/cart" component={Cart} />
+            <Route exact path="/checkout" component={CheckoutGeneric} />
             <Route exact path="/orders/:orderId" component={Checkout} />
             <Route
               render={() => <div>Sorry That Page Couldn't Be Found</div>}

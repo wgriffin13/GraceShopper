@@ -7,7 +7,7 @@ const Home = ({ categories }) => {
   const dvdUrls = [
     'http://i65.tinypic.com/2sblgz5.jpg',
     'http://i65.tinypic.com/j6515e.jpg',
-    'http://i65.tinypic.com/anbp8h.jpg'
+    'http://i65.tinypic.com/anbp8h.jpg',
   ];
 
   return (
@@ -27,16 +27,16 @@ const Home = ({ categories }) => {
                 style={{
                   width: '15rem',
                   height: '15rem',
-                  backgroundColor: `${category.color}`
+                  backgroundColor: `${category.color}`,
                 }}
                 className="my-3 justify-content-center "
               >
-                <Card.Link href={`/#/products/category/${category.id}`}>
+                <Card.Link href={`/#/products/filter/category/${category.id}`}>
                   <Card.Text
                     className="white-text-with-blue-shadow text-center"
                     style={{
                       fontSize: '22px',
-                      color: 'white'
+                      color: 'white',
                     }}
                   >
                     {category.name}
@@ -72,7 +72,7 @@ const Home = ({ categories }) => {
 
 const mapStateToProps = ({ categories }) => {
   return {
-    categories
+    categories,
   };
 };
 

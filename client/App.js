@@ -22,6 +22,7 @@ import Cart from './Cart';
 import Checkout from './CheckOut';
 import CheckoutGeneric from './CheckoutGeneric'; 
 import UserAccount from './AccountViews/UserAccount';
+import SignUp from './SignUp';
 
 class App extends Component {
   componentDidMount() {
@@ -64,6 +65,7 @@ class App extends Component {
             <Route exact path="/admin" component={Admin} />
             <Route exact path="/user" component={UserAccount} />
             <Route exact path="/login" component={Login} />
+            <Route exact path="/signup" component={SignUp} />
             <Route exact path="/cart" component={Cart} />
             <Route exact path="/checkout" component={CheckoutGeneric} />
             <Route exact path="/orders/:orderId" component={Checkout} />

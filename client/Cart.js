@@ -59,7 +59,7 @@ class Cart extends Component {
         if (parseInt(this.state.lineitems[productId], 10) <= availableQty) {
           const templineitems = this.state.cart.lineitems.map(item => {
             if (parseInt(item.productId, 10) === parseInt(productId, 10)) {
-              item.quantity = this.state.lineitems[productId];
+              item.quantity = parseInt(this.state.lineitems[productId], 10);
             }
             return item;
           })
@@ -69,8 +69,9 @@ class Cart extends Component {
           if (this.props.user.id && this.props.currentOrder)  {
             console.log(this.state.cart);
             console.log(this.state.lineitems);
-            // const lineItem = this.state.cart.lineitems.find(item => item.productId === parseInt(productId, 10));
-            // this.props.updateQuantity(lineItem.id, evt.target.value);
+            const lineItem = this.state.cart.lineitems.find(item => item.productId === parseInt(productId, 10));
+            console.log(lineItem)
+            this.props.updateQuantity(lineItem.id, parseInt(this.state.lineitems[productId], 10));
           } else {
             // Upload changes to session cart
             this.props.requestCreateSessionCart({...this.state.cart, lineitems: templineitems});
@@ -87,22 +88,6 @@ class Cart extends Component {
     const templineitems = this.state.lineitems;
     templineitems[evt.target.id] = evt.target.value;
     this.setState({ lineitems: templineitems });
-    console.log(this.state.lineitems)
-    //if logged in, call the thunk to update the quantity on the back-end
-    
-    //otherwise store in local state
-        // const tempCart = this.state.cart;
-        // tempCart.lineitems = tempCart.lineitems.map(item => {
-        // if (parseInt(evt.target.id, 10) === parseInt(item.productId, 10)) {
-        //     item.quantity = evt.target.value;
-        // }
-        // return item;
-        // });
-        // this.setState({ cart: tempCart });
-        // if (this.props.user.id) {
-        //     const lineItem = this.state.cart.lineitems.find(item => item.productId === parseInt(evt.target.id, 10));
-        //     this.props.updateQuantity(lineItem.id, evt.target.value);
-        // }
   };
 
   render() {
@@ -175,10 +160,10 @@ class Cart extends Component {
                           {this.priceFormat(item.netTotalCost * item.quantity)}
                           <div className="row d-flex flex-nowrap justify-content-end">
                             <button type="button" className="btn btn-info btn-sm mt-3 mr-1" id={item.productId} onClick={() => this.updateQuantity(item.productId)}>
-                              <i className="fa fa-refresh" aria-hidden="true" />
+                              <i className="fas fa-sync" aria-hidden="true" />
                             </button>
                             <button type="button" className="btn btn-danger btn-sm mt-3 mr-2" id={item.productId} onClick={() => this.props.requestDeleteItemSessionCart(item.productId)}>
-                              <i className="fa fa-trash" aria-hidden="true" />
+                              <i className="fas fa-trash-alt" aria-hidden="true" />
                             </button>
                           </div>
                         </td>

@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import {
   Button,
   Card,
@@ -14,7 +14,7 @@ import {
   Label,
   Table,
   Row
-} from 'reactstrap';
+} from "reactstrap";
 
 class Checkout extends Component {
   constructor(props) {
@@ -86,12 +86,12 @@ class Checkout extends Component {
 
     return (
       <div>
-        <hr />
+        <hr className="my-4" />
         {order ? (
           <Card>
             <CardHeader
               className="text-white"
-              style={{ backgroundColor: '#7cc245' }}
+              style={{ backgroundColor: "#7cc245" }}
             >
               Order # {order.id}
               <span className="float-right">
@@ -157,7 +157,7 @@ class Checkout extends Component {
                                   <div className="col-5 col-lg-7">
                                     {/* {item.product.title} */}
                                     <Link
-                                      style={{ textDecoration: 'none' }}
+                                      style={{ textDecoration: "none" }}
                                       to={`/products/detail/${item.productId}`}
                                     >
                                       {item.product.title}
@@ -223,6 +223,7 @@ class Checkout extends Component {
                         type="text"
                         id="street"
                         placeholder="Enter street name"
+                        defaultValue={`${user.street}`}
                       />
                     </FormGroup>
                     <FormGroup row className="my-0">
@@ -233,6 +234,7 @@ class Checkout extends Component {
                             type="text"
                             id="city"
                             placeholder="Enter city"
+                            defaultValue={`${user.city}`}
                           />
                         </FormGroup>
                       </Col>
@@ -243,6 +245,7 @@ class Checkout extends Component {
                             type="text"
                             id="state"
                             placeholder="Enter State"
+                            defaultValue={`${user.state}`}
                           />
                         </FormGroup>
                       </Col>
@@ -253,6 +256,7 @@ class Checkout extends Component {
                             type="text"
                             id="postal-code"
                             placeholder="Postal Code"
+                            defaultValue={`${user.zip}`}
                           />
                         </FormGroup>
                       </Col>
@@ -263,6 +267,7 @@ class Checkout extends Component {
                         type="text"
                         id="country"
                         placeholder="Country name"
+                        defaultValue="Uinited States of America"
                       />
                     </FormGroup>
                   </Collapse>
@@ -294,6 +299,7 @@ class Checkout extends Component {
                             id="nameOnCard"
                             placeholder="Enter your name"
                             required
+                            defaultValue={`${user.firstname} ${user.lastname}`}
                           />
                         </FormGroup>
                       </Col>
@@ -307,6 +313,7 @@ class Checkout extends Component {
                             id="ccnumber"
                             placeholder="0000 0000 0000 0000"
                             required
+                            defaultValue={`${user.creditcard}`}
                           />
                         </FormGroup>
                       </Col>
@@ -335,8 +342,6 @@ class Checkout extends Component {
                         <FormGroup>
                           <Label htmlFor="ccyear">Year</Label>
                           <Input type="select" name="ccyear" id="ccyear">
-                            <option>2017</option>
-                            <option>2018</option>
                             <option>2019</option>
                             <option>2020</option>
                             <option>2021</option>
@@ -365,14 +370,17 @@ class Checkout extends Component {
               </div>
             </CardBody>
             <CardFooter>
-              <Button color="outline-success" size="lg" block>
-                Confirm Purchase
-              </Button>
+              <Row className="justify-content-center mb-3">
+                <Button color="outline-success" size="lg">
+                  Confirm Purchase
+                </Button>
+              </Row>
             </CardFooter>
           </Card>
         ) : (
           <div> no order found </div>
         )}
+        <hr className="my-4" />
       </div>
     );
   }
@@ -381,7 +389,7 @@ class Checkout extends Component {
 const mapStateToProps = ({ user, orders }) => {
   return {
     user: user,
-    order: orders.find(order => order.status === 'pending')
+    order: orders.find(order => order.status === "pending")
   };
 };
 

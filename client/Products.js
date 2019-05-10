@@ -1,16 +1,16 @@
 /* eslint-disable complexity */
-import React, { Component, Fragment } from 'react';
-import { Card, Container, Col, Row, Pagination } from 'react-bootstrap';
-import { updateNavSearchValsBasedOnURL } from './store';
-import axios from 'axios';
-import { connect } from 'react-redux';
-import Ratings from './Ratings';
+import React, { Component, Fragment } from "react";
+import { Card, Container, Col, Row, Pagination } from "react-bootstrap";
+import { updateNavSearchValsBasedOnURL } from "./store";
+import axios from "axios";
+import { connect } from "react-redux";
+import Ratings from "./Ratings";
 
 class Products extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      count: '',
+      count: "",
       products: []
     };
   }
@@ -27,17 +27,17 @@ class Products extends Component {
     const { match, setNavSearchValues } = this.props;
     //just a category search
     if (
-      Object.keys(match.params).includes('categoryId') &&
-      !Object.keys(match.params).includes('searchTerm')
+      Object.keys(match.params).includes("categoryId") &&
+      !Object.keys(match.params).includes("searchTerm")
     ) {
       axios
         .get(
           `/api/products/productsWithCount/filter/category/${
             match.params.categoryId
               ? `${match.params.categoryId}/${
-                  match.params.index ? match.params.index : ''
+                  match.params.index ? match.params.index : ""
                 }`
-              : ''
+              : ""
           }`
         )
         .then(response => response.data)
@@ -47,10 +47,10 @@ class Products extends Component {
             count: productsAndCount.count
           });
         });
-      setNavSearchValues(match.params.categoryId, '');
+      setNavSearchValues(match.params.categoryId, "");
     }
     //category & title search
-    else if (Object.keys(match.params).includes('searchTerm')) {
+    else if (Object.keys(match.params).includes("searchTerm")) {
       axios
         .get(
           `/api/products/productsWithCount/search/category/${
@@ -58,9 +58,9 @@ class Products extends Component {
           }/term/${
             match.params.searchTerm
               ? `${match.params.searchTerm}/${
-                  match.params.index ? match.params.index : ''
+                  match.params.index ? match.params.index : ""
                 }`
-              : ''
+              : ""
           }`
         )
         .then(response => response.data)
@@ -75,7 +75,7 @@ class Products extends Component {
       axios
         .get(
           `/api/products/productsWithCount/${
-            match.params.index ? match.params.index : ''
+            match.params.index ? match.params.index : ""
           }`
         )
         .then(response => response.data)
@@ -103,10 +103,10 @@ class Products extends Component {
   pageChange = index => {
     //Have to page the next results based on the current URL and count
     const { history, match } = this.props;
-    if (match.path === '/products/:index?') {
+    if (match.path === "/products/:index?") {
       history.push(`/products/${index}`);
     } else if (
-      match.path === '/products/filter/category/:categoryId?/:index?'
+      match.path === "/products/filter/category/:categoryId?/:index?"
     ) {
       history.push(
         `/products/filter/category/${
@@ -115,7 +115,7 @@ class Products extends Component {
       );
     } else if (
       match.path ===
-      '/products/search/category/:categoryId/term/:searchTerm?/:index?'
+      "/products/search/category/:categoryId/term/:searchTerm?/:index?"
     ) {
       //Edge case if the user did a search with empty searchTerm but category is always selected
       if (match.params.searchTerm) {
@@ -153,30 +153,30 @@ class Products extends Component {
           <br />
           <Pagination>
             <Pagination.Item
-              disabled={first ? 'disabled' : ''}
+              disabled={first ? "disabled" : ""}
               onClick={() => pageChange(current - current)}
             >
               First
             </Pagination.Item>
             <Pagination.Prev
-              disabled={first ? 'disabled' : ''}
+              disabled={first ? "disabled" : ""}
               onClick={() => pageChange(current - 1)}
             />
             {pageFlip.map(page => (
               <Pagination.Item
                 key={page}
                 onClick={() => pageChange(page)}
-                disabled={current === page ? 'disabled' : ''}
+                disabled={current === page ? "disabled" : ""}
               >
                 {page + 1}
               </Pagination.Item>
             ))}
             <Pagination.Next
-              disabled={last ? 'disabled' : ''}
+              disabled={last ? "disabled" : ""}
               onClick={() => pageChange(current + 1)}
             />
             <Pagination.Item
-              disabled={last ? 'disabled' : ''}
+              disabled={last ? "disabled" : ""}
               onClick={() => pageChange(pages)}
             >
               Last
@@ -193,13 +193,13 @@ class Products extends Component {
                     <Card
                       key={product.id}
                       style={{
-                        width: '15rem',
-                        height: '27rem',
+                        width: "15rem",
+                        height: "27rem",
                         borderColor: `${
                           // adding defensive loading for category info
                           product && categories.length
                             ? findCategory(product, categories).color
-                            : 'white'
+                            : "white"
                         }`
                       }}
                       className="mb-3 mt-3 shadow rounded"
@@ -210,17 +210,17 @@ class Products extends Component {
                           backgroundColor: `${
                             product && categories.length
                               ? findCategory(product, categories).color
-                              : 'white'
+                              : "white"
                           }`
                         }}
                       >
                         {product && categories.length
                           ? findCategory(product, categories).name
-                          : 'white'}
+                          : "white"}
                       </Card.Header>
                       <Card.Body className="text-center">
                         <Card.Link
-                          style={{ textDecoration: 'none' }}
+                          style={{ textDecoration: "none" }}
                           href={`/#/products/detail/${product.id}`}
                         >
                           <Card.Img src={product.imageUrl} />
@@ -234,7 +234,7 @@ class Products extends Component {
                           backgroundColor: `${
                             product && categories.length
                               ? findCategory(product, categories).color
-                              : 'white'
+                              : "white"
                           }`
                         }}
                       >
@@ -247,9 +247,10 @@ class Products extends Component {
               })}
             </Row>
           ) : (
-            'No Products Match That Search'
+            "No Products Match That Search"
           )}
         </Container>
+        <hr className="my-4" />
       </Fragment>
     );
   }

@@ -66,6 +66,7 @@ const Home = ({ categories }) => {
           );
         })}
       </Row>
+      <hr className="my-4" />
     </Container>
   );
 };

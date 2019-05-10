@@ -1,25 +1,36 @@
-import React, { Fragment } from 'react';
+import React, { Fragment } from "react";
 
 const Ratings = ({ rating, starSize }) => {
   const generateStars = () => {
-    const generatedStars = [];
+    const stars = [];
     let count = 0;
     while (count < rating) {
-      generatedStars.push('s');
+      stars.push(true);
       count++;
     }
-    return generatedStars;
+    while (stars.length < 5) {
+      stars.push(false);
+    }
+    return stars;
   };
 
   return (
     <Fragment>
-      {generateStars().map((str, idx) => (
-        <i
-          key={idx}
-          className={`fas fa-star ${starSize}`}
-          style={{ color: 'yellow' }}
-        />
-      ))}
+      {generateStars().map((star, idx) =>
+        star ? (
+          <i
+            key={idx}
+            className={`fas fa-star ${starSize}`}
+            style={{ color: "yellow" }}
+          />
+        ) : (
+          <i
+            key={idx}
+            className={`far fa-star ${starSize}`}
+            style={{ color: "yellow" }}
+          />
+        )
+      )}
     </Fragment>
   );
 };

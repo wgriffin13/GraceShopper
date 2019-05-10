@@ -12,6 +12,13 @@ import {
 const OrdersPanel = props => {
   const orders = props.orders;
 
+  const calculateOrderTotal = order => {
+    return order.lineitems.reduce((acc, item) => {
+      acc += item.quantity * item.netTotalCost;
+      return acc;
+    }, 0);
+  };
+
   return (
     <Row>
       <Col>
@@ -27,7 +34,9 @@ const OrdersPanel = props => {
                 <thead>
                   <tr>
                     <th>OrderId</th>
-                    <th>UserId</th>
+                    <th>Date</th>
+                    <th>Items</th>
+                    <th>Price</th>
                     <th>Status</th>
                   </tr>
                 </thead>
@@ -36,7 +45,24 @@ const OrdersPanel = props => {
                     ? orders.map(order => (
                         <tr key={order.id}>
                           <td>{order.id}</td>
-                          <td>{order.userId}</td>
+                          <td>{order.createdAt.slice(0, 10)}</td>
+                          <td>
+                            {order.lineitems.map(item => (
+                              <Row key={item.id}>
+                                <Col>
+                                  <Card.Link
+                                    style={{ textDecoration: 'none' }}
+                                    href={`/#/products/detail/${
+                                      item.productId
+                                    }`}
+                                  >
+                                    {item.product.title}
+                                  </Card.Link>
+                                </Col>
+                              </Row>
+                            ))}
+                          </td>
+                          <td>{calculateOrderTotal(order)}</td>
                           <td>{order.status}</td>
                         </tr>
                       ))
@@ -44,14 +70,14 @@ const OrdersPanel = props => {
                 </tbody>
               </Table>
 
-              <Pagination>
+              {/* <Pagination>
                 <Pagination.Prev />
                 <Pagination.Item>1</Pagination.Item>
                 <Pagination.Item>2</Pagination.Item>
                 <Pagination.Item>3</Pagination.Item>
                 <Pagination.Item>4</Pagination.Item>
                 <Pagination.Next />
-              </Pagination>
+              </Pagination> */}
             </Card.Body>
           </Accordion.Collapse>
         </Card>

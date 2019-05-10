@@ -166,8 +166,6 @@ router.get(
   }
 );
 
-
-
 //GET /api/products/productId/productimagesId
 router.get('/productImages', (req, res, next) => {
   ProductImage.findAll({

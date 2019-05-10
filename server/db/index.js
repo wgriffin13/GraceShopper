@@ -1,5 +1,6 @@
 const Product = require("./models/product");
 const ProductImage = require("./models/productimage");
+const ProductReview = require("./models/productreview");
 const Category = require("./models/category");
 const User = require("./models/user");
 const Order = require("./models/order");
@@ -9,7 +10,8 @@ const {
   seedProducts,
   seedUsers,
   seedOrders,
-  seedLineItems
+  seedLineItems,
+  seedReviews
 } = require("./seed");
 const conn = require("./db");
 
@@ -31,16 +33,20 @@ const syncAndSeed = () => {
       );
     })
     .then(() => {
-      seedUsers.map(user => User.create(user));
-    })
-    .then(() => {
-      seedOrders.map(order => Order.create(order));
-    })
-    .then(() => {
-      seedLineItems.map(lineitem => LineItem.create(lineitem));
-    })
-    .catch(error => {
-      throw error;
+      return Promise.all(seedUsers.map(user => User.create(user)))
+        .then(() => {
+          return Promise.all(seedOrders.map(order => Order.create(order)));
+        })
+        .then(() => {
+          return Promise.all(
+            seedLineItems.map(lineitem => LineItem.create(lineitem))
+          );
+        })
+        .then(() => {
+          return Promise.all(
+            seedReviews.map(review => ProductReview.create(review))
+          );
+        });
     });
 };
 

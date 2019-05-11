@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment } from "react";
 import {
   Col,
   Navbar,
@@ -8,28 +8,27 @@ import {
   Button,
   Row,
   NavDropdown
-} from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { logout, updateNavSearchValsBasedOnURL } from './store';
-import Login from './Login';
+} from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { logout, updateNavSearchValsBasedOnURL } from "./store";
 
 class Navigation extends Component {
   constructor(props) {
     super(props);
     if (!props.navSearchTerms.categoryId || !props.navSearchTerms.searchTerm) {
       this.state = {
-        searchTerm: '',
-        categoryId: '0'
+        searchTerm: "",
+        categoryId: "0"
       };
     } else {
       this.state = {
         searchTerm: props.navSearchTerms.searchTerm
           ? props.navSearchTerms.searchTerm
-          : '',
+          : "",
         categoryId: props.navSearchTerms.categoryId
           ? props.navSearchTerms.categoryId
-          : '0'
+          : "0"
       };
     }
   }
@@ -40,14 +39,14 @@ class Navigation extends Component {
       prevProps.navSearchTerms.searchTerm !== navSearchTerms.searchTerm
     ) {
       this.setState({
-        searchTerm: navSearchTerms.searchTerm ? navSearchTerms.searchTerm : '',
-        categoryId: navSearchTerms.categoryId ? navSearchTerms.categoryId : '0'
+        searchTerm: navSearchTerms.searchTerm ? navSearchTerms.searchTerm : "",
+        categoryId: navSearchTerms.categoryId ? navSearchTerms.categoryId : "0"
       });
     }
   }
   logout = () => {
     this.props.logout();
-    this.props.history.push('/');
+    this.props.history.push("/");
   };
   onChange = ev => {
     this.setState({ [ev.target.name]: ev.target.value });
@@ -123,11 +122,11 @@ class Navigation extends Component {
               ) : (
                 ''
               )} */}
-
-              <Nav.Link as={Link} to="/cart">
-                cart
-              </Nav.Link>
-
+              <Form>
+                <Button variant="outline-success" as={Link} to="/cart">
+                  <i className="fas fa-shopping-cart" />
+                </Button>
+              </Form>
               <Form.Control
                 as="select"
                 variant="outline-secondary"
@@ -180,7 +179,7 @@ const mapStateToProps = ({ user, categories, navSearchTerms }) => {
 const mapDispatchToProps = dispatch => {
   return {
     logout: () => dispatch(logout()),
-    clearNavSearchTerms: () => dispatch(updateNavSearchValsBasedOnURL('0', ''))
+    clearNavSearchTerms: () => dispatch(updateNavSearchValsBasedOnURL("0", ""))
   };
 };
 
@@ -188,19 +187,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(Navigation);
-
-// <div>
-//   <button
-//     className="mr-auto"
-//     type="button"
-//     onClick={this.logout}
-//   >
-//     logout
-//   </button>
-//   </div>
-/* <Nav.Link
-                      className="mr-auto"
-                      onSelect={() => this.logout()}
-                    >
-                      logout
-                    </Nav.Link> */

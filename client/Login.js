@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Col, Button, Form, FormControl, InputGroup } from 'react-bootstrap';
-import { loginAttempt, fetchUserOrders } from './store';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+
+import { loginAttempt, fetchUserOrders } from "./store";
 
 class Login extends Component {
   constructor() {
     super();
     this.state = {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
       error: {}
     };
   }
@@ -30,18 +30,19 @@ class Login extends Component {
       .then(user => {
         if (user.id) {
           this.props.requestFetchUserOrders(user.id);
-          this.props.history.push('/');
+          this.props.history.push("/");
         }
       })
       .catch(error =>
         this.setState(
           {
             error,
-            email: '',
-            password: ''
+            email: "",
+            password: ""
           },
           () => console.log(this.state)
-        ));
+        )
+      );
   };
   render() {
     const { email, password, error } = this.state;
@@ -81,7 +82,7 @@ class Login extends Component {
               </em>
             </div>
           ) : (
-            ''
+            ""
           )}
         </form>
       </div>

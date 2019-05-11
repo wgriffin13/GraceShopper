@@ -13,14 +13,14 @@ import {
   fetchUsers,
   sessionLogin,
   getSessionCart,
-  fetchUserOrders,
+  fetchUserOrders
 } from './store';
 import Home from './Home';
 import Admin from './AccountViews/AdminAccount';
 import Login from './Login';
 import Cart from './Cart';
 import Checkout from './CheckOut';
-import CheckoutGeneric from './CheckoutGeneric'; 
+import CheckoutGeneric from './CheckoutGeneric';
 import UserAccount from './AccountViews/UserAccount';
 import SignUp from './SignUp';
 
@@ -89,7 +89,7 @@ const mapDispatchToProps = dispatch => {
     fetchInitialUsers: () => dispatch(fetchUsers()),
     sessionLogin: () => dispatch(sessionLogin()),
     getSessionCart: () => dispatch(getSessionCart()),
-    fetchUserOrders: userId => dispatch(fetchUserOrders(userId)),
+    fetchUserOrders: userId => dispatch(fetchUserOrders(userId))
   };
 };
 

@@ -30,7 +30,14 @@ class App extends Component {
     this.props.fetchInitialProducts();
     this.props.fetchInitialProductImages();
     this.props.fetchInitialUsers();
-    this.props.sessionLogin();
+    this.props.sessionLogin()
+      .then( user => {
+        console.log(user)
+        if (user.id){
+          console.log(user.id)
+          this.props.fetchUserOrders(user.id);
+        }
+      });
     this.props.getSessionCart();
     this.props.fetchInitialProductReviews();
   }
@@ -89,7 +96,7 @@ const mapDispatchToProps = dispatch => {
     fetchInitialUsers: () => dispatch(fetchUsers()),
     sessionLogin: () => dispatch(sessionLogin()),
     getSessionCart: () => dispatch(getSessionCart()),
-    fetchUserOrders: userId => dispatch(fetchUserOrders(userId)),
+    fetchUserOrders: (userId) => dispatch(fetchUserOrders(userId))
   };
 };
 

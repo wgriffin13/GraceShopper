@@ -185,7 +185,7 @@ const fetchUserOrders = userId => {
       .then(response => response.data)
       .then(data => {
         dispatch(getOrders(data));
-        // Call the functionality to merge sessionCart and pending cart
+        return data;
       });
   };
 };

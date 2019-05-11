@@ -1,5 +1,13 @@
 import React, { Component, Fragment } from "react";
-import { Navbar, Nav, Form, FormControl, Button } from "react-bootstrap";
+import {
+  Col,
+  Navbar,
+  Nav,
+  Form,
+  FormControl,
+  Button,
+  Row
+} from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { logout, updateNavSearchValsBasedOnURL } from "./store";
@@ -54,90 +62,106 @@ class Navigation extends Component {
 
     return (
       <Fragment>
-        <Navbar bg="light" className="mb-3">
-          <Navbar.Brand>Grace Shopper</Navbar.Brand>
+        <Navbar className="mb-2">
           <Nav className="mr-auto">
-            <Nav.Link as={Link} to="/" onClick={() => clearNavSearchTerms()}>
-              Home
-            </Nav.Link>
-            <Nav.Link
-              as={Link}
-              to="/products"
-              onClick={() => clearNavSearchTerms()}
-            >
-              Products
-            </Nav.Link>
+            <Row>
+              <Col>
+                <Navbar.Brand>Grace Shopper</Navbar.Brand>
+              </Col>
+              <Col>
+                <Nav.Link
+                  as={Link}
+                  to="/"
+                  onClick={() => clearNavSearchTerms()}
+                >
+                  Home
+                </Nav.Link>
+              </Col>
+              <Col>
+                <Nav.Link
+                  as={Link}
+                  to="/products"
+                  onClick={() => clearNavSearchTerms()}
+                >
+                  Products
+                </Nav.Link>
+              </Col>
 
-            {user.isAdmin ? (
-              <Nav.Link as={Link} to="/admin" className="mr-auto">
-                admin
-              </Nav.Link>
-            ) : (
-              ""
-            )}
+              <Col>
+                <Nav.Link as={Link} to="/user" className="mr-auto">
+                  Account
+                </Nav.Link>
 
-            <Nav.Item>
-              {this.props.isLoggedIn ? (
-                <div>
-                  <button
-                    className="mr-auto"
-                    type="button"
-                    onClick={this.logout}
-                  >
-                    logout
-                  </button>
-                  <Nav.Link as={Link} to="/user" className="mr-auto">
-                    my account
+                {this.props.isLoggedIn ? (
+                  <div>
+                    <Nav.Link className="mr-auto" onSelect={this.logout()}>
+                      logout
+                    </Nav.Link>
+                  </div>
+                ) : (
+                  <div>
+                    <Nav.Link as={Link} to="/login" className="mr-auto">
+                      login
+                    </Nav.Link>
+
+                    <Nav.Link as={Link} to="/signup" className="mr-auto">
+                      sign-up
+                    </Nav.Link>
+                  </div>
+                )}
+              </Col>
+              {user.isAdmin ? (
+                <Col>
+                  <Nav.Link as={Link} to="/admin" className="mr-auto">
+                    admin
                   </Nav.Link>
-                </div>
+                </Col>
               ) : (
-                <div>
-                  <Nav.Link as={Link} to="/login" className="mr-auto">
-                    login
-                  </Nav.Link>
-                  <Nav.Link as={Link} to="/signup" className="mr-auto">
-                    sign-up
-                  </Nav.Link>
-                </div>
+                ""
               )}
-            </Nav.Item>
 
-            <Nav.Link as={Link} to="/cart">
-              cart
-            </Nav.Link>
-
-            <div className="input-group">
-              <Form.Control
-                as="select"
-                variant="outline-secondary"
-                value={categoryId}
-                onChange={onChange}
-                name="categoryId"
-              >
-                <option value="0">All</option>
-                {categories.map(cat => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </option>
-                ))}
-              </Form.Control>
-              <FormControl
-                type="text"
-                placeholder="Search By Title"
-                className="mx-sm-2"
-                name="searchTerm"
-                value={searchTerm}
-                onChange={onChange}
-              />
-              <div className="input-group-append">
+              <Col>
+                <Nav.Link as={Link} to="/cart">
+                  cart
+                </Nav.Link>
+              </Col>
+              <Col>
+                <Form.Control
+                  as="select"
+                  variant="outline-secondary"
+                  value={categoryId}
+                  onChange={onChange}
+                  name="categoryId"
+                  className="input-group"
+                >
+                  <option value="0">All</option>
+                  {categories.map(cat => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </Form.Control>
+              </Col>
+              <Col>
+                <FormControl
+                  type="text"
+                  placeholder="Search By Title"
+                  className="mx-sm-2"
+                  name="searchTerm"
+                  value={searchTerm}
+                  onChange={onChange}
+                />
+              </Col>
+              <Col>
                 <Button
                   variant="outline-secondary"
                   onClick={() => searchByTerm()}
+                  className="input-group-append"
                 >
                   Search
                 </Button>
-              </div>
-            </div>
+              </Col>
+            </Row>
           </Nav>
         </Navbar>
       </Fragment>

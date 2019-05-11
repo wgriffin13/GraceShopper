@@ -88,4 +88,13 @@ router.put('/lineitems/:id', (req, res, next) => {
         .catch(next);
 })
 
+//deletes a line item
+
+router.delete('/lineitems/:id', (req, res, next) => {
+    LineItem.findByPk(req.params.id)
+        .then( (item) => item.destroy())
+        .then( () => res.sendStatus(204))
+        .catch(next)
+})
+
 module.exports = router;

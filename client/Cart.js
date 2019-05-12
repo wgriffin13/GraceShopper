@@ -208,7 +208,7 @@ class Cart extends Component {
                                 this.updateQuantity(item.productId)
                               }
                             >
-                              <i className="fas fa-sync" aria-hidden="true" />
+                              <i className="fas fa-sync" />
                             </button>
                             <button
                               type="button"
@@ -219,7 +219,6 @@ class Cart extends Component {
                             >
                               <i
                                 className="fas fa-trash-alt"
-                                aria-hidden="true"
                               />
                             </button>
                           </div>
@@ -270,9 +269,7 @@ class Cart extends Component {
                   type="button"
                   className="btn btn-success"
                   onClick={() =>
-                    this.props.history.push(
-                      `/orders/${this.props.currentOrder.id}`
-                    )
+                    this.props.history.push('/checkout')
                   }
                 >
                   Checkout{" ->"}

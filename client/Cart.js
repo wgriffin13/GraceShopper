@@ -20,8 +20,10 @@ class Cart extends Component {
   }
 
   componentDidMount() {
-    if (this.props.user.id && this.props.currentOrder.id) {
-      this.setState({ cart: this.props.currentOrder });
+    if (this.props.user.id && this.props.currentOrder) {
+      if (this.props.currentOrder.id) {
+        this.setState({ cart: this.props.currentOrder });
+      }
     }  else if (!this.props.user.id && this.props.sessionCart.sessionCartId) {
       this.setState({ cart: this.props.sessionCart });
     }
@@ -124,10 +126,6 @@ class Cart extends Component {
   };
 
   render() {
-    console.log('state', this.state);
-    if (this.props.user.id && !this.props.currentOrder){
-      return (<div>loading</div>)
-    }
     return (
       <Fragment>
         <hr className="my-4" />
@@ -208,7 +206,7 @@ class Cart extends Component {
                                 this.updateQuantity(item.productId)
                               }
                             >
-                              <i className="fas fa-sync" aria-hidden="true" />
+                              <i className="fas fa-sync" />
                             </button>
                             <button
                               type="button"
@@ -219,7 +217,6 @@ class Cart extends Component {
                             >
                               <i
                                 className="fas fa-trash-alt"
-                                aria-hidden="true"
                               />
                             </button>
                           </div>
@@ -270,9 +267,7 @@ class Cart extends Component {
                   type="button"
                   className="btn btn-success"
                   onClick={() =>
-                    this.props.history.push(
-                      `/orders/${this.props.currentOrder.id}`
-                    )
+                    this.props.history.push('/checkout')
                   }
                 >
                   Checkout{" ->"}

@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { fetchUserOrders } from './store';
+import { fetchUserOrders, loginAttempt, createSessionCart } from './store';
 import {
   Button,
   Card,
@@ -16,9 +16,9 @@ import {
   Input,
   Label,
   Table,
-  Form,
   Row
 } from 'reactstrap';
+import axios from 'axios';
 
 class CheckoutGeneric extends Component {
   constructor(props) {
@@ -57,9 +57,11 @@ class CheckoutGeneric extends Component {
   }
 
   componentDidMount() {
-    if (this.props.user.id && this.props.currentOrder.id) {
-      this.setState({ cart: this.props.currentOrder });
-      this.setState({ billingInfo: this.props.user, savedBilling: true });
+    if (this.props.user.id && this.props.currentOrder) {
+      if (this.props.currentOrder.id) {
+        this.setState({ cart: this.props.currentOrder });
+        this.setState({ billingInfo: this.props.user, savedBilling: true });
+      }
     }  else if (!this.props.user.id && this.props.sessionCart.sessionCartId) {
       this.setState({ cart: this.props.sessionCart });
     }
@@ -131,26 +133,49 @@ class CheckoutGeneric extends Component {
   };
 
   changeBillingInformation = evt => {
-    this.setState({billingInfo: {...this.state.billingInfo, [evt.target.name]: evt.target.value}})
-    console.log(this.state.billingInfo)
+    this.setState({billingInfo: {...this.state.billingInfo, [evt.target.name]: evt.target.value}});
   }
 
   submitInformation = infoType => {
     if (infoType === 'billing') {
-      this.setState({savedBilling: true})
+      this.setState({ savedBilling: true });
     } else if (infoType === 'shipping') {
-      this.setState({savedShipping: true})
+      this.setState({ savedShipping: true });
     }
   }
 
   changeShippingInformation = evt => {
-    this.setState({shippingInformation: {...this.state.shippingInformation, [evt.target.id]: evt.target.value}})
-    console.log(this.state)
+    this.setState({shippingInformation: {...this.state.shippingInformation, [evt.target.id]: evt.target.value}});
   }
 
   setShippingSame = () => {
-    this.setState({shippingInformation: this.state.billingInfo, savedShipping: true})
-    console.log(this.state.shippingInfomartion)
+    this.setState({shippingInformation: this.state.billingInfo, savedShipping: true});
+  }
+
+  completePurchase = () => {
+    if (this.state.cart.id) {
+      console.log('Logged in order');
+      axios.put(`/api/orders/${this.state.cart.id}`);
+      this.props.fetchUserOrders(this.state.billingInfo.id);
+      this.props.history.push('/checkout/success');
+    } else {
+      console.log('Session cart')
+      axios.post('/api/users', { ...this.state.billingInfo, username: this.state.billingInfo.email, isAdmin: false })
+        .then(response => {
+          const user = response.data;
+          axios.post(`/api/orders/user/${user.id}`, { ...this.state.cart, userId: user.id, status: 'purchased' })
+            .then(orderData => {
+              const order = orderData.data;
+              this.state.cart.lineitems.forEach(item => {
+                axios.post(`/api/orders/${order.id}`, {...item, orderId: order.id});
+              })
+              this.props.login(user);
+              this.props.requestCreateSessionCart({});
+              this.props.fetchUserOrders(user.id);
+              this.props.history.push('/checkout/success');
+            })
+        })
+    }
   }
 
   render() {
@@ -519,7 +544,7 @@ class CheckoutGeneric extends Component {
                 </div>
               </CardBody>
               <CardFooter>
-                <Button color="outline-success" size="lg" block>
+                <Button color="outline-success" size="lg" block onClick={() => this.completePurchase()}>
                   Confirm Purchase
                 </Button>
               </CardFooter>
@@ -543,6 +568,8 @@ const mapStateToProps = ({ user, sessionCart, orders }) => {
 const mapDispatchToProps = dispatch => {
   return {
     fetchUserOrders: id => dispatch(fetchUserOrders(id)),
+    login: (user) => dispatch(loginAttempt(user)),
+    requestCreateSessionCart: (sessionCart) => dispatch(createSessionCart(sessionCart))
   };
 };
 

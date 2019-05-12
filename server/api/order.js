@@ -40,6 +40,19 @@ router.get('/user/:id', (req, res, next) => {
         })
 })
 
+// Submit order as complete
+router.put('/:id', (req, res, next) => {
+    Order.findByPk(req.params.id)
+        .then(order => {
+            order.update({
+                status: 'purchased'
+            })
+                .then(data => res.send(data))
+                .catch(next)
+        })
+        .catch(next)
+})
+
 // Returns individual order where id === route id
 router.get('/:id', (req, res, next) => {
     Order.findByPk(req.params.id, {

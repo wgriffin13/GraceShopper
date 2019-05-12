@@ -20,8 +20,10 @@ class Cart extends Component {
   }
 
   componentDidMount() {
-    if (this.props.user.id && this.props.currentOrder.id) {
-      this.setState({ cart: this.props.currentOrder });
+    if (this.props.user.id && this.props.currentOrder) {
+      if (this.props.currentOrder.id) {
+        this.setState({ cart: this.props.currentOrder });
+      }
     }  else if (!this.props.user.id && this.props.sessionCart.sessionCartId) {
       this.setState({ cart: this.props.sessionCart });
     }
@@ -124,10 +126,6 @@ class Cart extends Component {
   };
 
   render() {
-    console.log('state', this.state);
-    if (this.props.user.id && !this.props.currentOrder){
-      return (<div>loading</div>)
-    }
     return (
       <Fragment>
         <hr className="my-4" />

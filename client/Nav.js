@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment } from "react";
 import {
   Col,
   Navbar,
@@ -12,27 +12,27 @@ import {
   Dropdown,
   DropdownButton,
   DropdownItem
-} from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { logout, updateNavSearchValsBasedOnURL } from './store';
+} from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { logout, updateNavSearchValsBasedOnURL } from "./store";
 
 class Navigation extends Component {
   constructor(props) {
     super(props);
     if (!props.navSearchTerms.categoryId || !props.navSearchTerms.searchTerm) {
       this.state = {
-        searchTerm: '',
-        categoryId: '0'
+        searchTerm: "",
+        categoryId: "0"
       };
     } else {
       this.state = {
         searchTerm: props.navSearchTerms.searchTerm
           ? props.navSearchTerms.searchTerm
-          : '',
+          : "",
         categoryId: props.navSearchTerms.categoryId
           ? props.navSearchTerms.categoryId
-          : '0'
+          : "0"
       };
     }
   }
@@ -43,14 +43,19 @@ class Navigation extends Component {
       prevProps.navSearchTerms.searchTerm !== navSearchTerms.searchTerm
     ) {
       this.setState({
-        searchTerm: navSearchTerms.searchTerm ? navSearchTerms.searchTerm : '',
-        categoryId: navSearchTerms.categoryId ? navSearchTerms.categoryId : '0'
+        searchTerm: navSearchTerms.searchTerm ? navSearchTerms.searchTerm : "",
+        categoryId: navSearchTerms.categoryId ? navSearchTerms.categoryId : "0"
       });
     }
   }
+
+  foundCategory = catId => {
+    return this.props.categories.find(cat => cat.id === catId);
+  };
+
   logout = () => {
     this.props.logout();
-    this.props.history.push('/');
+    this.props.history.push("/");
   };
   onChange = ev => {
     this.setState({ [ev.target.name]: ev.target.value });
@@ -63,15 +68,12 @@ class Navigation extends Component {
   render() {
     const { searchTerm, categoryId } = this.state;
     const { categories, isLoggedIn, user, clearNavSearchTerms } = this.props;
-    const { onChange, searchByTerm } = this;
+    const { onChange, searchByTerm, foundCategory } = this;
+    const foundCategoryName = this.foundCategory(categoryId);
 
-    const foundCategory = categories.filter(
-      cat => cat.id === this.state.categoryId
-    );
-
-    console.log('categories', categories);
-    console.log('foundCategory', foundCategory);
-    console.log('navSearchTerms', this.props.navSearchTerms);
+    console.log("categories", categories);
+    console.log("foundCategory", foundCategory);
+    console.log("navSearchTerms", this.props.navSearchTerms);
 
     return (
       <Fragment>
@@ -151,7 +153,7 @@ class Navigation extends Component {
                 <Form inline>
                   <InputGroup>
                     <InputGroup.Prepend>
-                      {categoryId === '0' ? (
+                      {categoryId === "0" ? (
                         <DropdownButton
                           title="All"
                           id="basic-nav-dropdown"
@@ -173,7 +175,7 @@ class Navigation extends Component {
                         </DropdownButton>
                       ) : (
                         <DropdownButton
-                          title={`${foundCategory}`}
+                          title={`${foundCategoryName}`}
                           id="basic-nav-dropdown"
                           onSelect={onChange}
                         >
@@ -235,7 +237,7 @@ const mapStateToProps = ({ user, categories, navSearchTerms }) => {
 const mapDispatchToProps = dispatch => {
   return {
     logout: () => dispatch(logout()),
-    clearNavSearchTerms: () => dispatch(updateNavSearchValsBasedOnURL('0', ''))
+    clearNavSearchTerms: () => dispatch(updateNavSearchValsBasedOnURL("0", ""))
   };
 };
 

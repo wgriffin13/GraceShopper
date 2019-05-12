@@ -7,7 +7,9 @@ import {
   FormControl,
   Button,
   Row,
-  NavDropdown
+  NavDropdown,
+  NavItem,
+  InputGroup
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
@@ -64,14 +66,16 @@ class Navigation extends Component {
     return (
       <Fragment>
         <Navbar className="mb-2">
-          <Nav className="mr-auto">
-            <Row>
+          <Nav>
+            <Col>
               <Navbar.Brand>Grace Shopper</Navbar.Brand>
-
+            </Col>
+            <Col>
               <Nav.Link as={Link} to="/" onClick={() => clearNavSearchTerms()}>
                 Home
               </Nav.Link>
-
+            </Col>
+            <Col>
               <Nav.Link
                 as={Link}
                 to="/products"
@@ -79,7 +83,8 @@ class Navigation extends Component {
               >
                 Products
               </Nav.Link>
-
+            </Col>
+            <Col>
               {isLoggedIn ? (
                 <NavDropdown
                   // title="Login"
@@ -112,8 +117,9 @@ class Navigation extends Component {
                   </NavDropdown.Item>
                 </NavDropdown>
               )}
+            </Col>
 
-              {/* {user.isAdmin ? (
+            {/* {user.isAdmin ? (
 
                   <Nav.Link as={Link} to="/admin" >
                     admin
@@ -122,44 +128,57 @@ class Navigation extends Component {
               ) : (
                 ''
               )} */}
+
+            <Col>
               <Form>
                 <Button variant="outline-success" as={Link} to="/cart">
                   <i className="fas fa-shopping-cart" />
                 </Button>
               </Form>
-              <Form.Control
-                as="select"
-                variant="outline-secondary"
-                value={categoryId}
-                onChange={onChange}
-                name="categoryId"
-                className="input-group"
-              >
-                <option value="0">All</option>
-                {categories.map(cat => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </option>
-                ))}
-              </Form.Control>
+            </Col>
+            <InputGroup>
+              <InputGroup.Append>
+                <Form>
+                  <Form.Control
+                    as="select"
+                    variant="outline-secondary"
+                    value={categoryId}
+                    onChange={onChange}
+                    name="categoryId"
+                    className="input-group"
+                  >
+                    <option value="0">All</option>
+                    {categories.map(cat => (
+                      <option key={cat.id} value={cat.id}>
+                        {cat.name}
+                      </option>
+                    ))}
+                  </Form.Control>
+                </Form>
+              </InputGroup.Append>
 
-              <FormControl
-                type="text"
-                placeholder="Search By Title"
-                className="mx-sm-2"
-                name="searchTerm"
-                value={searchTerm}
-                onChange={onChange}
-              />
-
-              <Button
-                variant="outline-secondary"
-                onClick={() => searchByTerm()}
-                className="input-group-append"
-              >
-                Search
-              </Button>
-            </Row>
+              <Form>
+                <FormControl
+                  type="text"
+                  placeholder="Search By Title"
+                  className="mx-sm-2"
+                  name="searchTerm"
+                  value={searchTerm}
+                  onChange={onChange}
+                />
+              </Form>
+              <InputGroup.Append>
+                <Form>
+                  <Button
+                    variant="outline-secondary"
+                    onClick={() => searchByTerm()}
+                    className="input-group-btn"
+                  >
+                    Search
+                  </Button>
+                </Form>
+              </InputGroup.Append>
+            </InputGroup>
           </Nav>
         </Navbar>
       </Fragment>

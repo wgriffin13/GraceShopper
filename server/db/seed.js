@@ -25,9 +25,11 @@ const generateReviews = () => {
 const seedReviews = generateReviews();
 
 const seedCategories = [
-  { name: 'Accessories', color: '#eaeb4e' },
+  // { name: "Accessories", color: "#eaeb4e" },
+  { name: 'Accessories', color: '#7cc245' },
   { name: 'Boxing', color: '#9161e8' },
-  { name: 'Cardio', color: '#7cc245' },
+  { name: 'Cardio', color: '#e0e014' },
+  // { name: 'Cardio', color: '#7cc245' },
   { name: 'Pilates', color: '#91c7f9' },
   { name: 'Free weights', color: '#01A4A4' },
   { name: 'Smart fitness', color: '#ee2a82' },
@@ -36,6 +38,58 @@ const seedCategories = [
 ];
 
 const seedUsers = [
+  {
+    username: 'PrestonC',
+    firstname: 'Preston',
+    lastname: 'Chaplin',
+    email: 'preston@email.com',
+    password: '54321',
+    creditcard: '1234 5678 9012 3456',
+    isAdmin: true,
+    street: faker.address.streetAddress(),
+    city: faker.address.city(),
+    state: faker.address.state(),
+    zip: faker.address.zipCode()
+  },
+  {
+    username: 'NelsonG',
+    firstname: 'Nelson',
+    lastname: 'Gedeon',
+    email: 'nelson@email.com',
+    password: '54321',
+    creditcard: '1234 5678 9012 3456',
+    isAdmin: true,
+    street: faker.address.streetAddress(),
+    city: faker.address.city(),
+    state: faker.address.state(),
+    zip: faker.address.zipCode()
+  },
+  {
+    username: 'WillG',
+    firstname: 'William',
+    lastname: 'Griffin',
+    email: 'will@email.com',
+    password: '54321',
+    isAdmin: true,
+    creditcard: '1234 5678 9012 3456',
+    street: faker.address.streetAddress(),
+    city: faker.address.city(),
+    state: faker.address.state(),
+    zip: faker.address.zipCode()
+  },
+  {
+    username: 'RubyB',
+    firstname: 'Ruby',
+    lastname: 'Barry',
+    email: 'ruby@email.com',
+    password: '54321',
+    isAdmin: true,
+    creditcard: '1234 5678 9012 3456',
+    street: faker.address.streetAddress(),
+    city: faker.address.city(),
+    state: faker.address.state(),
+    zip: faker.address.zipCode()
+  },
   {
     username: 'JaneD',
     firstname: 'Jane',
@@ -61,9 +115,9 @@ const seedUsers = [
     zip: faker.address.zipCode()
   },
   {
-    username: 'Preston',
-    firstname: 'Preston',
-    lastname: 'Chaplin',
+    username: 'OwnerO',
+    firstname: 'Owner',
+    lastname: 'Admin',
     email: 'owner@email.com',
     password: '54321',
     isAdmin: true,

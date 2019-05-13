@@ -6,13 +6,8 @@ import {
   Nav,
   Form,
   Button,
-  Row,
   NavDropdown,
-  NavItem,
-  InputGroup,
-  Dropdown,
-  DropdownButton,
-  DropdownItem
+  InputGroup
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -149,7 +144,6 @@ class Navigation extends Component {
                       <Form.Control
                         size="sm"
                         as="select"
-                        // variant="secondary"
                         value={categoryId}
                         onChange={onChange}
                         name="categoryId"
@@ -170,7 +164,6 @@ class Navigation extends Component {
                       size="sm"
                       type="text"
                       placeholder="Search Products"
-                      // className="sm-3"
                       name="searchTerm"
                       value={searchTerm}
                       onChange={onChange}

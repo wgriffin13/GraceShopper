@@ -1,21 +1,13 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import {
-  Accordion,
-  Badge,
-  Button,
-  Card,
-  Col,
-  Row,
-  Table
-} from "react-bootstrap";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { Accordion, Badge, Card, Col, Row, Table } from 'react-bootstrap';
 
 function UserRow(props) {
   const user = props.user;
   const userLink = `/users/${user.id}`;
 
   const getBadge = isAdmin => {
-    return isAdmin ? "success" : "primary";
+    return isAdmin ? 'success' : 'primary';
   };
 
   return (
@@ -31,7 +23,7 @@ function UserRow(props) {
       <td>
         <Link to={userLink}>
           <Badge color={getBadge(user.isAdmin)}>
-            {user.isAdmin ? "Administrator" : "User"}
+            {user.isAdmin ? 'Administrator' : 'User'}
           </Badge>
         </Link>
       </td>

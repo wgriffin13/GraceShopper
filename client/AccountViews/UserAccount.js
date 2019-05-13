@@ -25,7 +25,9 @@ class UserAccount extends Component {
             </Card.Header>
             <Card.Body>
               <Row>
-                <Col>{user.name}</Col>
+                <Col>
+                  {user.firstname} {user.lastname}
+                </Col>
               </Row>
               <Row>
                 <Col>{user.email}</Col>

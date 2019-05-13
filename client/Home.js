@@ -11,7 +11,7 @@ const Home = ({ categories }) => {
   ];
 
   return (
-    <Container className="d-flex-row">
+    <Container className="d-flex flex-column">
       {/* <Row>
         <Col />
         <Col>
@@ -47,10 +47,10 @@ const Home = ({ categories }) => {
           );
         })}
       </Row>
-      <Row>
+      <Row className="align-items-center">
         {dvdUrls.map(image => {
           return (
-            <Col key={image}>
+            <Col key={image} lg={4}>
               <Figure>
                 <Figure.Image
                   width={300}

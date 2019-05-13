@@ -1,6 +1,7 @@
-import React, { Component, Fragment } from "react";
+import React, { Component, Fragment } from 'react';
 import {
   Col,
+  Container,
   Navbar,
   Nav,
   Form,
@@ -12,27 +13,27 @@ import {
   Dropdown,
   DropdownButton,
   DropdownItem
-} from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import { logout, updateNavSearchValsBasedOnURL } from "./store";
+} from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { logout, updateNavSearchValsBasedOnURL } from './store';
 
 class Navigation extends Component {
   constructor(props) {
     super(props);
     if (!props.navSearchTerms.categoryId || !props.navSearchTerms.searchTerm) {
       this.state = {
-        searchTerm: "",
-        categoryId: "0"
+        searchTerm: '',
+        categoryId: '0'
       };
     } else {
       this.state = {
         searchTerm: props.navSearchTerms.searchTerm
           ? props.navSearchTerms.searchTerm
-          : "",
+          : '',
         categoryId: props.navSearchTerms.categoryId
           ? props.navSearchTerms.categoryId
-          : "0"
+          : '0'
       };
     }
   }
@@ -43,19 +44,15 @@ class Navigation extends Component {
       prevProps.navSearchTerms.searchTerm !== navSearchTerms.searchTerm
     ) {
       this.setState({
-        searchTerm: navSearchTerms.searchTerm ? navSearchTerms.searchTerm : "",
-        categoryId: navSearchTerms.categoryId ? navSearchTerms.categoryId : "0"
+        searchTerm: navSearchTerms.searchTerm ? navSearchTerms.searchTerm : '',
+        categoryId: navSearchTerms.categoryId ? navSearchTerms.categoryId : '0'
       });
     }
   }
 
-  foundCategory = catId => {
-    return this.props.categories.find(cat => cat.id === catId);
-  };
-
   logout = () => {
     this.props.logout();
-    this.props.history.push("/");
+    this.props.history.push('/');
   };
   onChange = ev => {
     this.setState({ [ev.target.name]: ev.target.value });
@@ -68,157 +65,130 @@ class Navigation extends Component {
   render() {
     const { searchTerm, categoryId } = this.state;
     const { categories, isLoggedIn, user, clearNavSearchTerms } = this.props;
-    const { onChange, searchByTerm, foundCategory } = this;
-    const foundCategoryName = this.foundCategory(categoryId);
-
-    console.log("categories", categories);
-    console.log("foundCategory", foundCategory);
-    console.log("navSearchTerms", this.props.navSearchTerms);
+    const { onChange, searchByTerm } = this;
 
     return (
       <Fragment>
         <Navbar className="mb-2">
-          <Nav>
-            <Navbar.Brand>Grace Shopper</Navbar.Brand>
+          <Container>
+            <Col>
+              <Nav>
+                <Navbar.Brand>Grace Shopper</Navbar.Brand>
 
-            <Nav.Link as={Link} to="/" onClick={() => clearNavSearchTerms()}>
-              Home
-            </Nav.Link>
+                <Nav.Link
+                  as={Link}
+                  to="/"
+                  onClick={() => clearNavSearchTerms()}
+                >
+                  Home
+                </Nav.Link>
 
-            <Nav.Link
-              as={Link}
-              to="/products"
-              onClick={() => clearNavSearchTerms()}
-            >
-              Products
-            </Nav.Link>
+                <Nav.Link
+                  as={Link}
+                  to="/products"
+                  onClick={() => clearNavSearchTerms()}
+                >
+                  Products
+                </Nav.Link>
+              </Nav>
+            </Col>
 
             {isLoggedIn ? (
-              <NavDropdown
-                // title="Login"
-                title={`${user.username}`}
-                id="basic-nav-dropdown"
-              >
-                <NavDropdown.Item>
-                  <Nav.Link as={Link} to="/user">
-                    my account
-                  </Nav.Link>
-                </NavDropdown.Item>
+              <Fragment>
+                {/* <p style={{ fontSize: 12, fontWeight: 'lighter' }}>
+                  signed in as
+                </p> */}
+                <NavDropdown title={`${user.username}`} id="basic-nav-dropdown">
+                  {user.isAdmin ? (
+                    <NavDropdown.Item>
+                      <Nav.Link as={Link} to="/admin">
+                        admin
+                      </Nav.Link>
+                    </NavDropdown.Item>
+                  ) : (
+                    <NavDropdown.Item>
+                      <Nav.Link as={Link} to="/user">
+                        my account
+                      </Nav.Link>
+                    </NavDropdown.Item>
+                  )}
 
-                <NavDropdown.Item>
-                  <button type="button" onClick={this.logout}>
-                    logout
-                  </button>
-                </NavDropdown.Item>
-              </NavDropdown>
+                  <NavDropdown.Item>
+                    <button type="button" onClick={this.logout}>
+                      logout
+                    </button>
+                  </NavDropdown.Item>
+                </NavDropdown>
+              </Fragment>
             ) : (
-              <NavDropdown title="Login" id="basic-nav-dropdown">
-                <NavDropdown.Item>
-                  <Nav.Link as={Link} to="/login" className="mr-auto">
-                    existing account
-                  </Nav.Link>
-                </NavDropdown.Item>
-                <NavDropdown.Item href="#create">
-                  <Nav.Link as={Link} to="/signup">
-                    create account
-                  </Nav.Link>
-                </NavDropdown.Item>
-              </NavDropdown>
+              <Fragment>
+                <NavDropdown title="login" id="basic-nav-dropdown">
+                  <NavDropdown.Item>
+                    <Nav.Link as={Link} to="/login" className="mr-auto">
+                      existing account
+                    </Nav.Link>
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href="#create">
+                    <Nav.Link as={Link} to="/signup">
+                      create account
+                    </Nav.Link>
+                  </NavDropdown.Item>
+                </NavDropdown>
+              </Fragment>
             )}
 
-            {/* {user.isAdmin ? (
+            <Nav.Link as={Link} to="/cart" style={{ color: '#7cc245' }}>
+              <i className="fas fa-shopping-cart" size="9x" />
+            </Nav.Link>
 
-                  <Nav.Link as={Link} to="/admin" >
-                    admin
-                  </Nav.Link>
-
-              ) : (
-                ''
-              )} */}
-            {/* <Form inline>
-              <InputGroup>
-                <InputGroup.Prepend>
-                  <InputGroup.Text id="basic-addon1">@</InputGroup.Text>
-                </InputGroup.Prepend>
-                <FormControl
-                  placeholder="Username"
-                  aria-label="Username"
-                  aria-describedby="basic-addon1"
-                />
-              </InputGroup>
-            </Form> */}
-
-            <Col lg="5">
-              <div>
-                <Form inline>
+            <Col>
+              <Nav className="justify-content-end">
+                <Form>
                   <InputGroup>
                     <InputGroup.Prepend>
-                      {categoryId === "0" ? (
-                        <DropdownButton
-                          title="All"
-                          id="basic-nav-dropdown"
-                          onSelect={onChange}
-                        >
-                          {/* <Dropdown.Item eventKey="0" title="All">
-                          All
-                        </Dropdown.Item> */}
-                          {categories.map(cat => (
-                            <Dropdown.Item
-                              key={cat.id}
-                              id={cat.id}
-                              name="categoryId"
-                              eventKey={cat.id}
-                            >
-                              {cat.name}
-                            </Dropdown.Item>
-                          ))}
-                        </DropdownButton>
-                      ) : (
-                        <DropdownButton
-                          title={`${foundCategoryName}`}
-                          id="basic-nav-dropdown"
-                          onSelect={onChange}
-                        >
-                          {categories.map(cat => (
-                            <Dropdown.Item
-                              key={cat.id}
-                              id={cat.id}
-                              name={cat.id}
-                              eventKey={cat.id}
-                            >
-                              {cat.name}
-                            </Dropdown.Item>
-                          ))}
-                        </DropdownButton>
-                      )}
+                      <Form.Control
+                        size="sm"
+                        as="select"
+                        // variant="secondary"
+                        value={categoryId}
+                        onChange={onChange}
+                        name="categoryId"
+                      >
+                        <option value="0">All Categories</option>
+                        {categories.map(cat => (
+                          <option
+                            key={cat.id}
+                            value={cat.id}
+                            style={{ backgrounColor: `${cat.color}` }}
+                          >
+                            {cat.name}
+                          </option>
+                        ))}
+                      </Form.Control>
                     </InputGroup.Prepend>
-
                     <Form.Control
+                      size="sm"
                       type="text"
-                      placeholder="Search Product Title"
+                      placeholder="Search Products"
+                      // className="sm-3"
                       name="searchTerm"
                       value={searchTerm}
                       onChange={onChange}
                     />
                     <InputGroup.Append>
                       <Button
-                        variant="info"
-                        onClick={() => searchByTerm()}
                         size="sm"
+                        variant="outline-success"
+                        onClick={() => searchByTerm()}
                       >
                         Search
                       </Button>
                     </InputGroup.Append>
                   </InputGroup>
                 </Form>
-              </div>
+              </Nav>
             </Col>
-            <Col>
-              <Button variant="outline-success" as={Link} to="/cart">
-                <i className="fas fa-shopping-cart" />
-              </Button>
-            </Col>
-          </Nav>
+          </Container>
         </Navbar>
       </Fragment>
     );
@@ -237,7 +207,7 @@ const mapStateToProps = ({ user, categories, navSearchTerms }) => {
 const mapDispatchToProps = dispatch => {
   return {
     logout: () => dispatch(logout()),
-    clearNavSearchTerms: () => dispatch(updateNavSearchValsBasedOnURL("0", ""))
+    clearNavSearchTerms: () => dispatch(updateNavSearchValsBasedOnURL('0', ''))
   };
 };
 

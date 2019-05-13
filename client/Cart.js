@@ -4,8 +4,8 @@ import { Card } from "react-bootstrap";
 import {
   deleteItemSessionCart,
   createSessionCart,
-  fetchUserOrders,
-  updateQuantity
+  updateQuantity,
+  deleteItemPendingOrder
 } from "./store";
 import axios from "axios";
 
@@ -21,17 +21,17 @@ class Cart extends Component {
 
   componentDidMount() {
     if (this.props.user.id && this.props.currentOrder) {
-      this.setState({ cart: this.props.currentOrder });
-    } else if (this.props.user.id && !this.props.currentOrder) {
-      this.props.fetchUserOrders(this.props.user.id);
-    } else if (this.props.sessionCart.sessionCartId) {
+      if (this.props.currentOrder.id) {
+        this.setState({ cart: this.props.currentOrder });
+      }
+    }  else if (!this.props.user.id && this.props.sessionCart.sessionCartId) {
       this.setState({ cart: this.props.sessionCart });
     }
   }
 
   componentDidUpdate(prevProps) {
     if (this.props !== prevProps) {
-      if (this.props.user.id) {
+      if (this.props.user.id && this.props.currentOrder) {
         this.setState({ cart: this.props.currentOrder });
       } else if (this.props.sessionCart.sessionCartId) {
         this.setState({ cart: this.props.sessionCart });
@@ -73,12 +73,9 @@ class Cart extends Component {
           this.setState({ warningMessage: "" });
           // Check for user's pending order
           if (this.props.user.id && this.props.currentOrder) {
-            console.log(this.state.cart);
-            console.log(this.state.lineitems);
             const lineItem = this.state.cart.lineitems.find(
               item => item.productId === parseInt(productId, 10)
             );
-            console.log(lineItem);
             this.props.updateQuantity(
               lineItem.id,
               parseInt(this.state.lineitems[productId], 10)
@@ -105,6 +102,22 @@ class Cart extends Component {
         }
       });
   };
+
+  handleDelete = (productId) => {
+    if (this.props.user.id && this.props.currentOrder) {
+      const lineItem = this.state.cart.lineitems.find(
+        item => item.productId === parseInt(productId, 10)
+      );
+      this.props.deleteItemPendingOrder(lineItem.id)
+        .then( () => {
+          const tempCart = this.state.cart;
+          tempCart.lineitems = tempCart.lineitems.filter(item => item.id !== lineItem.id);
+          this.setState({cart: tempCart});
+        })
+    } else {
+      this.props.requestDeleteItemSessionCart(productId);
+    }
+  }
 
   handleChange = evt => {
     const templineitems = this.state.lineitems;
@@ -193,21 +206,17 @@ class Cart extends Component {
                                 this.updateQuantity(item.productId)
                               }
                             >
-                              <i className="fas fa-sync" aria-hidden="true" />
+                              <i className="fas fa-sync" />
                             </button>
                             <button
                               type="button"
                               className="btn btn-danger btn-sm mt-3 mr-2"
                               id={item.productId}
-                              onClick={() =>
-                                this.props.requestDeleteItemSessionCart(
-                                  item.productId
-                                )
+                              onClick={ () => this.handleDelete(item.productId)
                               }
                             >
                               <i
                                 className="fas fa-trash-alt"
-                                aria-hidden="true"
                               />
                             </button>
                           </div>
@@ -258,9 +267,7 @@ class Cart extends Component {
                   type="button"
                   className="btn btn-success"
                   onClick={() =>
-                    this.props.history.push(
-                      `/orders/${this.props.currentOrder.id}`
-                    )
+                    this.props.history.push('/checkout')
                   }
                 >
                   Checkout{" ->"}
@@ -279,6 +286,7 @@ const mapStateToProps = ({ user, sessionCart, orders }) => {
   return {
     user,
     sessionCart,
+    orders,
     currentOrder: orders.find(order => order.status === "pending")
   };
 };
@@ -289,8 +297,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(deleteItemSessionCart(productId)),
     requestCreateSessionCart: sessionCart =>
       dispatch(createSessionCart(sessionCart)),
-    fetchUserOrders: id => dispatch(fetchUserOrders(id)),
-    updateQuantity: (id, quantity) => dispatch(updateQuantity(id, quantity))
+    updateQuantity: (id, quantity) => dispatch(updateQuantity(id, quantity)),
+    deleteItemPendingOrder: id => dispatch(deleteItemPendingOrder(id))
   };
 };
 

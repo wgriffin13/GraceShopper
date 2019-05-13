@@ -2,7 +2,14 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Button, Card, Form } from 'react-bootstrap';
 
-import { loginAttempt, fetchUserOrders } from './store';
+// import { loginAttempt, fetchUserOrders } from './store';
+import {
+  loginAttempt,
+  createPendingOrder,
+  addToCart,
+  updateQuantity,
+  fetchUserOrders
+} from './store';
 
 class Login extends Component {
   constructor() {
@@ -43,6 +50,67 @@ class Login extends Component {
           },
           () => console.log(this.state)
         ));
+  };
+
+  handleChange = evt => {
+    this.setState(
+      {
+        [evt.target.name]: evt.target.value
+      },
+      () => console.log(this.state)
+    );
+  };
+  handleSubmit = evt => {
+    evt.preventDefault();
+    this.props
+      .login({
+        email: this.state.email,
+        password: this.state.password
+      })
+      .then(user => {
+        if (user.id) {
+          this.props.requestFetchUserOrders(user.id).then(orders => {
+            if (this.props.sessionCart) {
+              const pendingOrder = orders.find(
+                order => order.status === 'pending'
+              );
+              this.dealWithSessionCart(pendingOrder, user);
+            }
+          });
+          this.props.history.push('/');
+        }
+      })
+      .catch(error =>
+        this.setState(
+          {
+            error,
+            email: '',
+            password: ''
+          },
+          () => console.log(this.state)
+        ));
+  };
+  dealWithSessionCart = async (pendingOrder, user) => {
+    if (!pendingOrder) {
+      pendingOrder = await this.props.createPendingOrder({
+        userId: user.id,
+        status: 'pending'
+      });
+    }
+    this.props.sessionCart.lineitems.forEach(item =>
+      this.dealWithCartItems(item, pendingOrder));
+  };
+  dealWithCartItems = (item, pendingOrder) => {
+    const existingli = pendingOrder.lineitems.find(
+      li => li.productId === item.productId
+    );
+    if (existingli) {
+      const newQuant = existingli.quantity + item.quantity;
+      this.props.updateQuantity(existingli.id, newQuant);
+    } else {
+      item.orderId = pendingOrder.id;
+      this.props.addToCart(item);
+    }
   };
   render() {
     const { email, password, error } = this.state;
@@ -103,14 +171,24 @@ class Login extends Component {
   }
 }
 
+const mapStateToProps = ({ sessionCart, orders }) => {
+  return {
+    sessionCart,
+    pendingOrder: orders.find(order => order.status === 'pending')
+  };
+};
+
 const mapDispatchToProps = dispatch => {
   return {
     login: user => dispatch(loginAttempt(user)),
-    requestFetchUserOrders: userId => dispatch(fetchUserOrders(userId))
+    requestFetchUserOrders: userId => dispatch(fetchUserOrders(userId)),
+    createPendingOrder: order => dispatch(createPendingOrder(order)),
+    addToCart: item => dispatch(addToCart(item)),
+    updateQuantity: (id, quant) => dispatch(updateQuantity(id, quant))
   };
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(Login);

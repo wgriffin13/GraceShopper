@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import {
+  Button,
   Col,
   Container,
   Navbar,
   Nav,
   Form,
-  Button,
   NavDropdown,
   InputGroup
 } from 'react-bootstrap';
@@ -80,33 +80,37 @@ class Navigation extends Component {
                 </Navbar.Brand>
               </Col>
               <Col>
-                <Nav.Link
-                  as={Link}
-                  to="/"
-                  onClick={() => clearNavSearchTerms()}
-                  style={{
-                    marginTop: '12px',
-                    marginLeft: '8px',
-                    color: '#00A1CB',
-                    fontSize: '18px'
-                  }}
-                >
-                  Home
-                </Nav.Link>
+                <Nav.Item>
+                  <Nav.Link
+                    as={Link}
+                    to="/"
+                    onClick={() => clearNavSearchTerms()}
+                    style={{
+                      marginTop: '12px',
+                      marginLeft: '8px',
+                      color: '#00A1CB',
+                      fontSize: '20px'
+                    }}
+                  >
+                    Home
+                  </Nav.Link>
+                </Nav.Item>
               </Col>
               <Col>
-                <Nav.Link
-                  style={{
-                    marginTop: '12px',
-                    color: '#00A1CB',
-                    fontSize: '18px'
-                  }}
-                  as={Link}
-                  to="/products"
-                  onClick={() => clearNavSearchTerms()}
-                >
-                  Products
-                </Nav.Link>
+                <Nav.Item>
+                  <Nav.Link
+                    style={{
+                      marginTop: '12px',
+                      color: '#00A1CB',
+                      fontSize: '20px'
+                    }}
+                    as={Link}
+                    to="/products"
+                    onClick={() => clearNavSearchTerms()}
+                  >
+                    Products
+                  </Nav.Link>
+                </Nav.Item>
               </Col>
               <Col>
                 {isLoggedIn ? (
@@ -121,22 +125,22 @@ class Navigation extends Component {
                       }}
                     >
                       {user.isAdmin ? (
-                        <NavDropdown.Item>
+                        <Nav.Item>
                           <Nav.Link as={Link} to="/admin">
                             admin
                           </Nav.Link>
-                        </NavDropdown.Item>
+                        </Nav.Item>
                       ) : (
-                        <NavDropdown.Item>
+                        <Nav.Item>
                           <Nav.Link as={Link} to="/user">
                             my account
                           </Nav.Link>
-                        </NavDropdown.Item>
+                        </Nav.Item>
                       )}
 
-                      <NavDropdown.Item>
+                      <Nav.Item>
                         <Nav.Link onClick={this.logout}>logout</Nav.Link>
-                      </NavDropdown.Item>
+                      </Nav.Item>
                     </NavDropdown>
                   </Fragment>
                 ) : (
@@ -146,32 +150,34 @@ class Navigation extends Component {
                       id="basic-nav-dropdown"
                       style={{ marginTop: '14px', fontColor: '' }}
                     >
-                      <NavDropdown.Item>
+                      <Nav.Item>
                         <Nav.Link as={Link} to="/login" className="mr-auto">
                           sign in
                         </Nav.Link>
-                      </NavDropdown.Item>
-                      <NavDropdown.Item href="#create">
+                      </Nav.Item>
+                      <Nav.Item href="#create">
                         <Nav.Link as={Link} to="/signup">
                           create new account
                         </Nav.Link>
-                      </NavDropdown.Item>
+                      </Nav.Item>
                     </NavDropdown>
                   </Fragment>
                 )}
               </Col>
               <Col>
-                <Nav.Link
-                  as={Link}
-                  to="/cart"
-                  style={{ marginTop: '14px', marginRight: '10px' }}
-                >
-                  <i
-                    className="fas fa-shopping-cart"
-                    size="9x"
-                    style={{ color: '#7cc245' }}
-                  />
-                </Nav.Link>
+                <Nav.Item>
+                  <Nav.Link
+                    as={Link}
+                    to="/cart"
+                    style={{ marginTop: '14px', marginRight: '10px' }}
+                  >
+                    <i
+                      className="fas fa-shopping-cart"
+                      size="9x"
+                      style={{ color: '#7cc245' }}
+                    />
+                  </Nav.Link>
+                </Nav.Item>
               </Col>
 
               <Col lg="5" className="justify-content-right">
@@ -191,7 +197,7 @@ class Navigation extends Component {
                             <option
                               key={cat.id}
                               value={cat.id}
-                              style={{ backgrounColor: `${cat.color}` }}
+                              style={{ co: `${cat.color}` }}
                             >
                               {cat.name}
                             </option>

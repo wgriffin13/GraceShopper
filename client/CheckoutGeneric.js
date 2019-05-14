@@ -52,7 +52,8 @@ class CheckoutGeneric extends Component {
         state: ''
       },
       savedShipping: false,
-      cart: {}
+      cart: {},
+      warningMessage: ''
     };
   }
 
@@ -165,43 +166,71 @@ class CheckoutGeneric extends Component {
     });
   };
 
-  completePurchase = () => {
-    if (this.state.cart.id) {
-      console.log('Logged in order');
-      axios
-        .put(`/api/orders/${this.state.cart.id}`)
-        .then(() => this.props.fetchUserOrders(this.state.billingInfo.id))
-        .then(() => this.props.history.push('/checkout/success'));
-    } else {
-      console.log('Session cart');
-      axios
-        .post('/api/users', {
-          ...this.state.billingInfo,
-          username: this.state.billingInfo.email,
-          isAdmin: false
+
+  quantityValidation = () => {
+    const quantityArray = [];
+    axios.get('/api/products')
+      .then(response => {
+        this.state.cart.lineitems.forEach(item => {
+          const product = response.data.find(p => parseInt(p.id, 10) === parseInt(item.productId, 10))
+          if ((product.quantity - item.quantity) < 0) {
+            return false;
+          } else {
+            quantityArray.push({ ...product, quantity: parseInt(product.quantity, 10) - parseInt(item.quantity, 10) });
+          }
         })
-        .then(response => {
-          const user = response.data;
+        quantityArray.forEach(product => axios.put(`/api/products/${product.id}`, product))
+      })
+  }
+
+  completePurchase = () => {
+    const qtyCheck = this.quantityValidation();
+    if (qtyCheck !== false) {
+      if (this.state.savedBilling === true && this.state.savedShipping === true) {
+        this.setState({warningMessage: ''})
+        if (this.state.cart.id) {
+          console.log('Logged in order');
           axios
-            .post(`/api/orders/user/${user.id}`, {
-              ...this.state.cart,
-              userId: user.id,
-              status: 'purchased'
-            })
-            .then(orderData => {
-              const order = orderData.data;
-              this.state.cart.lineitems.forEach(item => {
-                axios.post(`/api/orders/${order.id}`, {
-                  ...item,
-                  orderId: order.id
-                });
+            .put(`/api/orders/${this.state.cart.id}`)
+            .then(() => this.props.fetchUserOrders(this.state.billingInfo.id))
+            .then(() => this.props.history.push('/checkout/success'));
+            console.log('Session cart');
+        } else {
+            axios
+              .post('/api/users', {
+                ...this.state.billingInfo,
+                username: this.state.billingInfo.email,
+                isAdmin: false
+              })
+              .then(response => {
+                const user = response.data;
+                axios
+                  .post(`/api/orders/user/${user.id}`, {
+                    ...this.state.cart,
+                    userId: user.id,
+                    status: 'purchased'
+                  })
+                  .then(orderData => {
+                    const order = orderData.data;
+                    this.state.cart.lineitems.forEach(item => {
+                      axios.post(`/api/orders/${order.id}`, {
+                        ...item,
+                        orderId: order.id
+                      });
+                    });
+                    
+                    this.props.login(user);
+                    this.props.requestCreateSessionCart({});
+                    this.props.fetchUserOrders(user.id);
+                    this.props.history.push('/checkout/success');
+                  });
               });
-              this.props.login(user);
-              this.props.requestCreateSessionCart({});
-              this.props.fetchUserOrders(user.id);
-              this.props.history.push('/checkout/success');
-            });
-        });
+            }
+      } else {
+        this.setState({warningMessage: 'Please save billing and shipping information before proceeding.'})
+      }
+    } else {
+      this.setState({warningMessage: 'Cannot complete purchase with quantity of items in the cart. Please edit the product quantities before proceeding'});
     }
   };
 
@@ -657,6 +686,13 @@ class CheckoutGeneric extends Component {
                     </Collapse>
                   </div>
                 </div>
+                {this.state.warningMessage !== "" ? (
+                  <div className="alert alert-warning" role="alert">
+                    {this.state.warningMessage}
+                  </div>
+                ) : (
+                  ""
+                )}
               </CardBody>
               <CardFooter>
                 <Button

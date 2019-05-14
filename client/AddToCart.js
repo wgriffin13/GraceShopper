@@ -114,7 +114,6 @@ class AddToCartButton extends Component {
           size="sm"
         >
           <i className="fas fa-cart-arrow-down" />
-          {/* <i className="fas fa-shopping-cart" /> */}
         </Button>
       </Col>
     );

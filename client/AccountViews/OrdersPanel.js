@@ -73,9 +73,11 @@ const OrdersPanel = props => {
                             ))}
                           </td>
                           <td>{calculateOrderTotal(order)}</td>
-                          <Badge variant={getBadge(order.status)} size="lg">
-                            {order.status.toUpperCase()}
-                          </Badge>
+                          <td>
+                            <Badge variant={getBadge(order.status)} size="lg">
+                              {order.status.toUpperCase()}
+                            </Badge>
+                          </td>
                         </tr>
                       ))
                     : null}

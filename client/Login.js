@@ -7,7 +7,8 @@ import {
   createPendingOrder,
   addToCart,
   updateQuantity,
-  fetchUserOrders
+  fetchUserOrders,
+  deleteItemSessionCart
 } from './store';
 
 class Login extends Component {
@@ -105,10 +106,12 @@ class Login extends Component {
     );
     if (existingli) {
       const newQuant = existingli.quantity + item.quantity;
-      this.props.updateQuantity(existingli.id, newQuant);
+      this.props.updateQuantity(existingli.id, newQuant)
+        .then( () => this.props.deleteItemSessionCart(item.productId));
     } else {
       item.orderId = pendingOrder.id;
-      this.props.addToCart(item);
+      this.props.addToCart(item)
+      .then( () => this.props.deleteItemSessionCart(item.productId));
     }
   };
   render() {
@@ -183,7 +186,8 @@ const mapDispatchToProps = dispatch => {
     requestFetchUserOrders: userId => dispatch(fetchUserOrders(userId)),
     createPendingOrder: order => dispatch(createPendingOrder(order)),
     addToCart: item => dispatch(addToCart(item)),
-    updateQuantity: (id, quant) => dispatch(updateQuantity(id, quant))
+    updateQuantity: (id, quant) => dispatch(updateQuantity(id, quant)),
+    deleteItemSessionCart: (id) => dispatch(deleteItemSessionCart(id))
   };
 };
 

@@ -28,7 +28,7 @@ class Admin extends Component {
 
   render() {
     const { products, users, user, orders } = this.props;
-
+    if (user.id){
     return (
       <Accordion>
         <Card className="my-3">
@@ -69,7 +69,10 @@ class Admin extends Component {
         <br />
       </Accordion>
     );
+  } else {
+    return <div>Oop! You may not have permission to view this page.</div>
   }
+}
 }
 const mapStateToProps = ({ products, users, user, orders }) => {
   return {

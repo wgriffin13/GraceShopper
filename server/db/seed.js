@@ -243,7 +243,7 @@ const seedProducts = [
       "Coreplus reformer resistance band with four loops and comfort-cushion grips. Full length 45-Minute coreplus reformer workout DVD"
   },
   {
-    title: "Stamina AeroPilates Pro Reformer",
+    title: "AeroPilates Pro Reformer",
     categoryId: 4,
     price: 750.0,
     quantity: 3,
@@ -323,12 +323,12 @@ const seedProducts = [
     price: 90.0,
     quantity: 7,
     imageUrl:
-      "https://images-na.ssl-images-amazon.com/images/I/91KT6PEnEWL._SX679_.jpg",
+      "https://images-na.ssl-images-amazon.com/images/I/71HBtDEAgEL._SX679_.jpg",
     detailImages: [
       "https://images-na.ssl-images-amazon.com/images/I/91KT6PEnEWL._SX679_.jpg",
       "https://images-na.ssl-images-amazon.com/images/I/71HmY5EUU4L._SX679_.jpg",
       "https://images-na.ssl-images-amazon.com/images/I/81v2x8IEw2L._SX679_.jpg",
-      "https://images-na.ssl-images-amazon.com/images/I/71HBtDEAgEL._SX679_.jpg",
+      "https://images-na.ssl-images-amazon.com/images/I/91KT6PEnEWL._SX679_.jpg",
       "https://images-na.ssl-images-amazon.com/images/I/51b2tHlKJAL._SX679_.jpg"
     ],
     description:

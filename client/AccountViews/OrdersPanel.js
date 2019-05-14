@@ -1,16 +1,26 @@
 import React from 'react';
 import {
   Accordion,
+  Badge,
   Button,
   Card,
   Col,
-  Pagination,
   Table,
   Row
 } from 'react-bootstrap';
 
 const OrdersPanel = props => {
   const orders = props.orders;
+
+  const getBadge = status => {
+    const colorKey = {
+      cancelled: 'danger',
+      pending: 'warning',
+      purchased: 'success',
+      shipped: 'info'
+    };
+    return colorKey[status];
+  };
 
   const calculateOrderTotal = order => {
     return order.lineitems.reduce((acc, item) => {
@@ -63,21 +73,14 @@ const OrdersPanel = props => {
                             ))}
                           </td>
                           <td>{calculateOrderTotal(order)}</td>
-                          <td>{order.status}</td>
+                          <Badge variant={getBadge(order.status)} size="lg">
+                            {order.status.toUpperCase()}
+                          </Badge>
                         </tr>
                       ))
                     : null}
                 </tbody>
               </Table>
-
-              {/* <Pagination>
-                <Pagination.Prev />
-                <Pagination.Item>1</Pagination.Item>
-                <Pagination.Item>2</Pagination.Item>
-                <Pagination.Item>3</Pagination.Item>
-                <Pagination.Item>4</Pagination.Item>
-                <Pagination.Next />
-              </Pagination> */}
             </Card.Body>
           </Accordion.Collapse>
         </Card>

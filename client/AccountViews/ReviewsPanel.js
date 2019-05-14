@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Accordion,
   Button,
@@ -7,13 +7,11 @@ import {
   Image,
   Table,
   Row
-} from "react-bootstrap";
-import Ratings from "../Ratings";
+} from 'react-bootstrap';
+import Ratings from '../Ratings';
 
 const ReviewsPanel = ({ reviews, user }) => {
   const userReviews = reviews.filter(rev => rev.userId === user.id);
-
-  // console.log("userReviews in reviewsPanel", userReviews);
 
   return (
     <Row>
@@ -27,13 +25,6 @@ const ReviewsPanel = ({ reviews, user }) => {
           <Accordion.Collapse eventKey="1">
             <Card.Body>
               <Table hover bordered striped responsive size="sm">
-                {/* <thead>
-                  <tr>
-                    <th>Product</th>
-                    <th>Stars</th>
-                    <th>Review</th>
-                  </tr>
-                </thead> */}
                 <tbody>
                   {userReviews.map(review => (
                     <tr key={review.id}>

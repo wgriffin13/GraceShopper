@@ -155,9 +155,9 @@ class CheckoutGeneric extends Component {
   completePurchase = () => {
     if (this.state.cart.id) {
       console.log('Logged in order');
-      axios.put(`/api/orders/${this.state.cart.id}`);
-      this.props.fetchUserOrders(this.state.billingInfo.id);
-      this.props.history.push('/checkout/success');
+      axios.put(`/api/orders/${this.state.cart.id}`)
+        .then( () => this.props.fetchUserOrders(this.state.billingInfo.id))
+        .then( () => this.props.history.push('/checkout/success'));
     } else {
       console.log('Session cart')
       axios.post('/api/users', { ...this.state.billingInfo, username: this.state.billingInfo.email, isAdmin: false })

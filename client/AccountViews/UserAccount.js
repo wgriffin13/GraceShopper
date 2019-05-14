@@ -13,7 +13,7 @@ class UserAccount extends Component {
   render() {
     const { user, orders, reviews } = this.props;
 
-    if (user) {
+    if (user.id) {
       return (
         <Accordion>
           <Card>

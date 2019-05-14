@@ -7,8 +7,7 @@ import {
   Form,
   Button,
   NavDropdown,
-  InputGroup,
-  Row
+  InputGroup
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -66,7 +65,6 @@ class Navigation extends Component {
     return (
       <Fragment>
         <Navbar style={{ padding: 0 }}>
-          {/* <Navbar className="mb-2"> */}
           <Container>
             <Nav>
               <Col>
@@ -80,18 +78,6 @@ class Navigation extends Component {
                   <span style={{ color: '#9161e8' }}>Grace</span>
                   <span style={{ color: '#01A4A4' }}>Shopper</span>
                 </Navbar.Brand>
-                {/* <Navbar.Brand>Grace Shopper</Navbar.Brand> */}
-
-                {/* <Navbar.Brand as="h1">
-                  <span style={{ color: '#9161e8' }}>Grace </span>
-                  <span style={{ color: '#01A4A4' }}>S</span>
-                  <span style={{ color: '#00A1CB' }}>h</span>
-                  <span style={{ color: '#ee2a82' }}>o</span>
-                  <span style={{ color: '#91c7f9' }}>p</span>
-                  <span style={{ color: '#e0e014' }}>p</span>
-                  <span style={{ color: '#f46854' }}>e</span>
-                  <span style={{ color: '#7cc245' }}>r</span>
-                </Navbar.Brand> */}
               </Col>
               <Col>
                 <Nav.Link
@@ -112,7 +98,7 @@ class Navigation extends Component {
                 <Nav.Link
                   style={{
                     marginTop: '12px',
-                    color: '#ee2a82',
+                    color: '#00A1CB',
                     fontSize: '18px'
                   }}
                   as={Link}
@@ -125,13 +111,14 @@ class Navigation extends Component {
               <Col>
                 {isLoggedIn ? (
                   <Fragment>
-                    {/* <p style={{ fontSize: 12, fontWeight: 'lighter' }}>
-                  signed in as
-                </p> */}
                     <NavDropdown
                       title={`${user.username}`}
                       id="basic-nav-dropdown"
-                      style={{ marginTop: '15px', fontSize: '14px' }}
+                      style={{
+                        marginTop: '15px',
+                        fontSize: '14px',
+                        textColor: '#ee2a82'
+                      }}
                     >
                       {user.isAdmin ? (
                         <NavDropdown.Item>
@@ -149,9 +136,6 @@ class Navigation extends Component {
 
                       <NavDropdown.Item>
                         <Nav.Link onClick={this.logout}>logout</Nav.Link>
-                        {/* <button type="button" onClick={this.logout}>
-                      logout
-                    </button> */}
                       </NavDropdown.Item>
                     </NavDropdown>
                   </Fragment>
@@ -160,7 +144,7 @@ class Navigation extends Component {
                     <NavDropdown
                       title="login"
                       id="basic-nav-dropdown"
-                      style={{ marginTop: '14px' }}
+                      style={{ marginTop: '14px', fontColor: '' }}
                     >
                       <NavDropdown.Item>
                         <Nav.Link as={Link} to="/login" className="mr-auto">

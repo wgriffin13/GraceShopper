@@ -4,21 +4,15 @@ import {
   Card,
   Container,
   Col,
-  Figure,
   Row,
   Pagination,
   PageItem
 } from 'react-bootstrap';
-import {
-  updateNavSearchValsBasedOnURL,
-  createPendingOrder,
-  addToCart,
-  createSessionCart,
-  setSessionCart
-} from './store';
+import { updateNavSearchValsBasedOnURL } from './store';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import Ratings from './Ratings';
+import AddToCartButton from './AddToCart';
 
 class Products extends Component {
   constructor(props) {
@@ -159,6 +153,7 @@ class Products extends Component {
     for (let i = 0; i <= pages; ++i) {
       pageFlip.push(i);
     }
+
     return (
       <Fragment>
         <Container className="d-flex flex-column">
@@ -167,12 +162,6 @@ class Products extends Component {
           <Col>
             <Row className="justify-content-center h-10">
               <Pagination>
-                {/* <PageItem
-                disabled={first ? 'disabled' : ''}
-                onClick={() => pageChange(current - current)}
-              >
-                <i className="fas fa-angle-double-left" />
-              </PageItem> */}
                 <PageItem
                   disabled={first ? 'disabled' : ''}
                   onClick={() => pageChange(current - 1)}
@@ -195,12 +184,6 @@ class Products extends Component {
                 >
                   <i className="fas fa-angle-right" />
                 </PageItem>
-                {/* <PageItem
-                disabled={last ? 'disabled' : ''}
-                onClick={() => pageChange(pages)}
-              >
-                <i className="fas fa-angle-double-right" />
-              </PageItem> */}
               </Pagination>
             </Row>
           </Col>
@@ -214,7 +197,7 @@ class Products extends Component {
                       key={product.id}
                       style={{
                         width: '15rem',
-                        height: '26rem',
+                        height: '27.5rem',
                         borderWidth: '2px',
                         boxShadow: '4px 5px 14px 4px rgba(0, 0, 0, 0.2)',
                         borderColor: `${
@@ -283,13 +266,17 @@ class Products extends Component {
                                 height: '100px'
                               }}
                             >
-                              <Row className="align-items-center h-100">
+                              <Row className="align-items-center h-50">
                                 <Col className="col-12 mx-auto">
                                   <Card.Text className="text-center">
                                     {product.title}
                                   </Card.Text>
                                   <Card.Text className="text-center">
                                     <Ratings rating={averageRating(product)} />
+                                  </Card.Text>
+                                  <Card.Text className="text-center">
+                                    ${product.price}
+                                    <span> / {product.quantity} inStock</span>
                                   </Card.Text>
                                 </Col>
                               </Row>
@@ -298,17 +285,20 @@ class Products extends Component {
                         </Container>
                       </Card.Body>
                       <Card.Footer
-                        className="text-center text-white"
                         style={{
+                          padding: 2,
                           backgroundColor: `${
                             product && categories.length
                               ? findCategory(product, categories).color
                               : 'white'
                           }`
                         }}
+                        className="text-center"
                       >
-                        ${product.price}
-                        <span> / {product.quantity} inStock</span>
+                        <AddToCartButton
+                          product={product}
+                          history={this.props.history}
+                        />
                       </Card.Footer>
                     </Card>
                   </Col>

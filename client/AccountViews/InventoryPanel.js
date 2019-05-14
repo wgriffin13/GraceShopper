@@ -31,6 +31,7 @@ const InventoryPanel = props => {
                     <th>Price</th>
                     <th>Category</th>
                     <th>Quantity</th>
+                    <th>Status</th>
                   </tr>
                 </thead>
                 <tbody>

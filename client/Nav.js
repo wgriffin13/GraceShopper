@@ -109,9 +109,10 @@ class Navigation extends Component {
                   )}
 
                   <NavDropdown.Item>
-                    <button type="button" onClick={this.logout}>
+                    <Nav.Link onClick={this.logout}>logout</Nav.Link>
+                    {/* <button type="button" onClick={this.logout}>
                       logout
-                    </button>
+                    </button> */}
                   </NavDropdown.Item>
                 </NavDropdown>
               </Fragment>
@@ -120,12 +121,12 @@ class Navigation extends Component {
                 <NavDropdown title="login" id="basic-nav-dropdown">
                   <NavDropdown.Item>
                     <Nav.Link as={Link} to="/login" className="mr-auto">
-                      existing account
+                      sign in
                     </Nav.Link>
                   </NavDropdown.Item>
                   <NavDropdown.Item href="#create">
                     <Nav.Link as={Link} to="/signup">
-                      create account
+                      create new account
                     </Nav.Link>
                   </NavDropdown.Item>
                 </NavDropdown>

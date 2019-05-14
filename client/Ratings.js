@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment } from 'react';
 
 const Ratings = ({ rating, starSize }) => {
   const generateStars = () => {
@@ -17,20 +17,19 @@ const Ratings = ({ rating, starSize }) => {
   return (
     <Fragment>
       {generateStars().map((star, idx) =>
-        star ? (
+        (star ? (
           <i
             key={idx}
             className={`fas fa-star ${starSize}`}
-            style={{ color: "yellow" }}
+            style={{ color: "#f9c914" }}
           />
         ) : (
           <i
             key={idx}
             className={`far fa-star ${starSize}`}
-            style={{ color: "yellow" }}
+            style={{ color: "#f9c914" }}
           />
-        )
-      )}
+        )))}
     </Fragment>
   );
 };

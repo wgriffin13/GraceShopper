@@ -8,7 +8,8 @@ import {
   createPendingOrder,
   addToCart,
   createSessionCart,
-  setSessionCart
+  setSessionCart,
+  updateQuantity
 } from './store';
 
 class ProductDetail extends Component {
@@ -65,6 +66,12 @@ class ProductDetail extends Component {
   };
 
   addToCartOrder = order => {
+    const existingli = this.props.order.lineitems.find(li => li.productId === this.props.match.params.id * 1);
+    if (existingli) {
+      const newQuant = existingli.quantity + 1;
+      this.props.updateQuantity(existingli.id, newQuant)
+        .then( () => this.props.history.push('/cart'));
+    } else {
     this.props
       .addToCart({
         orderId: order.id,
@@ -74,6 +81,7 @@ class ProductDetail extends Component {
         netTotalCost: this.displayProduct().price
       })
       .then(() => this.props.history.push('/cart'));
+    }
   };
 
   handleAddToCartLoggedIn = () => {
@@ -295,7 +303,8 @@ const mapDispatchToProps = dispatch => {
     addToCart: item => dispatch(addToCart(item)),
     requestCreateSessionCart: sessionCart =>
       dispatch(createSessionCart(sessionCart)),
-    requestUpdateCart: sessionCart => dispatch(setSessionCart(sessionCart))
+    requestUpdateCart: sessionCart => dispatch(setSessionCart(sessionCart)),
+    updateQuantity: (id, quantity) => dispatch(updateQuantity(id, quantity))
   };
 };
 

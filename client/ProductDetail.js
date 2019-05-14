@@ -1,27 +1,27 @@
-import React, { Component, Fragment } from "react";
-import { Button, Card, Col, Container, Row } from "react-bootstrap";
-import { connect } from "react-redux";
-import ProductImages from "./ProductImages";
-import Ratings from "./Ratings";
-import Reviews from "./Reviews";
+import React, { Component, Fragment } from 'react';
+import { Button, Card, Col, Container, Row } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import ProductImages from './ProductImages';
+import Ratings from './Ratings';
+import Reviews from './Reviews';
 import {
   createPendingOrder,
   addToCart,
   createSessionCart,
   setSessionCart
-} from "./store";
+} from './store';
 
 class ProductDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      displayImage: ""
+      displayImage: ''
     };
   }
 
   componentDidMount() {
     if (
-      this.props.match.params.id !== localStorage.getItem("matchParams") &&
+      this.props.match.params.id !== localStorage.getItem('matchParams') &&
       this.props.products.length
     ) {
       this.setState({
@@ -33,8 +33,8 @@ class ProductDetail extends Component {
   }
 
   hydrateStateWithLocalStorage = () => {
-    if (localStorage.hasOwnProperty("displayImage")) {
-      let value = localStorage.getItem("displayImage");
+    if (localStorage.hasOwnProperty('displayImage')) {
+      let value = localStorage.getItem('displayImage');
       try {
         value = JSON.parse(value);
         this.setState({ displayImage: value });
@@ -47,8 +47,8 @@ class ProductDetail extends Component {
   handleClick = event => {
     event.preventDefault();
     this.setState({ displayImage: event.target.src });
-    localStorage.setItem("displayImage", JSON.stringify(event.target.src));
-    localStorage.setItem("matchParams", this.props.match.params.id);
+    localStorage.setItem('displayImage', JSON.stringify(event.target.src));
+    localStorage.setItem('matchParams', this.props.match.params.id);
   };
 
   displayProduct = () => {
@@ -73,7 +73,7 @@ class ProductDetail extends Component {
         orderPrice: this.displayProduct().price,
         netTotalCost: this.displayProduct().price
       })
-      .then(() => this.props.history.push("/cart"));
+      .then(() => this.props.history.push('/cart'));
   };
 
   handleAddToCartLoggedIn = () => {
@@ -84,7 +84,7 @@ class ProductDetail extends Component {
       this.props
         .createPendingOrder({
           userId: user.id,
-          status: "pending"
+          status: 'pending'
         })
         .then(newOrder => {
           this.addToCartOrder(newOrder);
@@ -95,7 +95,7 @@ class ProductDetail extends Component {
   initSessionCart = (product, qty) => {
     return {
       sessionCartId: 1,
-      status: "pending",
+      status: 'pending',
       lineitems: [
         {
           quantity: qty,
@@ -143,7 +143,7 @@ class ProductDetail extends Component {
       this.handleAddToCartLoggedIn();
     } else if (this.props.sessionCart.sessionCartId) {
       // Session cart exists -> updates quantity or adds line item
-      console.log("Session cart exists: " + this.props.sessionCart);
+      console.log('Session cart exists: ' + this.props.sessionCart);
       this.updateSessionCart(product, quantity);
     } else {
       // Create a session cart
@@ -151,7 +151,7 @@ class ProductDetail extends Component {
       this.props.requestCreateSessionCart(sessionCart);
     }
     // Sends user to cart
-    this.props.history.push("/cart");
+    this.props.history.push('/cart');
   };
 
   findReviewsByProduct = product => {
@@ -225,7 +225,7 @@ class ProductDetail extends Component {
                         onClick={() => this.addToCart(product, 1)}
                         size="lg"
                       >
-                        <i className="fas fa-shopping-cart" />
+                        <i className="fas fa-cart-arrow-down" />
                       </Button>
                     </Row>
                   </Col>
@@ -250,7 +250,10 @@ class ProductDetail extends Component {
                 <Row className="my-5">
                   <Col>
                     <Card>
-                      <Card.Header className="text-center">
+                      <Card.Header
+                        className="text-center"
+                        style={{ padding: 0 }}
+                      >
                         Verified Puchase Reviews
                       </Card.Header>
                       <Reviews reviews={productReviews} />
@@ -259,7 +262,7 @@ class ProductDetail extends Component {
                 </Row>
               </div>
             ) : (
-              "No Product Found"
+              'No Product Found'
             )}
           </Container>
         </Fragment>
@@ -282,7 +285,7 @@ const mapStateToProps = ({
     reviews,
     categories,
     sessionCart,
-    order: orders.find(order => order.status === "pending")
+    order: orders.find(order => order.status === 'pending')
   };
 };
 

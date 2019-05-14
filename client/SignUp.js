@@ -36,7 +36,7 @@ class SignUp extends Component {
             style={{ backgroundColor: '#9161e8' }}
             className="text-white"
           >
-            Please SignUp for a Grace Shopper account:
+            Create a Grace Shopper account
           </Card.Header>
           <Card.Body>
             <Form onSubmit={this.handleSubmit}>

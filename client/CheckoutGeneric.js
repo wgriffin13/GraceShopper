@@ -62,7 +62,7 @@ class CheckoutGeneric extends Component {
         this.setState({ cart: this.props.currentOrder });
         this.setState({ billingInfo: this.props.user, savedBilling: true });
       }
-    }  else if (!this.props.user.id && this.props.sessionCart.sessionCartId) {
+    } else if (!this.props.user.id && this.props.sessionCart.sessionCartId) {
       this.setState({ cart: this.props.sessionCart });
     }
   }
@@ -78,7 +78,7 @@ class CheckoutGeneric extends Component {
         // Sets state to an empty cart if the store no longger has a cart to reference since the user fully deleted the items
         this.setState({ cart: {} });
       }
-      console.log("sessionCart in CDU", this.props.sessionCart);
+      console.log('sessionCart in CDU', this.props.sessionCart);
     }
   }
 
@@ -133,8 +133,13 @@ class CheckoutGeneric extends Component {
   };
 
   changeBillingInformation = evt => {
-    this.setState({billingInfo: {...this.state.billingInfo, [evt.target.name]: evt.target.value}});
-  }
+    this.setState({
+      billingInfo: {
+        ...this.state.billingInfo,
+        [evt.target.name]: evt.target.value
+      }
+    });
+  };
 
   submitInformation = infoType => {
     if (infoType === 'billing') {
@@ -142,44 +147,65 @@ class CheckoutGeneric extends Component {
     } else if (infoType === 'shipping') {
       this.setState({ savedShipping: true });
     }
-  }
+  };
 
   changeShippingInformation = evt => {
-    this.setState({shippingInformation: {...this.state.shippingInformation, [evt.target.id]: evt.target.value}});
-  }
+    this.setState({
+      shippingInformation: {
+        ...this.state.shippingInformation,
+        [evt.target.id]: evt.target.value
+      }
+    });
+  };
 
   setShippingSame = () => {
-    this.setState({shippingInformation: this.state.billingInfo, savedShipping: true});
-  }
+    this.setState({
+      shippingInformation: this.state.billingInfo,
+      savedShipping: true
+    });
+  };
 
   completePurchase = () => {
     if (this.state.cart.id) {
       console.log('Logged in order');
-      axios.put(`/api/orders/${this.state.cart.id}`)
-        .then( () => this.props.fetchUserOrders(this.state.billingInfo.id))
-        .then( () => this.props.history.push('/checkout/success'));
+      axios
+        .put(`/api/orders/${this.state.cart.id}`)
+        .then(() => this.props.fetchUserOrders(this.state.billingInfo.id))
+        .then(() => this.props.history.push('/checkout/success'));
     } else {
-      console.log('Session cart')
-      axios.post('/api/users', { ...this.state.billingInfo, username: this.state.billingInfo.email, isAdmin: false })
+      console.log('Session cart');
+      axios
+        .post('/api/users', {
+          ...this.state.billingInfo,
+          username: this.state.billingInfo.email,
+          isAdmin: false
+        })
         .then(response => {
           const user = response.data;
-          axios.post(`/api/orders/user/${user.id}`, { ...this.state.cart, userId: user.id, status: 'purchased' })
+          axios
+            .post(`/api/orders/user/${user.id}`, {
+              ...this.state.cart,
+              userId: user.id,
+              status: 'purchased'
+            })
             .then(orderData => {
               const order = orderData.data;
               this.state.cart.lineitems.forEach(item => {
-                axios.post(`/api/orders/${order.id}`, {...item, orderId: order.id});
-              })
+                axios.post(`/api/orders/${order.id}`, {
+                  ...item,
+                  orderId: order.id
+                });
+              });
               this.props.login(user);
               this.props.requestCreateSessionCart({});
               this.props.fetchUserOrders(user.id);
               this.props.history.push('/checkout/success');
-            })
-        })
+            });
+        });
     }
-  }
+  };
 
   render() {
-
     return (
       <div>
         <hr />
@@ -187,77 +213,136 @@ class CheckoutGeneric extends Component {
           <CardHeader
             className="text-white"
             style={{ backgroundColor: '#7cc245' }}
-          >Checkout
+          >
+            Checkout
           </CardHeader>
-          {this.state.cart.status ?
+          {this.state.cart.status ? (
             <div>
               <CardBody>
-                {(this.state.savedBilling === true) ?
-                <div>
-                  <Row>
-                    <Col><b>{this.state.billingInfo.firstname} {this.state.billingInfo.lastname}</b></Col>
-                  </Row>
-                  <Row>
-                    <Col>{this.state.billingInfo.email}</Col>
-                  </Row>
-                  <Row>
-                    <Col>{this.state.billingInfo.street}</Col>
-                  </Row>
-                  <Row>
-                    <Col>{this.state.billingInfo.city}, {this.state.billingInfo.state} {this.state.billingInfo.zip}</Col>
-                  </Row>
-                  {this.state.billingInfo.createdAt ?
+                {this.state.savedBilling === true ? (
+                  <div>
                     <Row>
                       <Col>
-                        <small className="text-center">
-                          registered user since {this.state.billingInfo.createdAt.slice(0, 10)}
-                        </small>
+                        <b>
+                          {this.state.billingInfo.firstname}{' '}
+                          {this.state.billingInfo.lastname}
+                        </b>
                       </Col>
-                    </Row> : ''
-                  }
-                </div> :
-                <form>
-                  <div className="form-row">
-                    <div className="form-group col-md-6">
-                      <label>Email</label>
-                      <input name="email" className="form-control" id="inputEmail4" placeholder="Email" onChange={this.changeBillingInformation} />
-                    </div>
-                    <div className="form-group col-md-6">
-                      <label>Password</label>
-                      <input name="password" className="form-control" id="inputPassword4" placeholder="Password" onChange={this.changeBillingInformation} />
-                    </div>
+                    </Row>
+                    <Row>
+                      <Col>{this.state.billingInfo.email}</Col>
+                    </Row>
+                    <Row>
+                      <Col>{this.state.billingInfo.street}</Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        {this.state.billingInfo.city},{' '}
+                        {this.state.billingInfo.state}{' '}
+                        {this.state.billingInfo.zip}
+                      </Col>
+                    </Row>
+                    {this.state.billingInfo.createdAt ? (
+                      <Row>
+                        <Col>
+                          <small className="text-center">
+                            registered user since{' '}
+                            {this.state.billingInfo.createdAt.slice(0, 10)}
+                          </small>
+                        </Col>
+                      </Row>
+                    ) : (
+                      ''
+                    )}
                   </div>
-                  <div className="form-row">
-                    <div className="form-group col-md-6">
-                      <label>First Name</label>
-                      <input name="firstname" className="form-control" placeholder="First Name" onChange={this.changeBillingInformation} />
+                ) : (
+                  <form>
+                    <div className="form-row">
+                      <div className="form-group col-md-6">
+                        <label>Email</label>
+                        <input
+                          name="email"
+                          className="form-control"
+                          id="inputEmail4"
+                          placeholder="Email"
+                          onChange={this.changeBillingInformation}
+                        />
+                      </div>
+                      <div className="form-group col-md-6">
+                        <label>Password</label>
+                        <input
+                          name="password"
+                          className="form-control"
+                          id="inputPassword4"
+                          placeholder="Password"
+                          onChange={this.changeBillingInformation}
+                        />
+                      </div>
                     </div>
-                    <div className="form-group col-md-6">
-                      <label>Last Name</label>
-                      <input name="lastname" className="form-control" placeholder="Last Name" onChange={this.changeBillingInformation} />
+                    <div className="form-row">
+                      <div className="form-group col-md-6">
+                        <label>First Name</label>
+                        <input
+                          name="firstname"
+                          className="form-control"
+                          placeholder="First Name"
+                          onChange={this.changeBillingInformation}
+                        />
+                      </div>
+                      <div className="form-group col-md-6">
+                        <label>Last Name</label>
+                        <input
+                          name="lastname"
+                          className="form-control"
+                          placeholder="Last Name"
+                          onChange={this.changeBillingInformation}
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className="form-group">
-                    <label>Street Address</label>
-                    <input name="street" className="form-control" placeholder="1234 Broadway" onChange={this.changeBillingInformation} />
-                  </div>
-                  <div className="form-row">
-                    <div className="form-group col-md-6">
-                      <label>City</label>
-                      <input name="city" className="form-control" onChange={this.changeBillingInformation} />
+                    <div className="form-group">
+                      <label>Street Address</label>
+                      <input
+                        name="street"
+                        className="form-control"
+                        placeholder="1234 Broadway"
+                        onChange={this.changeBillingInformation}
+                      />
                     </div>
-                    <div className="form-group col-md-4">
-                      <label>State</label>
-                      <input name="state" className="form-control" onChange={this.changeBillingInformation} />
+                    <div className="form-row">
+                      <div className="form-group col-md-6">
+                        <label>City</label>
+                        <input
+                          name="city"
+                          className="form-control"
+                          onChange={this.changeBillingInformation}
+                        />
+                      </div>
+                      <div className="form-group col-md-4">
+                        <label>State</label>
+                        <input
+                          name="state"
+                          className="form-control"
+                          onChange={this.changeBillingInformation}
+                        />
+                      </div>
+                      <div className="form-group col-md-2">
+                        <label>Zip</label>
+                        <input
+                          name="zip"
+                          className="form-control"
+                          onChange={this.changeBillingInformation}
+                        />
+                      </div>
                     </div>
-                    <div className="form-group col-md-2">
-                      <label>Zip</label>
-                      <input name="zip" className="form-control" onChange={this.changeBillingInformation} />
-                    </div>
-                  </div>
-                  <button type="button" className="btn btn-primary" onClick={() => this.submitInformation('billing')}>Save Profile</button>
-                </form>
-                }
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={() => this.submitInformation('billing')}
+                    >
+                      Save Profile
+                    </button>
+                  </form>
+                )}
                 <hr />
                 <div id="itemsAccordion" data-children=".item">
                   <div className="item">
@@ -266,7 +351,7 @@ class CheckoutGeneric extends Component {
                       color="link"
                       onClick={() => this.toggleCustomItems(0)}
                       aria-expanded={this.state.customItems[0]}
-                      aria-Inputs="itemsAccordion1"
+                      // aria-Inputs="itemsAccordion1"
                     >
                       Products
                     </Button>
@@ -276,7 +361,13 @@ class CheckoutGeneric extends Component {
                       id="itemsAccordion1"
                       className="ml-3"
                     >
-                      <Table striped bordered hover size="small" className="mt-2">
+                      <Table
+                        striped
+                        bordered
+                        hover
+                        size="small"
+                        className="mt-2"
+                      >
                         <thead>
                           <tr>
                             <th scope="col">Product</th>
@@ -299,7 +390,6 @@ class CheckoutGeneric extends Component {
                                       />
                                     </div>
                                     <div className="col-5 col-lg-7">
-                                      {/* {item.product.title} */}
                                       <Link
                                         style={{ textDecoration: 'none' }}
                                         to={`/products/${item.productId}`}
@@ -309,11 +399,15 @@ class CheckoutGeneric extends Component {
                                     </div>
                                   </div>
                                 </td>
-                                <td className="text-right">{item.orderPrice}</td>
+                                <td className="text-right">
+                                  {item.orderPrice}
+                                </td>
                                 <td className="text-right">{item.discount}</td>
                                 <td className="text-right">{item.quantity}</td>
                                 <td className="text-right">
-                                  {this.priceFormat(item.netTotalCost * item.quantity)}
+                                  {this.priceFormat(
+                                    item.netTotalCost * item.quantity
+                                  )}
                                 </td>
                               </tr>
                             );
@@ -325,7 +419,9 @@ class CheckoutGeneric extends Component {
                             <th />
                             <th />
                             <th />
-                            <th scope="col">${this.priceFormat(this.calculateOrderTotal())}</th>
+                            <th scope="col">
+                              ${this.priceFormat(this.calculateOrderTotal())}
+                            </th>
                           </tr>
                         </tfoot>
                       </Table>
@@ -340,7 +436,7 @@ class CheckoutGeneric extends Component {
                       color="link"
                       onClick={() => this.toggleCustomShipping(0)}
                       aria-expanded={this.state.customShipping[0]}
-                      aria-controls="shippingAccordion1"
+                      // aria-controls="shippingAccordion1"
                     >
                       Shipping
                     </Button>
@@ -350,18 +446,26 @@ class CheckoutGeneric extends Component {
                       id="shippingAccordion1"
                       className="ml-3"
                     >
-                      {(this.state.savedShipping === true) ?
+                      {this.state.savedShipping === true ? (
                         <div>
                           <Row>
-                            <Col>{this.state.shippingInformation.firstname} {this.state.shippingInformation.lastname}</Col>
+                            <Col>
+                              {this.state.shippingInformation.firstname}{' '}
+                              {this.state.shippingInformation.lastname}
+                            </Col>
                           </Row>
                           <Row>
                             <Col>{this.state.shippingInformation.street}</Col>
                           </Row>
                           <Row>
-                            <Col>{this.state.shippingInformation.city}, {this.state.shippingInformation.state} {this.state.shippingInformation.zip}</Col>
+                            <Col>
+                              {this.state.shippingInformation.city},{' '}
+                              {this.state.shippingInformation.state}{' '}
+                              {this.state.shippingInformation.zip}
+                            </Col>
                           </Row>
-                        </div> :
+                        </div>
+                      ) : (
                         <div>
                           <FormGroup row className="my-0">
                             <Col xs="6">
@@ -441,10 +545,21 @@ class CheckoutGeneric extends Component {
                               onChange={this.changeShippingInformation}
                             />
                           </FormGroup>
-                          <Button color="primary" onClick={() => this.submitInformation('shipping')}>Save Shipping</Button>
-                          <Button color="outline-secondary" className="ml-2" onClick={this.setShippingSame}>Set Shipping as Billing</Button>
+                          <Button
+                            color="primary"
+                            onClick={() => this.submitInformation('shipping')}
+                          >
+                            Save Shipping
+                          </Button>
+                          <Button
+                            color="outline-secondary"
+                            className="ml-2"
+                            onClick={this.setShippingSame}
+                          >
+                            Set Shipping as Billing
+                          </Button>
                         </div>
-                      }
+                      )}
                     </Collapse>
                   </div>
                 </div>
@@ -456,7 +571,7 @@ class CheckoutGeneric extends Component {
                       color="link"
                       onClick={() => this.toggleCustomPayment(0)}
                       aria-expanded={this.state.customPayment[0]}
-                      aria-controls="paymentAccordion1"
+                      // aria-controls="paymentAccordion1"
                     >
                       Payment
                     </Button>
@@ -544,13 +659,19 @@ class CheckoutGeneric extends Component {
                 </div>
               </CardBody>
               <CardFooter>
-                <Button color="outline-success" size="lg" block onClick={() => this.completePurchase()}>
+                <Button
+                  color="outline-success"
+                  size="lg"
+                  block
+                  onClick={() => this.completePurchase()}
+                >
                   Confirm Purchase
                 </Button>
               </CardFooter>
-            </div> :
-          <div>Please add items to your cart before checking out.</div>
-          }
+            </div>
+          ) : (
+            <div>Please add items to your cart before checking out.</div>
+          )}
         </Card>
       </div>
     );
@@ -561,15 +682,16 @@ const mapStateToProps = ({ user, sessionCart, orders }) => {
   return {
     user,
     sessionCart,
-    currentOrder: orders.find(order => order.status === "pending")
+    currentOrder: orders.find(order => order.status === 'pending')
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     fetchUserOrders: id => dispatch(fetchUserOrders(id)),
-    login: (user) => dispatch(loginAttempt(user)),
-    requestCreateSessionCart: (sessionCart) => dispatch(createSessionCart(sessionCart))
+    login: user => dispatch(loginAttempt(user)),
+    requestCreateSessionCart: sessionCart =>
+      dispatch(createSessionCart(sessionCart))
   };
 };
 

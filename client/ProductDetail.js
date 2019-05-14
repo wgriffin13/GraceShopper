@@ -250,14 +250,7 @@ class ProductDetail extends Component {
                 <Row className="my-5">
                   <Col>
                     <Card>
-                      <Card.Header
-                        className="text-center"
-                        // style={{
-                        //   backgroundColor: `${
-                        //     this.findCategory(product, categories).color
-                        //   }`
-                        // }}
-                      >
+                      <Card.Header className="text-center">
                         Verified Puchase Reviews
                       </Card.Header>
                       <Reviews reviews={productReviews} />

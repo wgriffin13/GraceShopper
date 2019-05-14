@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Button, Card, Form } from 'react-bootstrap';
 
-// import { loginAttempt, fetchUserOrders } from './store';
 import {
   loginAttempt,
   createPendingOrder,

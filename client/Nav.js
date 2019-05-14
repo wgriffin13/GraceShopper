@@ -157,7 +157,7 @@ class Navigation extends Component {
                       </Nav.Item>
                       <Nav.Item href="#create">
                         <Nav.Link as={Link} to="/signup">
-                          create new account
+                          create account
                         </Nav.Link>
                       </Nav.Item>
                     </NavDropdown>

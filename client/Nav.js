@@ -191,7 +191,7 @@ class Navigation extends Component {
                             <option
                               key={cat.id}
                               value={cat.id}
-                              style={{ backgrounColor: `${cat.color}` }}
+                              style={{ co: `${cat.color}` }}
                             >
                               {cat.name}
                             </option>

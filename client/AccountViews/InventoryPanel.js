@@ -6,12 +6,11 @@ import {
   Card,
   Col,
   Table,
-  Row
+  Row,
 } from 'react-bootstrap';
 
 const InventoryPanel = props => {
   const products = props.products;
-
   return (
     <Row>
       <Col>
@@ -31,6 +30,8 @@ const InventoryPanel = props => {
                     <th>Price</th>
                     <th>Category</th>
                     <th>Quantity</th>
+                    <th>Stock Level</th>
+                    <th>Alert</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -44,6 +45,13 @@ const InventoryPanel = props => {
                           <td>{product.quantity}</td>
                           <td>
                             <Badge variant="success">InStock</Badge>
+                          </td>
+                          <td>
+                            <Button
+                              onClick={() => props.sendFlashSale(product)}
+                            >
+                              Alert
+                            </Button>
                           </td>
                         </tr>
                       ))

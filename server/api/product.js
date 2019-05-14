@@ -190,6 +190,14 @@ router.post('/', (req, res, next) => {
 });
 
 //PUT /api/products
+router.put('/:id', (req, res, next) => {
+  Product.findByPk(req.params.id)
+    .then(product => product.update(req.body))
+    .then(product => res.send(product))
+    .catch(next);
+});
+
+//PUT /api/products
 router.put('/', (req, res, next) => {
   Product.findByPk(req, params.id)
     .then(product => product.update(req.body))

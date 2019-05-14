@@ -25,14 +25,12 @@ const generateReviews = () => {
 const seedReviews = generateReviews();
 
 const seedCategories = [
-  // { name: "Accessories", color: "#eaeb4e" },
   { name: "Accessories", color: "#7cc245" },
   { name: "Boxing", color: "#9161e8" },
   { name: "Cardio", color: "#e0e014" },
-  // { name: 'Cardio', color: '#7cc245' },
   { name: "Pilates", color: "#91c7f9" },
-  { name: "Free weights", color: "#01A4A4" },
-  { name: "Smart fitness", color: "#ee2a82" },
+  { name: "Free Weights", color: "#01A4A4" },
+  { name: "Smart Fitness", color: "#ee2a82" },
   { name: "Yoga", color: "#f46854" },
   { name: "Resistance", color: "#00A1CB" }
 ];
@@ -243,7 +241,7 @@ const seedProducts = [
       "Coreplus reformer resistance band with four loops and comfort-cushion grips. Full length 45-Minute coreplus reformer workout DVD"
   },
   {
-    title: "Stamina AeroPilates Pro Reformer",
+    title: "AeroPilates Pro Reformer",
     categoryId: 4,
     price: 750.0,
     quantity: 3,
@@ -323,12 +321,12 @@ const seedProducts = [
     price: 90.0,
     quantity: 7,
     imageUrl:
-      "https://images-na.ssl-images-amazon.com/images/I/91KT6PEnEWL._SX679_.jpg",
+      "https://images-na.ssl-images-amazon.com/images/I/71HBtDEAgEL._SX679_.jpg",
     detailImages: [
       "https://images-na.ssl-images-amazon.com/images/I/91KT6PEnEWL._SX679_.jpg",
       "https://images-na.ssl-images-amazon.com/images/I/71HmY5EUU4L._SX679_.jpg",
       "https://images-na.ssl-images-amazon.com/images/I/81v2x8IEw2L._SX679_.jpg",
-      "https://images-na.ssl-images-amazon.com/images/I/71HBtDEAgEL._SX679_.jpg",
+      "https://images-na.ssl-images-amazon.com/images/I/91KT6PEnEWL._SX679_.jpg",
       "https://images-na.ssl-images-amazon.com/images/I/51b2tHlKJAL._SX679_.jpg"
     ],
     description:
@@ -584,8 +582,10 @@ const seedProducts = [
     price: 11.99,
     quantity: 19,
     imageUrl:
-      "https://images-na.ssl-images-amazon.com/images/I/71hoobO8oQL._SX679_.jpg",
+      "https://images-na.ssl-images-amazon.com/images/I/61l6nohSB7L._SX679_.jpg",
+
     detailImages: [
+      "https://images-na.ssl-images-amazon.com/images/I/61l6nohSB7L._SX679_.jpg",
       "https://images-na.ssl-images-amazon.com/images/I/71hoobO8oQL._SX679_.jpg",
       "https://images-na.ssl-images-amazon.com/images/I/71Nsbu415lL._SX679_.jpg",
       "https://images-na.ssl-images-amazon.com/images/I/81bc1cPg5OL._SX679_.jpg",

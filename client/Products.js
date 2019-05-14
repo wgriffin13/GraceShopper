@@ -1,10 +1,18 @@
 /* eslint-disable complexity */
 import React, { Component, Fragment } from 'react';
-import { Card, Container, Col, Row, Pagination } from 'react-bootstrap';
+import {
+  Card,
+  Container,
+  Col,
+  Row,
+  Pagination,
+  PageItem
+} from 'react-bootstrap';
 import { updateNavSearchValsBasedOnURL } from './store';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import Ratings from './Ratings';
+import AddToCartButton from './AddToCart';
 
 class Products extends Component {
   constructor(props) {
@@ -145,43 +153,41 @@ class Products extends Component {
     for (let i = 0; i <= pages; ++i) {
       pageFlip.push(i);
     }
+
     return (
       <Fragment>
-        <Container className="d-flex-row">
+        <Container className="d-flex flex-column">
           {/* Make sure to be defensive when loading products based on the category */}
-          <Row className="justify-content-center">
-            <Pagination size="sm">
-              <Pagination.Item
-                disabled={first ? 'disabled' : ''}
-                onClick={() => pageChange(current - current)}
-              >
-                First
-              </Pagination.Item>
-              <Pagination.Prev
-                disabled={first ? 'disabled' : ''}
-                onClick={() => pageChange(current - 1)}
-              />
-              {pageFlip.map(page => (
-                <Pagination.Item
-                  key={page}
-                  onClick={() => pageChange(page)}
-                  disabled={current === page ? 'disabled' : ''}
+
+          <Col>
+            <Row className="justify-content-center h-10">
+              <Pagination>
+                <PageItem
+                  disabled={first ? 'disabled' : ''}
+                  onClick={() => pageChange(current - 1)}
+                  style={{ text: 'red' }}
                 >
-                  {page + 1}
-                </Pagination.Item>
-              ))}
-              <Pagination.Next
-                disabled={last ? 'disabled' : ''}
-                onClick={() => pageChange(current + 1)}
-              />
-              <Pagination.Item
-                disabled={last ? 'disabled' : ''}
-                onClick={() => pageChange(pages)}
-              >
-                Last
-              </Pagination.Item>
-            </Pagination>
-          </Row>
+                  <i className="fas fa-angle-left" />
+                </PageItem>
+                {pageFlip.map(page => (
+                  <PageItem
+                    key={page}
+                    onClick={() => pageChange(page)}
+                    disabled={current === page ? 'disabled' : ''}
+                  >
+                    {page + 1}
+                  </PageItem>
+                ))}
+                <PageItem
+                  disabled={last ? 'disabled' : ''}
+                  onClick={() => pageChange(current + 1)}
+                >
+                  <i className="fas fa-angle-right" />
+                </PageItem>
+              </Pagination>
+            </Row>
+          </Col>
+
           {products.length ? (
             <Row>
               {products.map(product => {
@@ -191,7 +197,7 @@ class Products extends Component {
                       key={product.id}
                       style={{
                         width: '15rem',
-                        height: '26rem',
+                        height: '27.5rem',
                         borderWidth: '2px',
                         boxShadow: '4px 5px 14px 4px rgba(0, 0, 0, 0.2)',
                         borderColor: `${
@@ -200,7 +206,7 @@ class Products extends Component {
                             : 'white'
                         }`
                       }}
-                      className="mb-3 mt-3 rounded"
+                      className="mb-5 rounded"
                     >
                       <Card.Header
                         as="h6"
@@ -248,7 +254,8 @@ class Products extends Component {
                                     style={{
                                       width: '100%',
                                       height: 'auto',
-                                      alignItems: 'center'
+                                      alignItems: 'center',
+                                      padding: 5
                                     }}
                                   />
                                 </Col>
@@ -259,13 +266,17 @@ class Products extends Component {
                                 height: '100px'
                               }}
                             >
-                              <Row className="align-items-center h-100">
+                              <Row className="align-items-center h-50">
                                 <Col className="col-12 mx-auto">
                                   <Card.Text className="text-center">
                                     {product.title}
                                   </Card.Text>
                                   <Card.Text className="text-center">
                                     <Ratings rating={averageRating(product)} />
+                                  </Card.Text>
+                                  <Card.Text className="text-center">
+                                    ${product.price}
+                                    <span> / {product.quantity} inStock</span>
                                   </Card.Text>
                                 </Col>
                               </Row>
@@ -274,17 +285,20 @@ class Products extends Component {
                         </Container>
                       </Card.Body>
                       <Card.Footer
-                        className="text-center text-white"
                         style={{
+                          padding: 2,
                           backgroundColor: `${
                             product && categories.length
                               ? findCategory(product, categories).color
                               : 'white'
                           }`
                         }}
+                        className="text-center"
                       >
-                        ${product.price}
-                        <span> / {product.quantity} inStock</span>
+                        <AddToCartButton
+                          product={product}
+                          history={this.props.history}
+                        />
                       </Card.Footer>
                     </Card>
                   </Col>
@@ -299,6 +313,7 @@ class Products extends Component {
               {`${count} Results. Page ${current + 1}  of ${pages + 1}`}
             </i>
           </Row>
+
           <br />
           <br />
           <br />

@@ -1,11 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import {
+  Button,
   Col,
   Container,
   Navbar,
   Nav,
   Form,
-  Button,
   NavDropdown,
   InputGroup
 } from 'react-bootstrap';
@@ -64,124 +64,168 @@ class Navigation extends Component {
 
     return (
       <Fragment>
-        <Navbar className="mb-2">
+        <Navbar style={{ padding: 0 }}>
           <Container>
-            <Col>
-              <Nav>
-                <Navbar.Brand>Grace Shopper</Navbar.Brand>
-
-                <Nav.Link
-                  as={Link}
-                  to="/"
-                  onClick={() => clearNavSearchTerms()}
+            <Nav>
+              <Col>
+                <Navbar.Brand
+                  style={{
+                    fontSize: '40px',
+                    padding: 0,
+                    margin: 0
+                  }}
                 >
-                  Home
-                </Nav.Link>
+                  <span style={{ color: '#9161e8' }}>Grace</span>
+                  <span style={{ color: '#01A4A4' }}>Shopper</span>
+                </Navbar.Brand>
+              </Col>
+              <Col>
+                <Nav.Item>
+                  <Nav.Link
+                    as={Link}
+                    to="/"
+                    onClick={() => clearNavSearchTerms()}
+                    style={{
+                      marginTop: '12px',
+                      marginLeft: '8px',
+                      color: '#00A1CB',
+                      fontSize: '20px'
+                    }}
+                  >
+                    Home
+                  </Nav.Link>
+                </Nav.Item>
+              </Col>
+              <Col>
+                <Nav.Item>
+                  <Nav.Link
+                    style={{
+                      marginTop: '12px',
+                      color: '#00A1CB',
+                      fontSize: '20px'
+                    }}
+                    as={Link}
+                    to="/products"
+                    onClick={() => clearNavSearchTerms()}
+                  >
+                    Products
+                  </Nav.Link>
+                </Nav.Item>
+              </Col>
+              <Col>
+                {isLoggedIn ? (
+                  <Fragment>
+                    <NavDropdown
+                      title={`${user.username}`}
+                      id="basic-nav-dropdown"
+                      style={{
+                        marginTop: '15px',
+                        fontSize: '14px',
+                        textColor: '#ee2a82'
+                      }}
+                    >
+                      {user.isAdmin ? (
+                        <Nav.Item>
+                          <Nav.Link as={Link} to="/admin">
+                            admin
+                          </Nav.Link>
+                        </Nav.Item>
+                      ) : (
+                        <Nav.Item>
+                          <Nav.Link as={Link} to="/user">
+                            my account
+                          </Nav.Link>
+                        </Nav.Item>
+                      )}
 
-                <Nav.Link
-                  as={Link}
-                  to="/products"
-                  onClick={() => clearNavSearchTerms()}
-                >
-                  Products
-                </Nav.Link>
-              </Nav>
-            </Col>
+                      <Nav.Item>
+                        <Nav.Link onClick={this.logout}>logout</Nav.Link>
+                      </Nav.Item>
+                    </NavDropdown>
+                  </Fragment>
+                ) : (
+                  <Fragment>
+                    <NavDropdown
+                      title="login"
+                      id="basic-nav-dropdown"
+                      style={{ marginTop: '14px', fontColor: '' }}
+                    >
+                      <Nav.Item>
+                        <Nav.Link as={Link} to="/login" className="mr-auto">
+                          sign in
+                        </Nav.Link>
+                      </Nav.Item>
+                      <Nav.Item href="#create">
+                        <Nav.Link as={Link} to="/signup">
+                          create account
+                        </Nav.Link>
+                      </Nav.Item>
+                    </NavDropdown>
+                  </Fragment>
+                )}
+              </Col>
+              <Col>
+                <Nav.Item>
+                  <Nav.Link
+                    as={Link}
+                    to="/cart"
+                    style={{ marginTop: '14px', marginRight: '10px' }}
+                  >
+                    <i
+                      className="fas fa-shopping-cart"
+                      size="9x"
+                      style={{ color: '#7cc245' }}
+                    />
+                  </Nav.Link>
+                </Nav.Item>
+              </Col>
 
-            {isLoggedIn ? (
-              <Fragment>
-                {/* <p style={{ fontSize: 12, fontWeight: 'lighter' }}>
-                  signed in as
-                </p> */}
-                <NavDropdown title={`${user.username}`} id="basic-nav-dropdown">
-                  {user.isAdmin ? (
-                    <NavDropdown.Item>
-                      <Nav.Link as={Link} to="/admin">
-                        admin
-                      </Nav.Link>
-                    </NavDropdown.Item>
-                  ) : (
-                    <NavDropdown.Item>
-                      <Nav.Link as={Link} to="/user">
-                        my account
-                      </Nav.Link>
-                    </NavDropdown.Item>
-                  )}
-
-                  <NavDropdown.Item>
-                    <Nav.Link onClick={this.logout}>logout</Nav.Link>
-                    {/* <button type="button" onClick={this.logout}>
-                      logout
-                    </button> */}
-                  </NavDropdown.Item>
-                </NavDropdown>
-              </Fragment>
-            ) : (
-              <Fragment>
-                <NavDropdown title="login" id="basic-nav-dropdown">
-                  <NavDropdown.Item>
-                    <Nav.Link as={Link} to="/login" className="mr-auto">
-                      sign in
-                    </Nav.Link>
-                  </NavDropdown.Item>
-                  <NavDropdown.Item href="#create">
-                    <Nav.Link as={Link} to="/signup">
-                      create new account
-                    </Nav.Link>
-                  </NavDropdown.Item>
-                </NavDropdown>
-              </Fragment>
-            )}
-
-            <Nav.Link as={Link} to="/cart" style={{ color: '#7cc245' }}>
-              <i className="fas fa-shopping-cart" size="9x" />
-            </Nav.Link>
-
-            <Col>
-              <Nav className="justify-content-end">
-                <Form>
-                  <InputGroup>
-                    <InputGroup.Prepend>
+              <Col lg="5" className="justify-content-right">
+                <Nav style={{ marginTop: '19px', marginLeft: '10px' }}>
+                  <Form>
+                    <InputGroup>
+                      <InputGroup.Prepend>
+                        <Form.Control
+                          size="sm"
+                          as="select"
+                          value={categoryId}
+                          onChange={onChange}
+                          name="categoryId"
+                        >
+                          <option value="0">All Categories</option>
+                          {categories.map(cat => (
+                            <option
+                              key={cat.id}
+                              value={cat.id}
+                              style={{ co: `${cat.color}` }}
+                            >
+                              {cat.name}
+                            </option>
+                          ))}
+                        </Form.Control>
+                      </InputGroup.Prepend>
                       <Form.Control
                         size="sm"
-                        as="select"
-                        value={categoryId}
+                        type="text"
+                        placeholder="Search Products"
+                        name="searchTerm"
+                        value={searchTerm}
                         onChange={onChange}
-                        name="categoryId"
-                      >
-                        <option value="0">All Categories</option>
-                        {categories.map(cat => (
-                          <option
-                            key={cat.id}
-                            value={cat.id}
-                            style={{ backgrounColor: `${cat.color}` }}
-                          >
-                            {cat.name}
-                          </option>
-                        ))}
-                      </Form.Control>
-                    </InputGroup.Prepend>
-                    <Form.Control
-                      size="sm"
-                      type="text"
-                      placeholder="Search Products"
-                      name="searchTerm"
-                      value={searchTerm}
-                      onChange={onChange}
-                    />
-                    <InputGroup.Append>
-                      <Button
-                        size="sm"
-                        variant="outline-success"
-                        onClick={() => searchByTerm()}
-                      >
-                        Search
-                      </Button>
-                    </InputGroup.Append>
-                  </InputGroup>
-                </Form>
-              </Nav>
-            </Col>
+                      />
+                      <InputGroup.Append>
+                        <Button
+                          size="sm"
+                          variant="outline-success"
+                          onClick={() => searchByTerm()}
+                        >
+                          Search
+                        </Button>
+                      </InputGroup.Append>
+                    </InputGroup>
+                  </Form>
+                </Nav>
+              </Col>
+            </Nav>
           </Container>
         </Navbar>
       </Fragment>
